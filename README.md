@@ -94,3 +94,5 @@ PicT_Client
 - **데이터베이스 테이블 및 컬럼 이름**
     - 테이블 이름: snake_case 사용 (예: `user_profiles`, `product_details`)
         - 컬럼 이름: snake_case 사용 (예: `user_id`, `product_name`)
+
+### 템플릿 사용
