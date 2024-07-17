@@ -7,6 +7,7 @@ PicT_Client
 │   ├── assets/
 │   ├── components/
 │   ├── pages/
+│   ├── modals/
 │   ├── utils/
 │   ├── apis/
 │   └── hooks/
