@@ -30,7 +30,6 @@
     "no-irregular-whitespace": "warn",
     "no-setter-return": "warn",
     "no-unsafe-finally": "warn",
-    "quotes": ["off", "single"],
     "react/jsx-filename-extension": [1, { "extensions": [".tsx", ".jsx"] }],
 
     // Best Practices
