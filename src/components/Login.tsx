@@ -9,9 +9,9 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '../../components/ui/dialog';
-import { Input } from '../../components/ui/input';
-import { Label } from '../../components/ui/label';
+} from './ui/dialog';
+import { Input } from './ui/input';
+import { Label } from './ui/label';
 import {
   Form,
   FormControl,
@@ -20,7 +20,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '../../components/ui/form';
+} from './ui/form';
 // import { toast } from '@/components/ui/use-toast';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
@@ -30,7 +30,7 @@ import Link from 'next/link';
 
 import { Button } from '@/components/ui/button';
 
-import { Join } from '../../components/ui/join';
+import Join from './Join';
 
 const FormSchema = z.object({
   email: z.string().email({
@@ -41,9 +41,7 @@ const FormSchema = z.object({
   }),
 });
 
-function DialogDemo() {
-  const [showJoin, setShowJoin] = useState(false);
-
+function Login() {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     mode: 'onChange',
@@ -91,50 +89,42 @@ function DialogDemo() {
             <Input type='password' id='username' defaultValue='@peduarte' className='col-span-3' />
           </div>
         </div> */}
-        <div className='grid gap-4 py-4'>
-          {showJoin ? (
-            <Join /> // Join 컴포넌트 렌더링
-          ) : (
-            <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-8'>
-                <FormField
-                  control={form.control}
-                  name='email'
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>이메일</FormLabel>
-                      <FormControl>
-                        <Input placeholder='이메일을 입력하세요.' {...field} />
-                      </FormControl>
-                      {/* <FormDescription>This is your public display name.</FormDescription> */}
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name='password'
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>비밀번호</FormLabel>
-                      <FormControl>
-                        <Input type='password' placeholder='비밀번호를 입력하세요.' {...field} />
-                      </FormControl>
-                      {/* <FormDescription>This is your public display name.</FormDescription> */}
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <div>
-                  아직 회원이 아니신가요?{' '}
-                  <button onClick={() => setShowJoin(true)}>회원가입</button>
-                </div>
-                <Button type='submit' className='w-full' disabled={!form.formState.isValid}>
-                  로그인
-                </Button>
-              </form>
-            </Form>
-          )}
+        <div>
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-8'>
+              <FormField
+                control={form.control}
+                name='email'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>이메일</FormLabel>
+                    <FormControl>
+                      <Input placeholder='이메일을 입력하세요.' {...field} />
+                    </FormControl>
+                    {/* <FormDescription>This is your public display name.</FormDescription> */}
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name='password'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>비밀번호</FormLabel>
+                    <FormControl>
+                      <Input type='password' placeholder='비밀번호를 입력하세요.' {...field} />
+                    </FormControl>
+                    {/* <FormDescription>This is your public display name.</FormDescription> */}
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <Button type='submit' className='w-full' disabled={!form.formState.isValid}>
+                로그인
+              </Button>
+            </form>
+          </Form>
         </div>
         {/* <DialogFooter> */}
         {/* <button type='submit'>Save changes</button> */}
@@ -144,4 +134,4 @@ function DialogDemo() {
   );
 }
 
-export default DialogDemo;
+export default Login;
