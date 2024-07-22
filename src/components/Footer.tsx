@@ -1,9 +1,13 @@
 function Footer() {
   return (
-    <footer className='flex justify-between w-full border-t-[1px]'>
-      <span className='sr-only'>차징</span>
+    <footer className='relative translate-y-[-100%] flex justify-between w-full'>
+      <span className='sr-only'>PicT</span>
       <div className='flex flex-1 place-self-center text-xs'>
-        © 2024 PicT Inc. All rights reserved.
+        Copyright © 2024 여기서 세계속으로. All rights reserved.
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
       </div>
     </footer>
   );

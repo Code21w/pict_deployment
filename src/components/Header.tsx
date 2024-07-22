@@ -6,7 +6,7 @@ import Link from 'next/link';
 
 function Header() {
   return (
-    <header className='z-10 sticky top-0 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6 sm: flex justify-between'>
+    <header className='z-10 sticky top-0 flex h-16 items-center gap-4 border-b px-4 md:px-6 sm: flex justify-between'>
       <nav className='hidden w-full h-16 flex-row gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-10 '>
         <Link
           href={'/'}

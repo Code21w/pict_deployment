@@ -1,3 +1,10 @@
+@font-face {
+  font-family: 'Cafe24Moyamoya-Face-v1.0';
+  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_231029@1.1/Cafe24Moyamoya-Face-v1.0.woff2')
+    format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -26,4 +33,51 @@ body {
   .text-balance {
     text-wrap: balance;
   }
+}
+
+@keyframes floatRight {
+  0% {
+    transform: translateX(calc(var(--start-x) + 0px));
+  }
+  100% {
+    transform: translateX(calc(100vw));
+  }
+}
+
+@keyframes floatLeft {
+  0% {
+    transform: translateX(calc(var(--start-x) + 0px));
+  }
+  100% {
+    transform: translateX(-100px);
+  }
+}
+
+.cloud-right {
+  animation: floatRight infinite linear;
+}
+
+.cloud-left {
+  animation: floatLeft infinite linear;
+}
+
+.cloud-1 {
+  animation-duration: 20s;
+  top: var(--start-y);
+}
+.cloud-2 {
+  animation-duration: 10s;
+  top: var(--start-y);
+}
+.cloud-3 {
+  animation-duration: 8s;
+  top: var(--start-y);
+}
+.cloud-4 {
+  animation-duration: 10s;
+  top: var(--start-y);
+}
+.cloud-5 {
+  animation-duration: 5s;
+  top: var(--start-y);
 }
