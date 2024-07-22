@@ -1,5 +1,8 @@
 import Link from 'next/link';
 
+import Join from './Join';
+import Login from './Login';
+
 /** image */
 // import { Menu } from 'lucide-react';
 // import logo from '../../assets/images/logo.png';
@@ -22,12 +25,14 @@ function Header() {
         <Link href={'/'} className='text-muted-foreground transition-colors hover:text-foreground'>
           메인2
         </Link>
-        <Link href={'/'} className='text-muted-foreground transition-colors hover:text-foreground'>
-          메인3
-        </Link>
-        <Link href={'/'} className='text-muted-foreground transition-colors hover:text-foreground'>
-          메인4
-        </Link>
+        {/* <Link href={'/'} className='text-muted-foreground transition-colors hover:text-foreground'>
+          로그인
+        </Link> */}
+        <Login />
+        {/* <Link href={'/'} className='text-muted-foreground transition-colors hover:text-foreground'>
+          회원가입
+        </Link> */}
+        <Join />
       </nav>
     </header>
   );
