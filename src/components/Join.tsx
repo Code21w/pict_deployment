@@ -77,7 +77,9 @@ function Join() {
       </DialogTrigger>
       <DialogContent className='sm:max-w-[425px]'>
         <DialogHeader>
-          <DialogTitle className='cafe24-font text-center text-3xl'>회원가입</DialogTitle>
+          <DialogTitle className={`font-['Cafe24Moyamoya-Face-v1.0'] text-center text-3xl`}>
+            회원가입
+          </DialogTitle>
           {/* <DialogDescription>
              Make changes to your profile here. Click save when you're done.
            </DialogDescription> */}

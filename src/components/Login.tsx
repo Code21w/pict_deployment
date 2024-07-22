@@ -62,7 +62,9 @@ function Login() {
       </DialogTrigger>
       <DialogContent className='sm:max-w-[425px]'>
         <DialogHeader>
-          <DialogTitle className='cafe24-font text-center text-3xl'>로그인</DialogTitle>
+          <DialogTitle className={`font-['Cafe24Moyamoya-Face-v1.0'] text-center text-3xl`}>
+            로그인
+          </DialogTitle>
           {/* <DialogDescription>
             Make changes to your profile here. Click save when you're done.
           </DialogDescription> */}
@@ -119,12 +121,14 @@ function Login() {
               </div>
             </form>
           </Form>
-          <div class='hr-sect'>또는</div>
+          <div className='hr-sect'>또는</div>
           <div className='space-y-2'>
             <Button type='submit' className='w-full bg-green-500 hover:bg-green-600'>
+              <img src='naver.svg' alt='naver' width={23} className='mr-2' />
               네이버로 시작하기
             </Button>
             <Button type='submit' className='w-full bg-yellow-400 hover:bg-yellow-500'>
+              <img src='kakao.svg' alt='kakao' width={23} className='mr-2' />
               카카오로 시작하기
             </Button>
           </div>
