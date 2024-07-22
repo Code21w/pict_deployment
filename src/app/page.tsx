@@ -38,43 +38,9 @@ import { Button } from '@/components/ui/button';
 
 import Globe from '@/components/Globe';
 
-const FormSchema = z.object({
-  email: z.string().email({
-    message: '올바른 이메일 형식이 아닙니다.',
-  }),
-  password: z.string().min(1, {
-    message: '비밀번호가 입력되지 않았습니다.',
-  }),
-});
-
-function DialogDemo() {
-  const [showJoin, setShowJoin] = useState(false);
-
-  const form = useForm<z.infer<typeof FormSchema>>({
-    resolver: zodResolver(FormSchema),
-    mode: 'onChange',
-    defaultValues: {
-      email: '',
-      password: '',
-    },
-  });
-
-  function onSubmit(data: z.infer<typeof FormSchema>) {
-    console.log(data);
-    // toast({
-    //   title: 'You submitted the following values:',
-    //   description: (
-    //     <pre className='mt-2 w-[340px] rounded-md bg-slate-950 p-4'>
-    //       <code className='text-white'>{JSON.stringify(data, null, 2)}</code>
-    //     </pre>
-    //   ),
-    // });
-  }
-
+function Main() {
   return (
-    <main
-      className={`bg-gradient-to-b from-cyan-500 to-white-500 to-90% flex min-h-screen items-center justify-between`}
-    >
+    <main className={`flex min-h-screen items-center justify-between`}>
       <div className='w-full h-full'>
         <div className='mx-[100px] lg:mx-[250px] mb-[100px] lg:-mb-[150px] flex flex-col justify-between'>
           <div
@@ -118,4 +84,4 @@ function DialogDemo() {
   );
 }
 
-export default DialogDemo;
+export default Main;

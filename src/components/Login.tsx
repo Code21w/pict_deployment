@@ -53,14 +53,6 @@ function Login() {
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
     console.log(data);
-    // toast({
-    //   title: 'You submitted the following values:',
-    //   description: (
-    //     <pre className='mt-2 w-[340px] rounded-md bg-slate-950 p-4'>
-    //       <code className='text-white'>{JSON.stringify(data, null, 2)}</code>
-    //     </pre>
-    //   ),
-    // });
   }
 
   return (
@@ -70,7 +62,7 @@ function Login() {
       </DialogTrigger>
       <DialogContent className='sm:max-w-[425px]'>
         <DialogHeader>
-          <DialogTitle>로그인</DialogTitle>
+          <DialogTitle className='cafe24-font text-center text-3xl'>로그인</DialogTitle>
           {/* <DialogDescription>
             Make changes to your profile here. Click save when you're done.
           </DialogDescription> */}
@@ -89,42 +81,53 @@ function Login() {
             <Input type='password' id='username' defaultValue='@peduarte' className='col-span-3' />
           </div>
         </div> */}
-        <div>
+        <div className='space-y-7'>
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-8'>
-              <FormField
-                control={form.control}
-                name='email'
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>이메일</FormLabel>
-                    <FormControl>
-                      <Input placeholder='이메일을 입력하세요.' {...field} />
-                    </FormControl>
-                    {/* <FormDescription>This is your public display name.</FormDescription> */}
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name='password'
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>비밀번호</FormLabel>
-                    <FormControl>
-                      <Input type='password' placeholder='비밀번호를 입력하세요.' {...field} />
-                    </FormControl>
-                    {/* <FormDescription>This is your public display name.</FormDescription> */}
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <Button type='submit' className='w-full' disabled={!form.formState.isValid}>
-                로그인
-              </Button>
+            <form onSubmit={form.handleSubmit(onSubmit)}>
+              <div className='space-y-6'>
+                <FormField
+                  control={form.control}
+                  name='email'
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>이메일</FormLabel>
+                      <FormControl>
+                        <Input placeholder='이메일을 입력하세요.' {...field} />
+                      </FormControl>
+                      {/* <FormDescription>This is your public display name.</FormDescription> */}
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name='password'
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>비밀번호</FormLabel>
+                      <FormControl>
+                        <Input type='password' placeholder='비밀번호를 입력하세요.' {...field} />
+                      </FormControl>
+                      {/* <FormDescription>This is your public display name.</FormDescription> */}
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <Button type='submit' className='w-full' disabled={!form.formState.isValid}>
+                  로그인
+                </Button>
+              </div>
             </form>
           </Form>
+          <div class='hr-sect'>또는</div>
+          <div className='space-y-2'>
+            <Button type='submit' className='w-full bg-green-500 hover:bg-green-600'>
+              네이버로 시작하기
+            </Button>
+            <Button type='submit' className='w-full bg-yellow-400 hover:bg-yellow-500'>
+              카카오로 시작하기
+            </Button>
+          </div>
         </div>
         {/* <DialogFooter> */}
         {/* <button type='submit'>Save changes</button> */}
