@@ -11,14 +11,14 @@ export default function Home() {
       className={`bg-gradient-to-b from-cyan-500 to-white-500 to-90% flex min-h-screen items-center justify-between`}
     >
       <div className='w-full h-full'>
-        <div className='mx-[100px] mb-[100px] lg:-mb-[200px] flex flex-col justify-between'>
+        <div className='mx-[100px] lg:mx-[250px] mb-[100px] lg:-mb-[150px] flex flex-col justify-between'>
           <div
-            className={`relative text-8xl lg:text-[144px] font-['Cafe24Moyamoya-Face-v1.0'] -py-3`}
+            className={`relative text-8xl lg:text-[144px] xl:text-[192px] font-['Cafe24Moyamoya-Face-v1.0'] -py-3`}
           >
             여기서
           </div>
           <div
-            className={`self-end relative text-8xl lg:text-[144px] font-['Cafe24Moyamoya-Face-v1.0'] -my-3`}
+            className={`self-end relative text-8xl lg:text-[144px] xl:text-[192px] font-['Cafe24Moyamoya-Face-v1.0'] -my-3`}
           >
             세계속으로
           </div>
