@@ -17,7 +17,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <title>{metadata.title}</title>
         <meta name='description' content={metadata.description} />
       </head>
-      <body className='bg-gradient-to-b from-cyan-500 to-white-500 to-90% overflow-hidden'>
+      <body className='bg-gradient-to-b from-cyan-500 to-white-500 to-90% overflow-hidden h-full'>
         <Header />
         <main className='h-full'>{children}</main>
         <Footer />
