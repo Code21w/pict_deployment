@@ -4,20 +4,26 @@
 PicT_Client
 ├── public/
 ├── src/
+│   ├── app/ 
+│   │   ├── subpage/
+│   │   ├── global.css
+│   │   ├── layout.tsx
+│   │   └── page.tsx
 │   ├── assets/
+│   │   └── images/
+│   │   │   └── main/
 │   ├── components/
-│   ├── pages/
-│   ├── modals/
-│   ├── utils/
-│   ├── apis/
-│   └── hooks/
-├── App.js
-├── index.js
+│   │   ├── ui/
+│   │   ├── shared/
+│   │   ├── main/
+│   │   ├── resultmodal/
+│   │   └── login-join/
 ├── .env
 ├── .gitignore
 └── package.json
 ```
 
+추가 페이지 생성 시 **`app`** 하위에 `page.tsx` 와 `layout.tsx` 만들어서 사용
 ### gitlab 브랜치 네이밍 규칙
 
 - **주요 브랜치**: **`develop`**
