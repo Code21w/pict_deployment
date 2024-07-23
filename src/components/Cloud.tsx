@@ -40,7 +40,11 @@ const CloudAnimation: React.FC = () => {
             } as React.CSSProperties
           }
         >
-          <Image src={CloudImage} alt={`Cloud ${idx + 1}`} />
+          <Image
+            src={CloudImage}
+            alt={`Cloud ${idx + 1}`}
+            className={`${idx < 3 ? 'opacity-90' : ''}`}
+          />
         </div>
       ))}
     </div>
