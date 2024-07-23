@@ -52,7 +52,27 @@ function Login() {
   });
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
-    console.log(data);
+    fetch('http://localhost:5000/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log('Success:', data);
+        // 성공적인 로그인 후의 로직 추가
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+        // 에러 처리 로직 추가
+      });
   }
 
   return (
@@ -123,11 +143,11 @@ function Login() {
           </Form>
           <div className='hr-sect'>또는</div>
           <div className='space-y-2'>
-            <Button type='submit' className='w-full bg-green-500 hover:bg-green-600'>
-              <img src='naver.svg' alt='naver' width={23} className='mr-2' />
-              네이버로 시작하기
+            <Button type='submit' className='w-full bg-gray-200 hover:bg-gray-300 text-black'>
+              <img src='google.svg' alt='google' width={23} className='mr-2' />
+              구글로 시작하기
             </Button>
-            <Button type='submit' className='w-full bg-yellow-400 hover:bg-yellow-500'>
+            <Button type='submit' className='w-full bg-yellow-400 hover:bg-yellow-500 text-black'>
               <img src='kakao.svg' alt='kakao' width={23} className='mr-2' />
               카카오로 시작하기
             </Button>

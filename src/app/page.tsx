@@ -5,37 +5,6 @@ import Image from 'next/image';
 
 import CloudAnimation from '@/components/Cloud';
 import imageicon from '@/assets/images/image_icon.png';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form';
-// import { toast } from '@/components/ui/use-toast';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
-
-import Link from 'next/link';
-
-import { Button } from '@/components/ui/button';
-
-// import { Join } from '@/components/Join';
-
 import Globe from '@/components/Globe';
 
 function Main() {
