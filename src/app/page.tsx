@@ -40,7 +40,9 @@ import Globe from '@/components/Globe';
 
 function Main() {
   return (
-    <main className={`flex min-h-screen items-center justify-between`}>
+    <main
+      className={`bg-gradient-to-b from-cyan-500 to-white-500 to-white flex min-h-screen items-center justify-between`}
+    >
       <div className='w-full h-full'>
         <div className='mx-[100px] lg:mx-[250px] mb-[100px] lg:-mb-[150px] flex flex-col justify-between'>
           <div
