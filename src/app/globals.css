@@ -111,46 +111,83 @@ body {
     transform: translateX(calc(var(--start-x) + 0px));
   }
   100% {
-    transform: translateX(calc(100vw));
+    transform: translateX(100vw);
   }
 }
-
+@keyframes resetFloatRight {
+  0% {
+    transform: translateX(calc(0px - var(--width)));
+  }
+  100% {
+    transform: translateX(100vw);
+  }
+}
 @keyframes floatLeft {
   0% {
     transform: translateX(calc(var(--start-x) + 0px));
   }
   100% {
-    transform: translateX(-100px);
+    transform: translateX(calc(0px - var(--width)));
   }
 }
-
-.cloud-right {
-  animation: floatRight infinite linear;
+@keyframes resetFloatLeft {
+  0% {
+    transform: translateX(100vw);
+  }
+  100% {
+    transform: translateX(calc(0px - var(--width)));
+  }
 }
-
-.cloud-left {
-  animation: floatLeft infinite linear;
+@keyframes airPlane {
+  0% {
+    transform: translate(calc(var(--airplane-start-x) + 0px), calc(var(--airplane-start-y) + 0px));
+  }
+  100% {
+    transform: translate(100vw, 20vw);
+  }
 }
-
+@keyframes resetAirPlane {
+  0% {
+    transform: translate(calc(0px - var(--airplane-width)), calc(0px));
+  }
+  100% {
+    transform: translate(100vw, 20vw);
+  }
+}
 .cloud-1 {
-  animation-duration: 20s;
+  animation:
+    floatRight 60s infinite linear,
+    resetFloatRight 60s 60s infinite linear;
   top: var(--start-y);
 }
 .cloud-2 {
-  animation-duration: 10s;
+  animation:
+    floatLeft 35s infinite linear,
+    resetFloatLeft 35s 35s infinite linear;
   top: var(--start-y);
 }
 .cloud-3 {
-  animation-duration: 8s;
+  animation:
+    floatRight 30s infinite linear,
+    resetFloatRight 30s 30s infinite linear;
   top: var(--start-y);
 }
 .cloud-4 {
-  animation-duration: 10s;
+  animation:
+    floatLeft 50s infinite linear,
+    resetFloatLeft 50s 50s infinite linear;
   top: var(--start-y);
 }
 .cloud-5 {
-  animation-duration: 5s;
+  animation:
+    floatRight 20s infinite linear,
+    resetFloatRight 20s 20s infinite linear;
   top: var(--start-y);
+}
+.airplane {
+  animation:
+    airPlane 10s infinite linear,
+    resetAirPlane 10s 10s infinite linear;
 }
 
 .hr-sect {
