@@ -3,7 +3,7 @@
 import React, { useState } from 'react'; // useState 추가
 import Image from 'next/image';
 
-import CloudAnimation from '@/components/Cloud';
+import CloudAnimation from '@/components/main/Cloud';
 import imageicon from '@/assets/images/image_icon.png';
 import {
   Dialog,
@@ -36,8 +36,8 @@ import { Button } from '@/components/ui/button';
 
 // import { Join } from '@/components/Join';
 
-import Globe from '@/components/Globe';
-import AirplaneAnimation from '@/components/Airplane';
+import Globe from '@/components/main/Globe';
+import AirplaneAnimation from '@/components/main/Airplane';
 
 function Main() {
   return (
