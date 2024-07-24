@@ -37,13 +37,12 @@ import { Button } from '@/components/ui/button';
 // import { Join } from '@/components/Join';
 
 import Globe from '@/components/Globe';
+import AirplaneAnimation from '@/components/Airplane';
 
 function Main() {
   return (
-    <main
-      className={`bg-gradient-to-b from-cyan-500 to-white-500 to-white flex min-h-screen items-center justify-between`}
-    >
-      <div className='w-full h-full'>
+    <main className='flex min-h-screen items-center justify-between'>
+      <div className='w-full h-screen'>
         <div className='mx-[100px] lg:mx-[250px] mb-[100px] lg:-mb-[150px] flex flex-col justify-between'>
           <div
             className={`relative text-8xl lg:text-[144px] xl:text-[192px] font-['Cafe24Moyamoya-Face-v1.0'] -py-3`}
@@ -56,19 +55,23 @@ function Main() {
             세계속으로
           </div>
         </div>
-        <div className='relative z-1 -mt-[100px] ml-[50px]'>
+
+        <div className='relative z-1 ml-[50px]'>
           <Globe />
         </div>
-        <div className='relative z-2 -mt-[650px]'>
+        <div className='fixed z-2 -mt-[600px]'>
+          <AirplaneAnimation />
+        </div>
+        <div className='relative z-3 -mt-[800px]'>
           <CloudAnimation />
         </div>
-        <div className='relative z-3 -mt-[450px] mb-[150px] ml-[50%] flex flex-col w-[500px] h-[100px] '>
+        <div className='relative z-4 -mt-[400px] mb-[150px] ml-[40%] flex flex-col w-[500px] h-[100px] '>
           <div className='flex'>
             <div className='text-lg'>해외 이미지를 넣으면&nbsp;</div>
             <b className='text-lg'>국내에서 가장 비슷한 곳</b>
             <div className='text-lg'>을 찾아드려요!</div>
           </div>
-          <div className=' flex items-center bg-gray-100 rounded-3xl shadow-md justify-center mt-[10px]'>
+          <div className='flex items-center bg-gray-100 rounded-3xl shadow-md justify-center mt-[10px]'>
             <Image src={imageicon} alt='UploadImageIcon.png' />
             <input
               className='w-[300px] h-[100px] bg-gray-100 pl-[10px]'

@@ -58,7 +58,7 @@ function Login() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <button>로그인</button>
+        <button className='text-foreground transition-colors hover:text-muted'>로그인</button>
       </DialogTrigger>
       <DialogContent className='sm:max-w-[425px]'>
         <DialogHeader>
