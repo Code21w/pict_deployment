@@ -43,14 +43,14 @@ function Main() {
   return (
     <main className='flex min-h-screen items-center justify-between'>
       <div className='w-full h-screen'>
-        <div className='mx-[100px] lg:mx-[250px] mb-[100px] lg:-mb-[150px] flex flex-col justify-between'>
+        <div className='max-[1200px]:mt-[10%] mx-[200px] lg:mx-[250px] min-[1500px]:-mb-[150px] flex flex-col justify-between'>
           <div
-            className={`relative text-8xl lg:text-[144px] xl:text-[192px] font-['Cafe24Moyamoya-Face-v1.0'] -py-3`}
+            className={`relative text-8xl min-[1200px]:text-[144px] min-[1500px]:text-[192px] font-['Cafe24Moyamoya-Face-v1.0'] -py-3`}
           >
             여기서
           </div>
           <div
-            className={`self-end relative text-8xl lg:text-[144px] xl:text-[192px] font-['Cafe24Moyamoya-Face-v1.0'] -my-3`}
+            className={`self-end relative text-8xl min-[1200px]:text-[144px] min-[1500px]:text-[192px] font-['Cafe24Moyamoya-Face-v1.0'] -my-3`}
           >
             세계속으로
           </div>
@@ -65,7 +65,7 @@ function Main() {
         <div className='relative z-3 -mt-[800px]'>
           <CloudAnimation />
         </div>
-        <div className='relative z-4 -mt-[400px] mb-[150px] ml-[40%] flex flex-col w-[500px] h-[100px] '>
+        <div className='relative z-4 max-[1200px]:-mt-[300px] -mt-[400px] mb-[150px] ml-[40%] flex flex-col w-[500px] h-[100px] '>
           <div className='flex'>
             <div className='text-lg'>해외 이미지를 넣으면&nbsp;</div>
             <b className='text-lg'>국내에서 가장 비슷한 곳</b>
