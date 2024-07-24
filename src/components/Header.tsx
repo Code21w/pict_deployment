@@ -3,10 +3,6 @@ import Link from 'next/link';
 import Join from './Join';
 import Login from './Login';
 
-/** image */
-// import { Menu } from 'lucide-react';
-// import logo from '../../assets/images/logo.png';
-
 function Header() {
   return (
     <header className='z-10 sticky top-0 flex h-16 items-center gap-4 px-4 md:px-6 flex justify-between'>
@@ -25,13 +21,7 @@ function Header() {
         <Link href={'/'} className='text-foreground transition-colors hover:text-muted'>
           메인2
         </Link>
-        {/* <Link href={'/'} className='text-muted-foreground transition-colors hover:text-foreground'>
-          로그인
-        </Link> */}
         <Login />
-        {/* <Link href={'/'} className='text-muted-foreground transition-colors hover:text-foreground'>
-          회원가입
-        </Link> */}
         <Join />
       </nav>
     </header>

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react'; // useState 추가
+import React from 'react'; // useState 추가
 import Image from 'next/image';
 
 import CloudAnimation from '@/components/main/Cloud';
@@ -43,7 +43,7 @@ function Main() {
   return (
     <main className='flex min-h-screen items-center justify-between'>
       <div className='w-full h-screen'>
-        <div className='max-[1200px]:mt-[10%] mx-[200px] lg:mx-[250px] min-[1500px]:-mb-[150px] flex flex-col justify-between min-w-[460px]'>
+        <div className='mx-[200px] lg:mx-[250px] max-[1200px]:mt-[10%] min-[1500px]:-mb-[150px] flex flex-col justify-between min-w-[460px]'>
           <div
             className={`relative text-8xl min-[1200px]:text-[144px] min-[1500px]:text-[192px] font-['Cafe24Moyamoya-Face-v1.0'] -py-3`}
           >
