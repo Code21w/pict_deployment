@@ -2,7 +2,7 @@ function Globe() {
   if (process.browser) {
   }
   return (
-    <div className='w-[500px] h-[500px]'>
+    <div className='w-[300px] h-[300px] min-[1200px]:w-[400px] min-[1200px]:h-[400px] min-[1500px]:w-[500px] min-[1500px]:h-[500px]'>
       <svg xmlns='http://www.w3.org/2000/svg' viewBox='20 15 200 200'>
         <g className='animate-spin-slow' transform-origin='120 115'>
           <g>
