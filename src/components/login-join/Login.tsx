@@ -143,11 +143,11 @@ function Login() {
           <div className='hr-sect'>또는</div>
           <div className='space-y-2'>
             <Button type='submit' className='w-full bg-gray-200 hover:bg-gray-300 text-black'>
-              <Image src='google.svg' alt='google' width={23} className='mr-2' />
+              <Image src='google.svg' alt='google' width={23} height={23} className='mr-2' />
               구글로 시작하기
             </Button>
             <Button type='submit' className='w-full bg-yellow-400 hover:bg-yellow-500 text-black'>
-              <Image src='kakao.svg' alt='kakao' width={23} className='mr-2' />
+              <Image src='kakao.svg' alt='kakao' width={23} height={23} className='mr-2' />
               카카오로 시작하기
             </Button>
           </div>
