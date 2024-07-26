@@ -73,7 +73,7 @@ function Join() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <button>회원가입</button>
+        <button className='text-foreground transition-colors hover:text-muted'>회원가입</button>
       </DialogTrigger>
       <DialogContent className='sm:max-w-[425px]'>
         <DialogHeader>

@@ -4,7 +4,7 @@ import React, { useState, useCallback } from 'react'; // useState 추가
 import Image from 'next/image';
 import {useDropzone} from 'react-dropzone';
 
-import CloudAnimation from '@/components/Cloud';
+import CloudAnimation from '@/components/main/Cloud';
 import imageicon from '@/assets/images/image_icon.png';
 import { DialogDemo } from '@/components/resultmodal/ResultModal';
 import {
@@ -38,7 +38,8 @@ import { Button } from '@/components/ui/button';
 
 // import { Join } from '@/components/Join';
 
-import Globe from '@/components/Globe';
+import Globe from '@/components/main/Globe';
+import AirplaneAnimation from '@/components/main/Airplane';
 
 function Main() {
   const [image, setImage] = useState(null);
@@ -56,29 +57,31 @@ function Main() {
 
 
   return (
-    <main
-      className={`bg-gradient-to-b from-cyan-500 to-white-500 to-white flex min-h-screen items-center justify-between`}
-    >
-      <div className='w-full h-full'>
-        <div className='mx-[100px] lg:mx-[250px] mb-[100px] lg:-mb-[150px] flex flex-col justify-between'>
+    <main className='flex min-h-screen items-center justify-between'>
+      <div className='w-full h-screen'>
+        <div className='mx-[200px] lg:mx-[250px] max-[1200px]:mt-[10%] min-[1500px]:-mb-[150px] flex flex-col justify-between min-w-[460px]'>
           <div
-            className={`relative text-8xl lg:text-[144px] xl:text-[192px] font-['Cafe24Moyamoya-Face-v1.0'] -py-3`}
+            className={`relative text-8xl min-[1200px]:text-[144px] min-[1500px]:text-[192px] font-['Cafe24Moyamoya-Face-v1.0'] -py-3`}
           >
             여기서
           </div>
           <div
-            className={`self-end relative text-8xl lg:text-[144px] xl:text-[192px] font-['Cafe24Moyamoya-Face-v1.0'] -my-3`}
+            className={`self-end relative text-8xl min-[1200px]:text-[144px] min-[1500px]:text-[192px] font-['Cafe24Moyamoya-Face-v1.0'] -my-3`}
           >
             세계속으로
           </div>
         </div>
-        <div className='relative z-1 -mt-[100px] ml-[50px]'>
+
+        <div className='relative z-1 ml-[50px]'>
           <Globe />
         </div>
-        <div className='relative z-2 -mt-[650px]'>
+        <div className='fixed z-2 -mt-[600px]'>
+          <AirplaneAnimation />
+        </div>
+        <div className='relative z-3 -mt-[800px]'>
           <CloudAnimation />
         </div>
-        <div className='relative z-3 -mt-[450px] mb-[150px] ml-[50%] flex flex-col w-[500px] h-[100px] '>
+        <div className='relative z-4 max-[1200px]:-mt-[300px] -mt-[400px] mb-[150px] ml-[40%] flex flex-col w-[500px] h-[100px] '>
           <div className='flex'>
             <div className='text-lg'>해외 이미지를 넣으면&nbsp;</div>
             <b className='text-lg'>국내에서 가장 비슷한 곳</b>
