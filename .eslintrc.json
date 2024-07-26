@@ -16,13 +16,24 @@
     "plugin:@typescript-eslint/recommended",
     "plugin:react/recommended",
     "plugin:react-hooks/recommended",
-    "prettier",
+    // "prettier",
+    "plugin:prettier/recommended",
     "airbnb",
     "airbnb-typescript",
     "plugin:prettier/recommended",
     "airbnb/hooks"
   ],
   "rules": {
+    "prettier/prettier": [
+      "warn",
+      {
+        "endOfLine": "auto"
+      }
+    ],
+    "react/no-unknown-property": ["error", { "ignore": ["css"] }],
+    "import/no-extraneous-dependencies": ["error", { "devDependencies": true }],
+    "react/jsx-props-no-spreading": "off",
+
     // General rules
     "no-console": ["error", { "allow": ["error"] }],
     "no-debugger": "warn",

@@ -2,7 +2,7 @@ function Globe() {
   if (process.browser) {
   }
   return (
-    <div className='w-[500px] h-[500px]'>
+    <div className='w-[300px] h-[300px] min-[1200px]:w-[400px] min-[1200px]:h-[400px] min-[1500px]:w-[500px] min-[1500px]:h-[500px]'>
       <svg xmlns='http://www.w3.org/2000/svg' viewBox='20 15 200 200'>
         <g className='animate-spin-slow' transform-origin='120 115'>
           <g>
@@ -3597,8 +3597,8 @@ function Globe() {
               ry='4.4'
               fill='none'
               stroke='#396ad8'
-              stroke-linecap='round'
-              stroke-linejoin='round'
+              strokeLinecap='round'
+              strokeLinejoin='round'
             />
             <ellipse
               cx='104.8'
@@ -3607,8 +3607,8 @@ function Globe() {
               ry='6.7'
               fill='none'
               stroke='#396ad8'
-              stroke-linecap='round'
-              stroke-linejoin='round'
+              strokeLinecap='round'
+              strokeLinejoin='round'
             />
             <ellipse
               cx='104.8'
@@ -3617,8 +3617,8 @@ function Globe() {
               ry='9.3'
               fill='none'
               stroke='#396ad8'
-              stroke-linecap='round'
-              stroke-linejoin='round'
+              strokeLinecap='round'
+              strokeLinejoin='round'
             />
           </g>
           <g>
@@ -3629,8 +3629,8 @@ function Globe() {
               ry='4.4'
               fill='none'
               stroke='#396ad8'
-              stroke-linecap='round'
-              stroke-linejoin='round'
+              strokeLinecap='round'
+              strokeLinejoin='round'
             />
             <ellipse
               cx='127.6'
@@ -3639,8 +3639,8 @@ function Globe() {
               ry='6.7'
               fill='none'
               stroke='#396ad8'
-              stroke-linecap='round'
-              stroke-linejoin='round'
+              strokeLinecap='round'
+              strokeLinejoin='round'
             />
             <ellipse
               cx='127.6'
@@ -3649,8 +3649,8 @@ function Globe() {
               ry='9.3'
               fill='none'
               stroke='#396ad8'
-              stroke-linecap='round'
-              stroke-linejoin='round'
+              strokeLinecap='round'
+              strokeLinejoin='round'
             />
           </g>
           <g>
@@ -3662,8 +3662,8 @@ function Globe() {
               transform='translate(36 175.2) rotate(-62.3)'
               fill='none'
               stroke='#396ad8'
-              stroke-linecap='round'
-              stroke-linejoin='round'
+              strokeLinecap='round'
+              strokeLinejoin='round'
             />
             <ellipse
               cx='162.3'
@@ -3673,8 +3673,8 @@ function Globe() {
               transform='translate(36 175.2) rotate(-62.3)'
               fill='none'
               stroke='#396ad8'
-              stroke-linecap='round'
-              stroke-linejoin='round'
+              strokeLinecap='round'
+              strokeLinejoin='round'
             />
             <ellipse
               cx='162.3'
@@ -3684,8 +3684,8 @@ function Globe() {
               transform='translate(36 175.2) rotate(-62.3)'
               fill='none'
               stroke='#396ad8'
-              stroke-linecap='round'
-              stroke-linejoin='round'
+              strokeLinecap='round'
+              strokeLinejoin='round'
             />
           </g>
           <g>
@@ -3697,8 +3697,8 @@ function Globe() {
               transform='translate(-10.6 109.8) rotate(-32.3)'
               fill='none'
               stroke='#396ad8'
-              stroke-linecap='round'
-              stroke-linejoin='round'
+              strokeLinecap='round'
+              strokeLinejoin='round'
             />
             <ellipse
               cx='182.8'
@@ -3708,8 +3708,8 @@ function Globe() {
               transform='translate(-10.6 109.8) rotate(-32.3)'
               fill='none'
               stroke='#396ad8'
-              stroke-linecap='round'
-              stroke-linejoin='round'
+              strokeLinecap='round'
+              strokeLinejoin='round'
             />
             <ellipse
               cx='182.8'
@@ -3719,8 +3719,8 @@ function Globe() {
               transform='translate(-10.6 109.8) rotate(-32.3)'
               fill='none'
               stroke='#396ad8'
-              stroke-linecap='round'
-              stroke-linejoin='round'
+              strokeLinecap='round'
+              strokeLinejoin='round'
             />
           </g>
           <g>
@@ -3732,8 +3732,8 @@ function Globe() {
               transform='translate(-47 30.5) rotate(-25)'
               fill='none'
               stroke='#396ad8'
-              stroke-linecap='round'
-              stroke-linejoin='round'
+              strokeLinecap='round'
+              strokeLinejoin='round'
             />
             <ellipse
               cx='44'
@@ -3743,8 +3743,8 @@ function Globe() {
               transform='translate(-47 30.5) rotate(-25)'
               fill='none'
               stroke='#396ad8'
-              stroke-linecap='round'
-              stroke-linejoin='round'
+              strokeLinecap='round'
+              strokeLinejoin='round'
             />
             <ellipse
               cx='44'
@@ -3754,8 +3754,8 @@ function Globe() {
               transform='translate(-47 30.5) rotate(-25)'
               fill='none'
               stroke='#396ad8'
-              stroke-linecap='round'
-              stroke-linejoin='round'
+              strokeLinecap='round'
+              strokeLinejoin='round'
             />
           </g>
           <g>
@@ -3767,8 +3767,8 @@ function Globe() {
               transform='translate(50.7 172.8) rotate(-62.3)'
               fill='none'
               stroke='#396ad8'
-              stroke-linecap='round'
-              stroke-linejoin='round'
+              strokeLinecap='round'
+              strokeLinejoin='round'
             />
             <ellipse
               cx='167.7'
@@ -3778,8 +3778,8 @@ function Globe() {
               transform='translate(50.7 172.8) rotate(-62.3)'
               fill='none'
               stroke='#396ad8'
-              stroke-linecap='round'
-              stroke-linejoin='round'
+              strokeLinecap='round'
+              strokeLinejoin='round'
             />
             <ellipse
               cx='167.7'
@@ -3789,8 +3789,8 @@ function Globe() {
               transform='translate(50.7 172.8) rotate(-62.3)'
               fill='none'
               stroke='#396ad8'
-              stroke-linecap='round'
-              stroke-linejoin='round'
+              strokeLinecap='round'
+              strokeLinejoin='round'
             />
           </g>
           <g>
@@ -3802,8 +3802,8 @@ function Globe() {
               transform='translate(4.1 282.6) rotate(-70.8)'
               fill='none'
               stroke='#396ad8'
-              stroke-linecap='round'
-              stroke-linejoin='round'
+              strokeLinecap='round'
+              strokeLinejoin='round'
             />
             <ellipse
               cx='200.3'
@@ -3813,8 +3813,8 @@ function Globe() {
               transform='translate(4.1 282.6) rotate(-70.8)'
               fill='none'
               stroke='#396ad8'
-              stroke-linecap='round'
-              stroke-linejoin='round'
+              strokeLinecap='round'
+              strokeLinejoin='round'
             />
             <ellipse
               cx='200.3'
@@ -3824,8 +3824,8 @@ function Globe() {
               transform='translate(4.1 282.6) rotate(-70.8)'
               fill='none'
               stroke='#396ad8'
-              stroke-linecap='round'
-              stroke-linejoin='round'
+              strokeLinecap='round'
+              strokeLinejoin='round'
             />
           </g>
           <g>
@@ -3837,8 +3837,8 @@ function Globe() {
               transform='translate(-33.5 252.7) rotate(-62.1)'
               fill='none'
               stroke='#396ad8'
-              stroke-linecap='round'
-              stroke-linejoin='round'
+              strokeLinecap='round'
+              strokeLinejoin='round'
             />
             <ellipse
               cx='192.2'
@@ -3848,8 +3848,8 @@ function Globe() {
               transform='translate(-33.5 252.7) rotate(-62.1)'
               fill='none'
               stroke='#396ad8'
-              stroke-linecap='round'
-              stroke-linejoin='round'
+              strokeLinecap='round'
+              strokeLinejoin='round'
             />
             <ellipse
               cx='192.2'
@@ -3859,8 +3859,8 @@ function Globe() {
               transform='translate(-33.5 252.7) rotate(-62.1)'
               fill='none'
               stroke='#396ad8'
-              stroke-linecap='round'
-              stroke-linejoin='round'
+              strokeLinecap='round'
+              strokeLinejoin='round'
             />
           </g>
           <g>
@@ -3872,8 +3872,8 @@ function Globe() {
               transform='translate(-21.2 58.4) rotate(-49.3)'
               fill='none'
               stroke='#396ad8'
-              stroke-linecap='round'
-              stroke-linejoin='round'
+              strokeLinecap='round'
+              strokeLinejoin='round'
             />
             <ellipse
               cx='52.3'
@@ -3883,8 +3883,8 @@ function Globe() {
               transform='translate(-21.2 58.4) rotate(-49.3)'
               fill='none'
               stroke='#396ad8'
-              stroke-linecap='round'
-              stroke-linejoin='round'
+              strokeLinecap='round'
+              strokeLinejoin='round'
             />
             <ellipse
               cx='52.3'
@@ -3894,8 +3894,8 @@ function Globe() {
               transform='translate(-21.2 58.4) rotate(-49.3)'
               fill='none'
               stroke='#396ad8'
-              stroke-linecap='round'
-              stroke-linejoin='round'
+              strokeLinecap='round'
+              strokeLinejoin='round'
             />
           </g>
           <g>
@@ -3907,8 +3907,8 @@ function Globe() {
               transform='translate(-13.7 10.8) rotate(-4.2)'
               fill='none'
               stroke='#396ad8'
-              stroke-linecap='round'
-              stroke-linejoin='round'
+              strokeLinecap='round'
+              strokeLinejoin='round'
             />
             <ellipse
               cx='135'
@@ -3918,8 +3918,8 @@ function Globe() {
               transform='translate(-13.7 10.8) rotate(-4.2)'
               fill='none'
               stroke='#396ad8'
-              stroke-linecap='round'
-              stroke-linejoin='round'
+              strokeLinecap='round'
+              strokeLinejoin='round'
             />
             <ellipse
               cx='135'
@@ -3929,8 +3929,8 @@ function Globe() {
               transform='matrix(1, -0.07, 0.07, 1, -13.65, 10.79)'
               fill='none'
               stroke='#396ad8'
-              stroke-linecap='round'
-              stroke-linejoin='round'
+              strokeLinecap='round'
+              strokeLinejoin='round'
             />
           </g>
           <g>
@@ -3942,8 +3942,8 @@ function Globe() {
               transform='matrix(0.27, -0.96, 0.96, 0.27, -119.84, 238.02)'
               fill='none'
               stroke='#396ad8'
-              stroke-linecap='round'
-              stroke-linejoin='round'
+              strokeLinecap='round'
+              strokeLinejoin='round'
             />
             <ellipse
               cx='96.3'
@@ -3953,8 +3953,8 @@ function Globe() {
               transform='translate(-119.8 238) rotate(-74.4)'
               fill='none'
               stroke='#396ad8'
-              stroke-linecap='round'
-              stroke-linejoin='round'
+              strokeLinecap='round'
+              strokeLinejoin='round'
             />
             <ellipse
               cx='96.3'
@@ -3964,8 +3964,8 @@ function Globe() {
               transform='translate(-119.8 238) rotate(-74.4)'
               fill='none'
               stroke='#396ad8'
-              stroke-linecap='round'
-              stroke-linejoin='round'
+              strokeLinecap='round'
+              strokeLinejoin='round'
             />
           </g>
           <g>
@@ -3977,8 +3977,8 @@ function Globe() {
               transform='translate(-70.9 45) rotate(-29.7)'
               fill='none'
               stroke='#396ad8'
-              stroke-linecap='round'
-              stroke-linejoin='round'
+              strokeLinecap='round'
+              strokeLinejoin='round'
             />
             <ellipse
               cx='48.1'
@@ -3988,8 +3988,8 @@ function Globe() {
               transform='translate(-70.9 45) rotate(-29.7)'
               fill='none'
               stroke='#396ad8'
-              stroke-linecap='round'
-              stroke-linejoin='round'
+              strokeLinecap='round'
+              strokeLinejoin='round'
             />
             <ellipse
               cx='48.1'
@@ -3999,8 +3999,8 @@ function Globe() {
               transform='translate(-70.9 45) rotate(-29.7)'
               fill='none'
               stroke='#396ad8'
-              stroke-linecap='round'
-              stroke-linejoin='round'
+              strokeLinecap='round'
+              strokeLinejoin='round'
             />
           </g>
           <g>
@@ -4012,8 +4012,8 @@ function Globe() {
               transform='matrix(0.07, -1, 1, 0.07, -84.28, 143.84)'
               fill='none'
               stroke='#396ad8'
-              stroke-linecap='round'
-              stroke-linejoin='round'
+              strokeLinecap='round'
+              strokeLinejoin='round'
             />
             <ellipse
               cx='34.8'
@@ -4023,8 +4023,8 @@ function Globe() {
               transform='translate(-84.3 143.8) rotate(-85.8)'
               fill='none'
               stroke='#396ad8'
-              stroke-linecap='round'
-              stroke-linejoin='round'
+              strokeLinecap='round'
+              strokeLinejoin='round'
             />
             <ellipse
               cx='34.8'
@@ -4034,8 +4034,8 @@ function Globe() {
               transform='translate(-84.3 143.8) rotate(-85.8)'
               fill='none'
               stroke='#396ad8'
-              stroke-linecap='round'
-              stroke-linejoin='round'
+              strokeLinecap='round'
+              strokeLinejoin='round'
             />
           </g>
           <g>
@@ -4047,8 +4047,8 @@ function Globe() {
               transform='translate(-31.2 73.2) rotate(-61.7)'
               fill='none'
               stroke='#396ad8'
-              stroke-linecap='round'
-              stroke-linejoin='round'
+              strokeLinecap='round'
+              strokeLinejoin='round'
             />
             <ellipse
               cx='44.9'
@@ -4058,8 +4058,8 @@ function Globe() {
               transform='translate(-31.2 73.2) rotate(-61.7)'
               fill='none'
               stroke='#396ad8'
-              stroke-linecap='round'
-              stroke-linejoin='round'
+              strokeLinecap='round'
+              strokeLinejoin='round'
             />
             <ellipse
               cx='44.9'
@@ -4069,8 +4069,8 @@ function Globe() {
               transform='translate(-31.2 73.2) rotate(-61.7)'
               fill='none'
               stroke='#396ad8'
-              stroke-linecap='round'
-              stroke-linejoin='round'
+              strokeLinecap='round'
+              strokeLinejoin='round'
             />
           </g>
         </g>
@@ -4081,56 +4081,56 @@ function Globe() {
             transform='translate(0.5 0.5)'
             fill='none'
             stroke='#c60'
-            stroke-linecap='round'
-            stroke-linejoin='round'
+            strokeLinecap='round'
+            strokeLinejoin='round'
           />
           <path
             d='M104,99S12.5,55.2,44.5,122.1'
             transform='translate(0.5 0.5)'
             fill='none'
             stroke='#c60'
-            stroke-linecap='round'
-            stroke-linejoin='round'
+            strokeLinecap='round'
+            strokeLinejoin='round'
           />
           <path
             d='M199.8,138.3s69.3-75.8-17-64.5'
             transform='translate(0.5 0.5)'
             fill='none'
             stroke='#c60'
-            stroke-linecap='round'
-            stroke-linejoin='round'
+            strokeLinecap='round'
+            strokeLinejoin='round'
           />
           <path
             d='M45.6,61.6s-60.8,15.4-9.9,56.2'
             transform='translate(0.5 0.5)'
             fill='none'
             stroke='#c60'
-            stroke-linecap='round'
-            stroke-linejoin='round'
+            strokeLinecap='round'
+            strokeLinejoin='round'
           />
           <path
             d='M127.5,95.5s61.6-127.3,40.8-50.9'
             transform='translate(0.5 0.5)'
             fill='none'
             stroke='#c60'
-            stroke-linecap='round'
-            stroke-linejoin='round'
+            strokeLinecap='round'
+            strokeLinejoin='round'
           />
           <path
             d='M134.6,200.2s75,24,58.9-45.9'
             transform='translate(0.5 0.5)'
             fill='none'
             stroke='#c60'
-            stroke-linecap='round'
-            stroke-linejoin='round'
+            strokeLinecap='round'
+            strokeLinejoin='round'
           />
           <path
             d='M48.3,156.7S27,225,96.3,198'
             transform='translate(0.5 0.5)'
             fill='none'
             stroke='#c60'
-            stroke-linecap='round'
-            stroke-linejoin='round'
+            strokeLinecap='round'
+            strokeLinejoin='round'
           />
         </g>
       </svg>

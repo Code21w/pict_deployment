@@ -1,36 +1,35 @@
 'use client';
 
-import React, { useState } from 'react'; // useState 추가
+import React from 'react';
+import Image from 'next/image';
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
-  DialogFooter,
+  // DialogDescription,
+  // DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from './ui/dialog';
-import { Input } from './ui/input';
-import { Label } from './ui/label';
+} from '../ui/dialog';
+import { Input } from '../ui/input';
+// import { Label } from './ui/label';
 import {
   Form,
   FormControl,
-  FormDescription,
+  // FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
-} from './ui/form';
+} from '../ui/form';
 // import { toast } from '@/components/ui/use-toast';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-import Link from 'next/link';
+// import Link from 'next/link';
 
 import { Button } from '@/components/ui/button';
-
-import Join from './Join';
 
 const FormSchema = z.object({
   email: z.string().email({
@@ -78,7 +77,7 @@ function Login() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <button>로그인</button>
+        <button className='text-foreground transition-colors hover:text-muted'>로그인</button>
       </DialogTrigger>
       <DialogContent className='sm:max-w-[425px]'>
         <DialogHeader>
@@ -144,11 +143,11 @@ function Login() {
           <div className='hr-sect'>또는</div>
           <div className='space-y-2'>
             <Button type='submit' className='w-full bg-gray-200 hover:bg-gray-300 text-black'>
-              <img src='google.svg' alt='google' width={23} className='mr-2' />
+              <Image src='google.svg' alt='google' width={23} className='mr-2' />
               구글로 시작하기
             </Button>
             <Button type='submit' className='w-full bg-yellow-400 hover:bg-yellow-500 text-black'>
-              <img src='kakao.svg' alt='kakao' width={23} className='mr-2' />
+              <Image src='kakao.svg' alt='kakao' width={23} className='mr-2' />
               카카오로 시작하기
             </Button>
           </div>

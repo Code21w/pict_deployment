@@ -1,33 +1,35 @@
+/* eslint-disable react/jsx-props-no-spreading */
+
 'use client';
 
 import React from 'react';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
-  DialogFooter,
+  // DialogDescription,
+  // DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from './ui/dialog';
-import { Input } from './ui/input';
-import { Label } from './ui/label';
+} from '../ui/dialog';
+import { Input } from '../ui/input';
+// import { Label } from './ui/label';
 import {
   Form,
   FormControl,
-  FormDescription,
+  // FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
-} from './ui/form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
+} from '../ui/form';
 
-import Link from 'next/link';
+// import Link from 'next/link';
 
-import { Button } from '@/components/ui/button';
+import { Button } from '../ui/button';
 
 const FormSchema = z.object({
   username: z.string().min(2, {
@@ -67,13 +69,31 @@ function Join() {
   });
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
-    console.log(data);
+    fetch('http://localhost:5000/register', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+        // 에러 처리 로직 추가
+      });
   }
 
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <button>회원가입</button>
+        <button type='button' className='text-foreground transition-colors hover:text-muted'>
+          회원가입
+        </button>
       </DialogTrigger>
       <DialogContent className='sm:max-w-[425px]'>
         <DialogHeader>
