@@ -6,7 +6,7 @@ const api = axios.create({ baseURL });
 
 async function UploadFile(formData: FormData) {
   try {
-    const response = await api.post<{ image: string }>('/images', formData, {
+    const response = await api.post<{ image: string }>('/api/images', formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
