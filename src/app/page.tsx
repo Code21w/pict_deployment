@@ -2,11 +2,12 @@
 
 import React, { useState, useCallback } from 'react'; // useState 추가
 import Image from 'next/image';
-import {useDropzone} from 'react-dropzone';
+import { useDropzone } from 'react-dropzone';
 
 import CloudAnimation from '@/components/main/Cloud';
 import imageicon from '@/assets/images/image_icon.png';
 import { DialogDemo } from '@/components/resultmodal/ResultModal';
+import UploadFile from '@/api/SendingImage';
 import {
   Dialog,
   DialogContent,
@@ -43,18 +44,42 @@ import AirplaneAnimation from '@/components/main/Airplane';
 
 function Main() {
   const [image, setImage] = useState(null);
+  const [file, setFile] = useState(null);
+  const [dialogOpen, setDialogOpen] = useState(false);
 
   const onDrop = useCallback((acceptedFiles) => {
     const file = acceptedFiles[0];
     if (file) {
       const objectUrl = URL.createObjectURL(file);
       setImage(objectUrl);
-      console.log("Uploaded file:", file);
-      console.log("Object URL:", objectUrl);
+      setFile(file);
+      console.log('Uploaded file:', file);
+      console.log('Object URL:', objectUrl);
     }
   }, []);
-  const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop});
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    onDrop,
+    accept: {
+      'image/*': ['.jpeg', '.jpg', '.png'],
+    },
+  });
 
+  const handleButtonClick = async () => {
+    if (file) {
+      const formData = new FormData();
+      formData.append('file', file);
+
+      try {
+        const response = await UploadFile(formData);
+        console.log('Server response:', response);
+        setDialogOpen(true);
+      } catch (error) {
+        console.error('Error uploading file:', error);
+      }
+    } else {
+      console.error('No file to upload');
+    }
+  };
 
   return (
     <main className='flex min-h-screen items-center justify-between'>
@@ -87,21 +112,36 @@ function Main() {
             <b className='text-lg'>국내에서 가장 비슷한 곳</b>
             <div className='text-lg'>을 찾아드려요!</div>
           </div>
-          <div 
-            {...getRootProps()} 
+          <div
+            {...getRootProps()}
             className={`flex items-center bg-gray-100 rounded-3xl shadow-md justify-center mt-[10px] ${
               isDragActive ? 'bg-gray-200' : 'bg-gray-100'
             }`}
           >
-          <input {...getInputProps()} className='w-[300px] h-[100px] bg-transparent pl-[10px]' />
+            <input {...getInputProps()} className='w-[300px] h-[100px] bg-transparent pl-[10px]' />
             {!image && <Image src={imageicon} alt='UploadImageIcon.png' />}
-            {image && <img src={image} alt='Uploaded Preview' className='w-[300px] h-[100px] object-cover' />}
+            {image && (
+              <img
+                src={image}
+                alt='Uploaded Preview'
+                className='w-[300px] h-[100px] object-cover'
+              />
+            )}
           </div>
           <div>
-            <DialogDemo triggerClassName ='w-[500px] h-[50px] bg-cyan-300 active:bg-cyan-400 rounded-3xl shadow-md mt-[10px]'>
+            <button
+              onClick={handleButtonClick}
+              className='w-[500px] h-[50px] bg-cyan-300 active:bg-cyan-400 rounded-3xl shadow-md mt-[10px]'
+            >
               여기랑 비슷한 곳 찾아주세요!
-            </DialogDemo> 
+            </button>
           </div>
+          {dialogOpen && (
+            <DialogDemo
+              triggerClassName='w-[500px] h-[50px] bg-cyan-300 active:bg-cyan-400 rounded-3xl shadow-md mt-[10px]'
+              image={image} // 업로드된 이미지를 DialogDemo로 전달
+            />
+          )}
         </div>
       </div>
     </main>
