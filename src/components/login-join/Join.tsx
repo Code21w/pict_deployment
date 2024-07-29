@@ -69,7 +69,7 @@ function Join() {
   });
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
-    fetch('http://localhost:5000/register', {
+    fetch('https://localhost:3000/register', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
