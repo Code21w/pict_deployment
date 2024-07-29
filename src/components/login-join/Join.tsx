@@ -32,7 +32,7 @@ import {
 import { Button } from '../ui/button';
 
 const FormSchema = z.object({
-  username: z.string().min(2, {
+  display_name: z.string().min(2, {
     message: '이름은 두 글자 이상이어야 합니다.',
   }),
   email: z.string().email({
@@ -61,7 +61,7 @@ function Join() {
     resolver: zodResolver(FormSchema),
     mode: 'onChange',
     defaultValues: {
-      username: '',
+      display_name: '',
       email: '',
       password: '',
       passwordCheck: '',
@@ -69,11 +69,12 @@ function Join() {
   });
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
-    fetch('https://localhost:3000/register', {
+    fetch('/auth/register', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
+      credentials: 'include',
       body: JSON.stringify(data),
     })
       .then((response) => {
@@ -123,7 +124,7 @@ function Join() {
             <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-8'>
               <FormField
                 control={form.control}
-                name='username'
+                name='display_name'
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>이름</FormLabel>
