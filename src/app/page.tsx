@@ -13,14 +13,14 @@ import { DialogDemo } from '@/components/resultmodal/ResultModal';
 
 import AirplaneAnimation from '@/components/main/Airplane';
 import Globe from '@/components/main/Globe';
-
 function Main() {
   const [image, setImage] = useState(null);
-
-  const onDrop = useCallback((acceptedFiles) => {
+  // Todo define type acceptedFiles
+  const onDrop = useCallback((acceptedFiles: any) => {
     const file = acceptedFiles[0];
     if (file) {
-      const objectUrl = URL.createObjectURL(file);
+      const objectUrl: any = URL.createObjectURL(file);
+      //Todo define type objectUrl
       setImage(objectUrl);
       console.log('Uploaded file:', file);
       console.log('Object URL:', objectUrl);

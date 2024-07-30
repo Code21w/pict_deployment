@@ -17,10 +17,7 @@
     "plugin:react/recommended",
     "plugin:react-hooks/recommended",
     "prettier",
-    "airbnb",
-    "airbnb-typescript",
-    "plugin:prettier/recommended",
-    "airbnb/hooks"
+    "plugin:prettier/recommended"
   ],
   "rules": {
     // General rules
