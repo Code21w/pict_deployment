@@ -71,6 +71,7 @@ function Main() {
     accept: {
       'image/*': ['.jpeg', '.jpg', '.png'],
     },
+    multiple: false,
   });
 
   const handleButtonClick = async () => {
