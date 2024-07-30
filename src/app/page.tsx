@@ -1,9 +1,12 @@
 'use client';
 
 import Image from 'next/image';
+import { useCallback, useState } from 'react'; // useState 추가
+import { useDropzone } from 'react-dropzone';
 
-import imageIcon from '@/assets/images/image_icon.png';
+import imageicon from '@/assets/images/image_icon.png';
 import CloudAnimation from '@/components/main/Cloud';
+import { DialogDemo } from '@/components/resultmodal/ResultModal';
 // import { toast } from '@/components/ui/use-toast';
 
 // import { Join } from '@/components/Join';
@@ -12,6 +15,19 @@ import AirplaneAnimation from '@/components/main/Airplane';
 import Globe from '@/components/main/Globe';
 
 function Main() {
+  const [image, setImage] = useState(null);
+
+  const onDrop = useCallback((acceptedFiles) => {
+    const file = acceptedFiles[0];
+    if (file) {
+      const objectUrl = URL.createObjectURL(file);
+      setImage(objectUrl);
+      console.log('Uploaded file:', file);
+      console.log('Object URL:', objectUrl);
+    }
+  }, []);
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
+
   return (
     <main className='flex min-h-screen items-center justify-between'>
       <div className='w-full h-screen'>
@@ -43,17 +59,26 @@ function Main() {
             <b className='text-lg'>국내에서 가장 비슷한 곳</b>
             <div className='text-lg'>을 찾아드려요!</div>
           </div>
-          <div className='flex items-center bg-gray-100 rounded-3xl shadow-md justify-center mt-[10px]'>
-            <Image src={imageIcon} alt='UploadImageIcon.png' />
-            <input
-              className='w-[300px] h-[100px] bg-gray-100 pl-[10px]'
-              placeholder='Drag an image here or upload a file'
-            ></input>
+          <div
+            {...getRootProps()}
+            className={`flex items-center bg-gray-100 rounded-3xl shadow-md justify-center mt-[10px] ${
+              isDragActive ? 'bg-gray-200' : 'bg-gray-100'
+            }`}
+          >
+            <input {...getInputProps()} className='w-[300px] h-[100px] bg-transparent pl-[10px]' />
+            {!image && <Image src={imageicon} alt='UploadImageIcon.png' />}
+            {image && (
+              <img
+                src={image}
+                alt='Uploaded Preview'
+                className='w-[300px] h-[100px] object-cover'
+              />
+            )}
           </div>
           <div>
-            <button className='w-[500px] h-[50px] bg-cyan-300 active:bg-cyan-400 rounded-3xl shadow-md mt-[10px]'>
+            <DialogDemo triggerClassName='w-[500px] h-[50px] bg-cyan-300 active:bg-cyan-400 rounded-3xl shadow-md mt-[10px]'>
               여기랑 비슷한 곳 찾아주세요!
-            </button>
+            </DialogDemo>
           </div>
         </div>
       </div>
