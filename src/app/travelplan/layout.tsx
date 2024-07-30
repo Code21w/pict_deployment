@@ -1,4 +1,4 @@
-import './globals.css';
+import '../globals.css';
 import { ReactNode } from 'react';
 import Footer from '@/components/shared/Footer';
 import Header from '@/components/shared/Header';
@@ -17,10 +17,9 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <title>{metadata.title}</title>
         <meta name='description' content={metadata.description} />
       </head>
-      <body className='bg-gradient-to-b from-cyan-500 to-white-500 to-90% overflow-hidden h-full min-w-[720px]'>
+      <body className='overflow-hidden h-full min-w-[720px]'>
         <Header />
         <main className='h-full'>{children}</main>
-        <Footer />
       </body>
     </html>
   );

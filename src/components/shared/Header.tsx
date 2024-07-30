@@ -1,7 +1,7 @@
 import Link from 'next/link';
 
-import Join from './Join';
-import Login from './Login';
+import Join from '@/components/login-join/Join';
+import Login from '@/components/login-join/Login';
 
 function Header() {
   return (
@@ -15,11 +15,11 @@ function Header() {
           <span className='sr-only'>PicT</span>
         </Link>
 
-        <Link href={'/1'} className='text-foreground transition-colors hover:text-muted'>
+        <Link href={'/'} className='text-foreground transition-colors hover:text-muted'>
           메인1
         </Link>
-        <Link href={'/'} className='text-foreground transition-colors hover:text-muted'>
-          메인2
+        <Link href={'/travelplan'} className='text-foreground transition-colors hover:text-muted'>
+          여행일지
         </Link>
         <Login />
         <Join />

@@ -1,43 +1,15 @@
 'use client';
 
-import React from 'react'; // useState 추가
 import Image from 'next/image';
 
+import imageIcon from '@/assets/images/image_icon.png';
 import CloudAnimation from '@/components/main/Cloud';
-import imageicon from '@/assets/images/image_icon.png';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form';
 // import { toast } from '@/components/ui/use-toast';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
-
-import Link from 'next/link';
-
-import { Button } from '@/components/ui/button';
 
 // import { Join } from '@/components/Join';
 
-import Globe from '@/components/main/Globe';
 import AirplaneAnimation from '@/components/main/Airplane';
+import Globe from '@/components/main/Globe';
 
 function Main() {
   return (
@@ -72,7 +44,7 @@ function Main() {
             <div className='text-lg'>을 찾아드려요!</div>
           </div>
           <div className='flex items-center bg-gray-100 rounded-3xl shadow-md justify-center mt-[10px]'>
-            <Image src={imageicon} alt='UploadImageIcon.png' />
+            <Image src={imageIcon} alt='UploadImageIcon.png' />
             <input
               className='w-[300px] h-[100px] bg-gray-100 pl-[10px]'
               placeholder='Drag an image here or upload a file'

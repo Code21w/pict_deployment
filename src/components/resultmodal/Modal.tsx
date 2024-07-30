@@ -9,7 +9,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from './ui/dialog';
+} from '../ui/dialog';
 
 import { Button } from '@/components/ui/button';
 import { Title } from '@radix-ui/react-toast';
