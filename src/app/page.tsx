@@ -43,12 +43,16 @@ function Main() {
   const [image, setImage] = useState(null);
   const [file, setFile] = useState(null);
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [responseImageUrl, setResponseImageUrl] = useState(null);
+  const [responseImage, setResponseImage] = useState(null);
+  const [location, setLocation] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [similarity, setSimilarity] = useState(0);
   const [errorMessage, setErrorMessage] = useState('');
+  const [isUploadedImageVisible, setIsUploadedImageVisible] = useState(false);
 
   const onDrop = useCallback((acceptedFiles, fileRejections) => {
     if (fileRejections.length > 0) {
-      setErrorMessage('이미지 형식이 아닙니다');
+      setErrorMessage('이미지 형식이 아닙니다!');
       return;
     }
     const file = acceptedFiles[0];
@@ -78,16 +82,23 @@ function Main() {
     const formData = new FormData();
     formData.append('file', file);
     setDialogOpen(true);
+    setLoading(true);
 
     try {
       const response = await UploadFile(formData);
       console.log('Server response:', response);
 
-      if (response && response.length > 0) {
-        setResponseImageUrl(response[0].image_url);
-      }
+      const { image_url, location, similarity } = response;
+
+      const roundedSimilarity = Math.round(similarity);
+
+      setResponseImage(image_url);
+      setLocation(location);
+      setSimilarity(roundedSimilarity);
+      setLoading(false);
     } catch (error) {
       console.error('Error uploading file:', error);
+      setLoading(false); // 에러가 발생해도 로딩 상태 해제 추후 출력 페이지 작성
     }
   };
 
@@ -134,7 +145,7 @@ function Main() {
               />
             )}
           </div>
-          {errorMessage && <div className='text-red-500 mt-2'>{errorMessage}</div>}
+
           <div>
             <button
               onClick={handleButtonClick}
@@ -143,11 +154,20 @@ function Main() {
                 file ? 'bg-cyan-300 active:bg-cyan-400' : 'bg-gray-300 cursor-not-allowed'
               }`}
             >
-              여기랑 비슷한 곳 찾아주세요!
+              {file ? '여기랑 비슷한 곳 찾아주세요!' : '이미지를 업로드 해주세요!'}
             </button>
+            {errorMessage && <div className='text-red-500 mt-2'>{errorMessage}</div>}
           </div>
           <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-            <DialogDemo responseImageUrl={responseImageUrl} />
+            <DialogDemo
+              responseImage={responseImage}
+              location={location}
+              similarity={similarity}
+              isUploadedImageVisible={isUploadedImageVisible}
+              setIsUploadedImageVisible={setIsUploadedImageVisible}
+              image={image}
+              loading={loading}
+            />
           </Dialog>
         </div>
       </div>
