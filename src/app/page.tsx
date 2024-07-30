@@ -77,6 +77,7 @@ function Main() {
 
     const formData = new FormData();
     formData.append('file', file);
+    setDialogOpen(true);
 
     try {
       const response = await UploadFile(formData);
@@ -85,8 +86,6 @@ function Main() {
       if (response && response.length > 0) {
         setResponseImageUrl(response[0].image_url);
       }
-
-      setDialogOpen(true);
     } catch (error) {
       console.error('Error uploading file:', error);
     }
