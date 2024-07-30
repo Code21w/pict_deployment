@@ -50,19 +50,32 @@ function Main() {
   const [errorMessage, setErrorMessage] = useState('');
   const [isUploadedImageVisible, setIsUploadedImageVisible] = useState(false);
 
-  const onDrop = useCallback((acceptedFiles, fileRejections) => {
+  const onDrop = useCallback((acceptedFiles: File[], fileRejections: any[]) => {
+    // 파일 형식 오류가 있는 경우
     if (fileRejections.length > 0) {
       setErrorMessage('이미지 형식이 아닙니다!');
+      setImage(null);
+      setFile(null);
       return;
     }
-    const file = acceptedFiles[0];
-    if (file) {
-      const objectUrl = URL.createObjectURL(file);
-      setImage(objectUrl);
-      setFile(file);
-      setErrorMessage('');
-      console.log('Uploaded file:', file);
-      console.log('Object URL:', objectUrl);
+
+    // 여러 파일이 드롭된 경우
+    if (acceptedFiles.length > 1) {
+      setErrorMessage('하나의 이미지 파일만 업로드 해주세요!');
+      setImage(null);
+      setFile(null);
+      return;
+    }
+
+    // 하나의 파일만 드롭된 경우
+    if (acceptedFiles.length === 1) {
+      const file = acceptedFiles[0];
+      if (file) {
+        const objectUrl = URL.createObjectURL(file);
+        setImage(objectUrl);
+        setFile(file);
+        setErrorMessage('');
+      }
     }
   }, []);
 
@@ -71,7 +84,7 @@ function Main() {
     accept: {
       'image/*': ['.jpeg', '.jpg', '.png'],
     },
-    multiple: false,
+    multiple: true, // 여러 파일 선택 옵션
   });
 
   const handleButtonClick = async () => {
@@ -84,6 +97,8 @@ function Main() {
     formData.append('file', file);
     setDialogOpen(true);
     setLoading(true);
+    setImage(null);
+    setFile(null);
 
     try {
       const response = await UploadFile(formData);
