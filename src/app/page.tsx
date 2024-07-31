@@ -4,9 +4,9 @@ import Image from 'next/image';
 import { useCallback, useState } from 'react'; // useState 추가
 import { useDropzone } from 'react-dropzone';
 
-import imageicon from '@/assets/images/image_icon.png';
+import imageIcon from '@/assets/images/image_icon.png';
 import CloudAnimation from '@/components/main/Cloud';
-import { DialogDemo } from '@/components/resultmodal/ResultModal';
+import { DialogDemo } from '@/components/resultModal/ResultModal';
 // import { toast } from '@/components/ui/use-toast';
 
 // import { Join } from '@/components/Join';
@@ -66,7 +66,7 @@ function Main() {
             }`}
           >
             <input {...getInputProps()} className='w-[300px] h-[100px] bg-transparent pl-[10px]' />
-            {!image && <Image src={imageicon} alt='UploadImageIcon.png' />}
+            {!image && <Image src={imageIcon} alt='UploadImageIcon.png' />}
             {image && (
               <img
                 src={image}
