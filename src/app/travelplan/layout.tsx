@@ -1,8 +1,7 @@
-import '../globals.css';
-import { ReactNode } from 'react';
 import Footer from '@/components/shared/Footer';
-import Header from '@/components/shared/Header';
-
+import TravelHeader from '@/components/shared/TravelHeader';
+import { ReactNode } from 'react';
+import '../globals.css';
 export const metadata = {
   title: 'My App',
   description: 'This is my app',
@@ -18,8 +17,9 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <meta name='description' content={metadata.description} />
       </head>
       <body className='overflow-hidden h-full min-w-[720px]'>
-        <Header />
-        <main className='h-full'>{children}</main>
+        <TravelHeader />
+        <main className='ml-[85px] h-full'>{children}</main>
+        <Footer />
       </body>
     </html>
   );
