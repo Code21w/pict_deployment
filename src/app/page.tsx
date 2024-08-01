@@ -97,8 +97,6 @@ function Main() {
     formData.append('file', file);
     setDialogOpen(true);
     setLoading(true);
-    setImage(null);
-    setFile(null);
 
     try {
       const response = await UploadFile(formData);
