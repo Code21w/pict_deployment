@@ -17,19 +17,6 @@ function TravelPlan() {
   }, []);
   useEffect(() => {}, [btnActive]);
 
-  function toggleExpandButton(e: React.MouseEvent<HTMLButtonElement>) {
-    const target = e.target as HTMLButtonElement;
-    if (target.value === 'off') {
-      setWidth(300);
-      target.value = 'on';
-      target.innerHTML = '<';
-    } else {
-      setWidth(50);
-      target.value = 'off';
-      target.innerHTML = '>';
-    }
-  }
-
   function checkToggle() {
     if (btnActive === false) setBtnActive(true);
     else setBtnActive(false);
@@ -48,6 +35,29 @@ function TravelPlan() {
         'inline-flex items-center justify-center whitespace-nowrap border border-input w-1 h-10 px-4 py-2 rounded-md bg-accent text-2xl text-gray-500/50 hover:bg-accent hover:text-accent-foreground';
     }
   }
+  function toggleExpandButton(e: React.MouseEvent<HTMLButtonElement>) {
+    const target = e.target as HTMLButtonElement;
+    if (target.value === 'off') {
+      target.value = 'on';
+      target.innerHTML = '<';
+      setWidth(300);
+      const temp = document.getElementById('temp_place_edit_container');
+
+      temp
+        ? (temp.className = 'slideOut relative border-solid border-2 border-green-500 w-[300px]')
+        : '';
+    } else {
+      target.value = 'off';
+      target.innerHTML = '>';
+      setWidth(50);
+      const temp = document.getElementById('temp_place_edit_container');
+
+      temp
+        ? (temp.className = 'slideIn relative border-solid border-2 border-green-500 w-[75px]')
+        : '';
+    }
+  }
+
   return (
     <div className='border-solid border-2 flex h-screen overflow-hidden'>
       <div className='relative border-solid border-2 flex max-h-full'>
@@ -67,7 +77,7 @@ function TravelPlan() {
                 <div className='image_component border-solid border-2 rounded-md w-[64px] h-[64px] mx-[15px]'>
                   <Image
                     src={ImageIcon}
-                    alt='recommendedPlace'
+                    alt='recommended_place'
                     className='object-scale-down w-[64px] h-[64px]'
                   ></Image>
                 </div>
@@ -90,7 +100,11 @@ function TravelPlan() {
             ))}
           </div>
         </div>
-        <div className='relative border-solid border-2 border-green-500 w-[50px]' style={{ width }}>
+        <div
+          id='temp_place_edit_container'
+          className='relative border-solid border-2 border-green-500 w-[75px]'
+          // style={{ width }}
+        >
           <Button
             value='off'
             className='absolute z-10 -right-11 top-[450px] hover:cursor-pointer'
