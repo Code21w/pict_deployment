@@ -13,6 +13,7 @@ import React from 'react';
 export function DialogDemo({
   responseImage,
   location,
+  locationInfo,
   isUploadedImageVisible,
   setIsUploadedImageVisible,
   image,
@@ -62,8 +63,9 @@ export function DialogDemo({
           <DialogDescription className='h-10 text-black inline-flex items-center justify-center'>
             유사도 {loading ? <Skeleton className='h-4 w-[25px]' /> : <>{similarity}</>} %
           </DialogDescription>
-          <Skeleton className='h-4 w-[450px]' />
-          <Skeleton className='h-4 w-[450px]' />
+          <DialogDescription className='h-10 text-black inline-flex items-center justify-center'>
+            {loading ? <Skeleton className='h-4 w-[450px]' /> : <>{locationInfo}</>}
+          </DialogDescription>
         </div>
       </div>
       <DialogFooter>

@@ -8,6 +8,8 @@ import CloudAnimation from '@/components/main/Cloud';
 import imageicon from '@/assets/images/image_icon.png';
 import { DialogDemo } from '@/components/resultmodal/ResultModal';
 import UploadFile from '@/api/SendingImage';
+import fetchLocationInfo from '@/api/fetchLocationInfo';
+import generateAndStoreImage from '@/api/generateAndStoreImage';
 import {
   Dialog,
   DialogContent,
@@ -49,6 +51,7 @@ function Main() {
   const [similarity, setSimilarity] = useState(0);
   const [errorMessage, setErrorMessage] = useState('');
   const [isUploadedImageVisible, setIsUploadedImageVisible] = useState(false);
+  const [locationInfo, setLocationInfo] = useState('');
 
   const onDrop = useCallback((acceptedFiles: File[], fileRejections: any[]) => {
     // 파일 형식 오류가 있는 경우
@@ -109,6 +112,12 @@ function Main() {
       setResponseImage(image_url);
       setLocation(location);
       setSimilarity(roundedSimilarity);
+
+      const fetchedLocationInfo = await fetchLocationInfo(location);
+      setLocationInfo(fetchedLocationInfo);
+
+      await generateAndStoreImage(image_url, location);
+
       setLoading(false);
     } catch (error) {
       console.error('Error uploading file:', error);
@@ -176,6 +185,7 @@ function Main() {
             <DialogDemo
               responseImage={responseImage}
               location={location}
+              locationInfo={locationInfo}
               similarity={similarity}
               isUploadedImageVisible={isUploadedImageVisible}
               setIsUploadedImageVisible={setIsUploadedImageVisible}

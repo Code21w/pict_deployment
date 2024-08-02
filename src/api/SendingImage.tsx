@@ -14,7 +14,7 @@ async function UploadFile(formData: FormData) {
         location: string;
         similarity: number;
       }>;
-    }>('/api/combined_densenet', formData, {
+    }>('/api/combined-densenet', formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
