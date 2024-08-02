@@ -11,7 +11,7 @@ function PlaceCategory() {
     <Badge
       key={idx}
       variant='outline'
-      className={`${btnActive === idx ? 'bg-yellow-500' : ''}`}
+      className={`hover:cursor-pointer ${btnActive === idx ? 'bg-cyan-400 text-white' : ''}`}
       onClick={() => handleSubmit(idx)}
     >
       {item}

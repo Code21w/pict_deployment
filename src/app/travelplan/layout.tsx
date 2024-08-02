@@ -1,4 +1,3 @@
-import Footer from '@/components/shared/Footer';
 import TravelHeader from '@/components/shared/TravelHeader';
 import { ReactNode } from 'react';
 import '../globals.css';
@@ -19,7 +18,6 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <body className='overflow-hidden h-full min-w-[720px]'>
         <TravelHeader />
         <main className='ml-[85px] h-full'>{children}</main>
-        <Footer />
       </body>
     </html>
   );

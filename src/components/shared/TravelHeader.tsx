@@ -1,6 +1,6 @@
 function TravelHeader() {
   return (
-    <header className='fixed border-solid border-2 left-0 w-[85px] z-1 overflow-hidden h-full justify-between'>
+    <header className='fixed left-0 w-[85px] z-1 overflow-hidden h-full justify-between'>
       <nav className='h-full text-lg font-medium flex flex-col items-center text-sm gap-20 mt-[20px]'>
         <div>PicT</div>
         <div className='text-center text-base text-cyan-500'>
