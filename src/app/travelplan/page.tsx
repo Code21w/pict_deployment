@@ -1,6 +1,7 @@
 'use client';
 import ImageIcon from '@/assets/images/image_icon.png';
 import PlaceCategory from '@/components/travel_plan/PlaceCategory';
+import TravelPlanCheckButton from '@/components/travel_plan/TravelPlanCheckButton';
 import { Button } from '@/components/ui/button';
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
@@ -74,7 +75,10 @@ function TravelPlan() {
 
           <div className='list_container flex flex-col border-solid border-2 box-content overflow-auto'>
             {rcPlace.map((item, idx) => (
-              <div className='list_component flex items-center border-solid border-2 w-full min-h-[100px] w-[300px]'>
+              <div
+                key={idx}
+                className='list_component flex items-center border-solid border-2 w-full min-h-[100px] w-[300px]'
+              >
                 <div className='image_component border-solid border-2 rounded-md w-[64px] h-[64px] mx-[15px]'>
                   <Image
                     src={ImageIcon}
@@ -84,18 +88,7 @@ function TravelPlan() {
                 </div>
                 <div>{item}</div>
                 <div className='absolute right-3'>
-                  <Button
-                    key={idx}
-                    value='off'
-                    className='w-1 bg-accent text-2xl text-gray-500/50'
-                    variant='outline'
-                    onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-                      checkToggle();
-                      toggleActive(e);
-                    }}
-                  >
-                    +
-                  </Button>
+                  <TravelPlanCheckButton />
                 </div>
               </div>
             ))}
