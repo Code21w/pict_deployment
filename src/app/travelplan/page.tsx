@@ -8,7 +8,7 @@ function TravelPlan() {
   const [period, setPeriod] = useState(3);
   const [areaName, setAreaName] = useState('광명');
   const [rcPlace, setRcPlace] = useState(['']);
-
+  const [placeSelectCount, setPlaceSelectCount] = useState(0);
   const [btnActive, setBtnActive] = useState(false);
   const [width, setWidth] = useState(50);
   //페이지 첫 렌더링 시 ai가 생성해준 데이터로 설정
@@ -26,6 +26,7 @@ function TravelPlan() {
     if (target.value === 'off') {
       target.value = 'on';
       target.innerHTML = '&#10004';
+      //className 속성에서 원하는 거만 추가하고 싶은데 전체를 지정해줘야 하는 문제가 발생..
       target.className =
         'inline-flex items-center justify-center whitespace-nowrap border-none w-1 h-10 px-4 py-2 rounded-md bg-cyan-500/50 text-white';
     } else {
@@ -103,8 +104,10 @@ function TravelPlan() {
         <div
           id='temp_place_edit_container'
           className='relative border-solid border-2 border-green-500 w-[75px]'
-          // style={{ width }}
         >
+          <div>
+            <div className='text-4xl'>{placeSelectCount}</div>
+          </div>
           <Button
             value='off'
             className='absolute z-10 -right-11 top-[450px] hover:cursor-pointer'
