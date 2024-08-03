@@ -1,15 +1,12 @@
 import { Button } from '@/components/ui/button';
-import { Skeleton } from '@/components/ui/skeleton';
 import {
-  Dialog,
   DialogContent,
   DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import React from 'react';
-
+import { Skeleton } from '@/components/ui/skeleton';
 export function DialogDemo({
   responseImage,
   location,

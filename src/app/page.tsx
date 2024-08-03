@@ -1,43 +1,16 @@
 'use client';
 
-import React, { useState, useCallback } from 'react';
 import Image from 'next/image';
+import { useCallback, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 
-import imageIcon from '@/assets/images/image_icon.png';
-import CloudAnimation from '@/components/main/Cloud';
-import imageicon from '@/assets/images/image_icon.png';
-import { DialogDemo } from '@/components/resultmodal/ResultModal';
 import UploadFile from '@/api/SendingImage';
 import fetchLocationInfo from '@/api/fetchLocationInfo';
 import generateAndStoreImage from '@/api/generateAndStoreImage';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
-
-import Link from 'next/link';
-
-import { Button } from '@/components/ui/button';
+import imageIcon from '@/assets/images/image_icon.png';
+import CloudAnimation from '@/components/main/Cloud';
+import { DialogDemo } from '@/components/resultmodal/ResultModal';
+import { Dialog } from '@/components/ui/dialog';
 
 import AirplaneAnimation from '@/components/main/Airplane';
 import Globe from '@/components/main/Globe';
@@ -133,10 +106,14 @@ function Main() {
     <main className='flex min-h-screen items-center justify-between'>
       <div className='w-full h-screen'>
         <div className='mx-[200px] lg:mx-[250px] max-[1200px]:mt-[10%] min-[1500px]:-mb-[150px] flex flex-col justify-between min-w-[460px]'>
-          <div className='relative text-8xl min-[1200px]:text-[144px] min-[1500px]:text-[192px] font-["Cafe24Moyamoya-Face-v1.0"] -py-3'>
+          <div
+            className={`relative text-8xl min-[1200px]:text-[144px] min-[1500px]:text-[192px] font-['Cafe24Moyamoya-Face-v1.0'] -py-3`}
+          >
             여기서
           </div>
-          <div className='self-end relative text-8xl min-[1200px]:text-[144px] min-[1500px]:text-[192px] font-["Cafe24Moyamoya-Face-v1.0"] -my-3'>
+          <div
+            className={`self-end relative text-8xl min-[1200px]:text-[144px] min-[1500px]:text-[192px] font-['Cafe24Moyamoya-Face-v1.0'] -my-3`}
+          >
             세계속으로
           </div>
         </div>
@@ -163,7 +140,7 @@ function Main() {
             }`}
           >
             <input {...getInputProps()} className='w-[300px] h-[100px] bg-transparent pl-[10px]' />
-            {!image && <Image src={imageicon} alt='UploadImageIcon.png' />}
+            {!image && <Image src={imageIcon} alt='UploadImageIcon.png' />}
             {image && (
               <img
                 src={image}

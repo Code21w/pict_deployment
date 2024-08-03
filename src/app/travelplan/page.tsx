@@ -49,16 +49,14 @@ function TravelPlan() {
           id='temp_place_edit_container'
           className='relative border-solid border-2 border-green-500 w-[120px]'
         >
-          <div>
-            <div className='text-4xl'>{placeSelectCount}</div>
+          <div className=''>
+            <div className='text-2xl'>{placeSelectCount}</div>
           </div>
-          {/*  */}
           <div>
             <PlaceListBlock>
               <div>333</div>
             </PlaceListBlock>
           </div>
-          {/*  */}
           <div>
             <ExpandButton />
           </div>
