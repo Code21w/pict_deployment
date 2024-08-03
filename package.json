@@ -7,6 +7,7 @@
     "dev": "next dev --turbo",
     "build": "next build",
     "start": "next start",
+    "format": "prettier -–write 'src/**/*.{ts,tsx,css}'",
     "lint": "next lint"
   },
   "dependencies": {
@@ -16,6 +17,7 @@
     "@radix-ui/react-select": "^2.1.1",
     "@radix-ui/react-slot": "^1.1.0",
     "@radix-ui/react-toast": "^1.2.1",
+    "axios": "^1.7.2",
     "@svgr/webpack": "^8.1.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",

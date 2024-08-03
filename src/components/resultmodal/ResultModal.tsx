@@ -1,5 +1,5 @@
-import { Button } from '@/components/ui/button'
-import { Skeleton } from '@/components/ui/skeleton'
+import { Button } from '@/components/ui/button';
+import { Skeleton } from '@/components/ui/skeleton';
 import {
   Dialog,
   DialogContent,
@@ -7,54 +7,70 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog'
-import React, {useState} from 'react'
+} from '@/components/ui/dialog';
+import React from 'react';
 
-
-
-export function DialogDemo ({ children, triggerClassName }) {
-    const [isImageLoaded, setIsImageLoaded] = useState(false);
-
-    const resultImageLoad = () => {
-        setIsImageLoaded(true);
-    };
-
+export function DialogDemo({
+  responseImage,
+  location,
+  locationInfo,
+  isUploadedImageVisible,
+  setIsUploadedImageVisible,
+  image,
+  loading,
+  similarity,
+}) {
+  const handleToggleImage = () => {
+    setIsUploadedImageVisible(!isUploadedImageVisible);
+  };
   return (
-    <Dialog>
-        <DialogTrigger asChild>
-            <div className={triggerClassName}>{children}</div>
-        </DialogTrigger>
-        <DialogContent className='sm:max-w-[1200px] h-[800px]'>
-        <DialogHeader>
-                <DialogTitle>
-                    <Button variant='link'>내가 넣은 사진 보기</Button>
-                </DialogTitle>
-            </DialogHeader>
-            <div className='top-1 p-3 h-[350px] rounded-xl'> 
-                <div>                    
-                    {isImageLoaded ?  (<img src=''
-                        onLoad={resultImageLoad}
-                    />) : (<Skeleton className='h-4 w-[250px]' />) }
-                </div>
-            </div>
-        
-            
+    <DialogContent className='sm:max-w-[1200px] h-[800px]'>
+      <DialogHeader>
+        <DialogTitle>
+          <Button variant='link' onClick={handleToggleImage} className='text-gray-500'>
+            {isUploadedImageVisible ? '서버에서 받은 사진 보기' : '내가 넣은 사진 보기'}
+          </Button>
+        </DialogTitle>
+      </DialogHeader>
+      <div className='w-full h-[400px] bg-gray-200 flex items-center justify-center'>
+        <div className='flex items-center justify-center w-full h-full'>
+          {loading ? (
+            <Skeleton className='w-full h-full' />
+          ) : isUploadedImageVisible ? (
+            <img
+              src={image}
+              alt='Uploaded image'
+              className='max-w-full max-h-full object-contain'
+            />
+          ) : responseImage ? (
+            <img
+              src={responseImage}
+              alt='Response image'
+              className='max-w-full max-h-full object-contain'
+            />
+          ) : (
+            <Skeleton className='w-full h-full' />
+          )}
+        </div>
+      </div>
 
-            <div className='grid gap-1 grid place-items-center py-1'>      
-                <div className='flex flex-col space-y-3'>
-                    <div className='space-y-1000'>
-                        <DialogDescription className='h-10 text-black'> 여기는 OO같아요!</DialogDescription>
-                        <Skeleton className='h-4 w-[250px]' />
-
-                        <Skeleton className='h-4 w-[250px]' />
-                    </div>
-                </div>
-            </div>
-            <DialogFooter>
-                <Button variant='link'>더 많은 정보 보러 가기</Button>
-            </DialogFooter>
-        </DialogContent>
-    </Dialog>
+      <div className='grid gap-1 place-items-center py-4'>
+        <div className='flex flex-col space-y-3 text-center'>
+          <DialogDescription className='h-10 text-black inline-flex items-center justify-center'>
+            비슷한 장소로 {loading ? <Skeleton className='h-4 w-[50px]' /> : <>{location}</>}{' '}
+            어때요?
+          </DialogDescription>
+          <DialogDescription className='h-10 text-black inline-flex items-center justify-center'>
+            유사도 {loading ? <Skeleton className='h-4 w-[25px]' /> : <>{similarity}</>} %
+          </DialogDescription>
+          <DialogDescription className='h-10 text-black inline-flex items-center justify-center'>
+            {loading ? <Skeleton className='h-4 w-[450px]' /> : <>{locationInfo}</>}
+          </DialogDescription>
+        </div>
+      </div>
+      <DialogFooter>
+        <Button variant='link'>더 많은 정보 보러 가기</Button>
+      </DialogFooter>
+    </DialogContent>
   );
-};
+}
