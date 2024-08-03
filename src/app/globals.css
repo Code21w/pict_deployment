@@ -106,6 +106,28 @@ body {
   }
 }
 
+@keyframes slideOut {
+  0% {
+    width: 120px;
+  }
+  100% {
+    width: 400px;
+  }
+}
+@keyframes slideIn {
+  0% {
+    width: 400px;
+  }
+  100% {
+    width: 120px;
+  }
+}
+.slideOut {
+  animation: slideOut 0.3s linear;
+}
+.slideIn {
+  animation: slideIn 0.3s linear;
+}
 @keyframes floatRight {
   0% {
     transform: translateX(calc(var(--start-x) + 0px));

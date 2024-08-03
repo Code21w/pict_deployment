@@ -1,60 +1,32 @@
 'use client';
 
-import React, { useState, useCallback } from 'react'; // useState 추가
 import Image from 'next/image';
-import {useDropzone} from 'react-dropzone';
+import { useCallback, useState } from 'react'; // useState 추가
+import { useDropzone } from 'react-dropzone';
 
+import imageIcon from '@/assets/images/image_icon.png';
 import CloudAnimation from '@/components/main/Cloud';
-import imageicon from '@/assets/images/image_icon.png';
-import { DialogDemo } from '@/components/resultmodal/ResultModal';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form';
+import { DialogDemo } from '@/components/resultModal/ResultModal';
 // import { toast } from '@/components/ui/use-toast';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
-
-import Link from 'next/link';
-
-import { Button } from '@/components/ui/button';
 
 // import { Join } from '@/components/Join';
 
-import Globe from '@/components/main/Globe';
 import AirplaneAnimation from '@/components/main/Airplane';
-
+import Globe from '@/components/main/Globe';
 function Main() {
   const [image, setImage] = useState(null);
-
-  const onDrop = useCallback((acceptedFiles) => {
+  // Todo define type acceptedFiles
+  const onDrop = useCallback((acceptedFiles: any) => {
     const file = acceptedFiles[0];
     if (file) {
-      const objectUrl = URL.createObjectURL(file);
+      const objectUrl: any = URL.createObjectURL(file);
+      //Todo define type objectUrl
       setImage(objectUrl);
-      console.log("Uploaded file:", file);
-      console.log("Object URL:", objectUrl);
+      console.log('Uploaded file:', file);
+      console.log('Object URL:', objectUrl);
     }
   }, []);
-  const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop});
-
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
   return (
     <main className='flex min-h-screen items-center justify-between'>
@@ -87,20 +59,26 @@ function Main() {
             <b className='text-lg'>국내에서 가장 비슷한 곳</b>
             <div className='text-lg'>을 찾아드려요!</div>
           </div>
-          <div 
-            {...getRootProps()} 
+          <div
+            {...getRootProps()}
             className={`flex items-center bg-gray-100 rounded-3xl shadow-md justify-center mt-[10px] ${
               isDragActive ? 'bg-gray-200' : 'bg-gray-100'
             }`}
           >
-          <input {...getInputProps()} className='w-[300px] h-[100px] bg-transparent pl-[10px]' />
-            {!image && <Image src={imageicon} alt='UploadImageIcon.png' />}
-            {image && <img src={image} alt='Uploaded Preview' className='w-[300px] h-[100px] object-cover' />}
+            <input {...getInputProps()} className='w-[300px] h-[100px] bg-transparent pl-[10px]' />
+            {!image && <Image src={imageIcon} alt='UploadImageIcon.png' />}
+            {image && (
+              <img
+                src={image}
+                alt='Uploaded Preview'
+                className='w-[300px] h-[100px] object-cover'
+              />
+            )}
           </div>
           <div>
-            <DialogDemo triggerClassName ='w-[500px] h-[50px] bg-cyan-300 active:bg-cyan-400 rounded-3xl shadow-md mt-[10px]'>
+            <DialogDemo triggerClassName='w-[500px] h-[50px] bg-cyan-300 active:bg-cyan-400 rounded-3xl shadow-md mt-[10px]'>
               여기랑 비슷한 곳 찾아주세요!
-            </DialogDemo> 
+            </DialogDemo>
           </div>
         </div>
       </div>
