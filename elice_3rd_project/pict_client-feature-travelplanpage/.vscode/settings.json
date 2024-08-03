@@ -4,9 +4,12 @@
     "appkey",
     "autoload",
     "dapi",
+    "Itinery",
     "kakao",
     "KAKAOMAP",
+    "Moyamoya",
     "naver",
+    "resultmodal",
     "travelplan"
   ]
 }

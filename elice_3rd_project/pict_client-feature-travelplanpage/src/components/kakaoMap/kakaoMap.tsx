@@ -1,4 +1,4 @@
-
+// components/kakaoMap/kakaoMap.tsx
 import styled from "@emotion/styled";
 import { useEffect } from "react";
 
@@ -23,6 +23,17 @@ function Map({ latitude, longitude }: MapProps) {
           center: new window.kakao.maps.LatLng(latitude, longitude),
         };
         const map = new window.kakao.maps.Map(container, options);
+
+        // 지도 크기 조절
+        const handleResize = () => {
+          const mapWidth = document.documentElement.clientWidth - 430; // 슬라이드바의 최소 너비를 고려하여 계산
+          const mapHeight = mapWidth * (220 / 320); // 가로 세로 비율 유지
+          map.setSize(new window.kakao.maps.Size(mapWidth, mapHeight));
+        };
+
+        handleResize(); // 초기 크기 설정
+        window.addEventListener("resize", handleResize); // 창 크기 변경 시 지도 크기 조절
+
         const markerPosition = new window.kakao.maps.LatLng(latitude, longitude);
         const marker = new window.kakao.maps.Marker({
           position: markerPosition,
@@ -41,7 +52,8 @@ function Map({ latitude, longitude }: MapProps) {
 }
 
 const MapContainer = styled.div`
-  aspect-ratio: 320 / 220;
+  width: 100%;
+  height: 100%;
 `;
 
 export default Map;

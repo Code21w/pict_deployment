@@ -6,7 +6,7 @@ import { useDropzone } from 'react-dropzone';
 
 import imageIcon from '@/assets/images/image_icon.png';
 import CloudAnimation from '@/components/main/Cloud';
-import { DialogDemo } from '@/components/resultModal/ResultModal';
+import { DialogDemo } from '@/components/resultmodal/ResultModal';
 // import { toast } from '@/components/ui/use-toast';
 
 // import { Join } from '@/components/Join';

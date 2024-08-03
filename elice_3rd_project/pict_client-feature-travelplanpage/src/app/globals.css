@@ -212,3 +212,13 @@ body {
 .cafe24-font {
   font-family: 'Cafe24Moyamoya-Face-v1.0', sans-serif;
 }
+
+
+html, body, #__next {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+
+
