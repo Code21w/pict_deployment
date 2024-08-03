@@ -9,7 +9,7 @@ import fetchLocationInfo from '@/api/fetchLocationInfo';
 import generateAndStoreImage from '@/api/generateAndStoreImage';
 import imageIcon from '@/assets/images/image_icon.png';
 import CloudAnimation from '@/components/main/Cloud';
-import { DialogDemo } from '@/components/resultmodal/ResultModal';
+// import { DialogDemo } from '@/components/resultmodal/ResultModal';
 import { Dialog } from '@/components/ui/dialog';
 
 import AirplaneAnimation from '@/components/main/Airplane';
@@ -163,7 +163,7 @@ function Main() {
             {errorMessage && <div className='text-red-500 mt-2'>{errorMessage}</div>}
           </div>
           <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-            <DialogDemo
+            {/* <DialogDemo
               responseImage={responseImage}
               location={location}
               locationInfo={locationInfo}
@@ -172,7 +172,7 @@ function Main() {
               setIsUploadedImageVisible={setIsUploadedImageVisible}
               image={image}
               loading={loading}
-            />
+            /> */}
           </Dialog>
         </div>
       </div>
