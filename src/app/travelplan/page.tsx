@@ -1,64 +1,25 @@
 'use client';
 import ImageIcon from '@/assets/images/image_icon.png';
+import ExpandButton from '@/components/travel_plan/ExpandButton';
 import PlaceCategory from '@/components/travel_plan/PlaceCategory';
 import TravelPlanCheckButton from '@/components/travel_plan/TravelPlanCheckButton';
-import { Button } from '@/components/ui/button';
 import Image from 'next/image';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 function TravelPlan() {
   const [period, setPeriod] = useState(3);
   const [areaName, setAreaName] = useState('광명');
   const [rcPlace, setRcPlace] = useState(['']);
   const [placeSelectCount, setPlaceSelectCount] = useState(0);
-  const [btnActive, setBtnActive] = useState(false);
-  const [width, setWidth] = useState(50);
+  const changeSelectCount = (isChecked: boolean) => {
+    !isChecked
+      ? setPlaceSelectCount(placeSelectCount + 1)
+      : setPlaceSelectCount(placeSelectCount - 1);
+  };
+
   //페이지 첫 렌더링 시 ai가 생성해준 데이터로 설정
   useEffect(() => {
     setPeriod(4), setAreaName('제주'), setRcPlace(['해수욕장', '절', '샘플3']);
   }, []);
-  useEffect(() => {}, [btnActive]);
-
-  function checkToggle() {
-    if (btnActive === false) setBtnActive(true);
-    else setBtnActive(false);
-  }
-  function toggleActive(e: React.MouseEvent<HTMLButtonElement>) {
-    const target = e.target as HTMLButtonElement;
-    if (target.value === 'off') {
-      target.value = 'on';
-      target.innerHTML = '&#10004';
-      //className 속성에서 원하는 거만 추가하고 싶은데 전체를 지정해줘야 하는 문제가 발생..
-      target.className =
-        'inline-flex items-center justify-center whitespace-nowrap border-none w-1 h-10 px-4 py-2 rounded-md bg-cyan-500/50 text-white';
-    } else {
-      target.value = 'off';
-      target.innerHTML = '+';
-      target.className =
-        'inline-flex items-center justify-center whitespace-nowrap border border-input w-1 h-10 px-4 py-2 rounded-md bg-accent text-2xl text-gray-500/50 hover:bg-accent hover:text-accent-foreground';
-    }
-  }
-  function toggleExpandButton(e: React.MouseEvent<HTMLButtonElement>) {
-    const target = e.target as HTMLButtonElement;
-    if (target.value === 'off') {
-      target.value = 'on';
-      target.innerHTML = '<';
-      setWidth(300);
-      const temp = document.getElementById('temp_place_edit_container');
-
-      temp
-        ? (temp.className = 'slideOut relative border-solid border-2 border-green-500 w-[300px]')
-        : '';
-    } else {
-      target.value = 'off';
-      target.innerHTML = '>';
-      setWidth(50);
-      const temp = document.getElementById('temp_place_edit_container');
-
-      temp
-        ? (temp.className = 'slideIn relative border-solid border-2 border-green-500 w-[75px]')
-        : '';
-    }
-  }
 
   return (
     <div className='border-solid border-2 flex h-screen overflow-hidden'>
@@ -88,7 +49,7 @@ function TravelPlan() {
                 </div>
                 <div>{item}</div>
                 <div className='absolute right-3'>
-                  <TravelPlanCheckButton />
+                  <TravelPlanCheckButton changeSelectCountFunction={changeSelectCount} />
                 </div>
               </div>
             ))}
@@ -96,18 +57,15 @@ function TravelPlan() {
         </div>
         <div
           id='temp_place_edit_container'
-          className='relative border-solid border-2 border-green-500 w-[75px]'
+          className='relative border-solid border-2 border-green-500 w-[120px]'
         >
           <div>
             <div className='text-4xl'>{placeSelectCount}</div>
           </div>
-          <Button
-            value='off'
-            className='absolute z-10 -right-11 top-[450px] hover:cursor-pointer'
-            onClick={(e) => toggleExpandButton(e)}
-          >
-            {'>'}
-          </Button>
+          <div>
+            <ExpandButton />
+          </div>
+          {/* width: 120px ~ 400px */}
         </div>
         <div className='border-solid border-2 border-red-500 w-screen h-screen rounded-md border max-h-full overflow-auto relative'>
           <div className='flex rounded-md bg-gray-500/50 items-center m-[30px] -mb-[10px]'>

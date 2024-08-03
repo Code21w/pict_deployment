@@ -108,25 +108,25 @@ body {
 
 @keyframes slideOut {
   0% {
-    width: 75px;
+    width: 120px;
   }
   100% {
-    width: 300px;
+    width: 400px;
   }
 }
 @keyframes slideIn {
   0% {
-    width: 300px;
+    width: 400px;
   }
   100% {
-    width: 75px;
+    width: 120px;
   }
 }
 .slideOut {
-  animation: slideOut 0.3s ease-in;
+  animation: slideOut 0.3s linear;
 }
 .slideIn {
-  animation: slideIn 0.3s ease-out;
+  animation: slideIn 0.3s linear;
 }
 @keyframes floatRight {
   0% {

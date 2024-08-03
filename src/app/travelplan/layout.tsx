@@ -6,19 +6,11 @@ export const metadata = {
   description: 'This is my app',
 };
 
-export default function RootLayout({ children }: { children: ReactNode }) {
+export default function TravelPlanLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang='en'>
-      <head>
-        <meta charSet='UTF-8' />
-        <meta name='viewport' content='width=device-width, initial-scale=1.0' />
-        <title>{metadata.title}</title>
-        <meta name='description' content={metadata.description} />
-      </head>
-      <body className='overflow-hidden h-full min-w-[720px]'>
-        <TravelHeader />
-        <main className='ml-[85px] h-full'>{children}</main>
-      </body>
-    </html>
+    <div className='bg-white'>
+      <TravelHeader />
+      <main className='ml-[85px] h-full '>{children}</main>
+    </div>
   );
 }

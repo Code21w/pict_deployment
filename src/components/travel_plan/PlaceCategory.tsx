@@ -1,3 +1,5 @@
+'use client';
+
 import { Badge } from '@/components/ui/badge';
 import { useState } from 'react';
 const categoryList = ['인문장소', '자연', '액티비티', '문화시설'];
