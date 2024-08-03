@@ -87,7 +87,7 @@ function Main() {
     accept: {
       'image/*': ['.jpeg', '.jpg', '.png'],
     },
-    multiple: true, // 여러 파일 선택 옵션
+    multiple: false, // 여러 파일 선택 옵션
   });
 
   const handleButtonClick = async () => {
@@ -113,10 +113,14 @@ function Main() {
       setLocation(location);
       setSimilarity(roundedSimilarity);
 
+      console.log(`Fetching location info for: ${location}`);
       const fetchedLocationInfo = await fetchLocationInfo(location);
+      console.log('Fetched location info:', fetchedLocationInfo);
       setLocationInfo(fetchedLocationInfo);
 
+      console.log(`Generating and storing image for: ${image_url}, ${location}`);
       await generateAndStoreImage(image_url, location);
+      console.log('Image generation and storage complete');
 
       setLoading(false);
     } catch (error) {
