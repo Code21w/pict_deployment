@@ -4,13 +4,19 @@ import ExpandButton from '@/components/travel_plan/ExpandButton';
 import PlaceCategory from '@/components/travel_plan/PlaceCategory';
 import PlaceListBlock from '@/components/travel_plan/PlaceListBlock';
 import TravelPlanCheckButton from '@/components/travel_plan/TravelPlanCheckButton';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 function TravelPlan() {
   const [period, setPeriod] = useState(3);
   const [areaName, setAreaName] = useState('광명');
   const [rcPlace, setRcPlace] = useState(['']);
   const [placeSelectCount, setPlaceSelectCount] = useState(0);
-  const [parentWidth, setParentWidth] = useState('');
+  const [parentWidth, setParentWidth] = useState<number | undefined>();
+  const componentRef = useRef<HTMLDivElement>(null);
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  function toggleExpand() {
+    setIsExpanded((prev) => !prev);
+  }
   const changeSelectCount = (isChecked: boolean) => {
     !isChecked
       ? setPlaceSelectCount(placeSelectCount + 1)
@@ -21,6 +27,16 @@ function TravelPlan() {
   useEffect(() => {
     setPeriod(4), setAreaName('제주'), setRcPlace(['해수욕장', '절', '샘플3']);
   }, []);
+
+  useEffect(() => {
+    const updateWidth = () => {
+      if (componentRef.current) {
+        setParentWidth(componentRef.current.offsetWidth);
+      }
+    };
+    updateWidth();
+  }, [isExpanded]);
+
   return (
     <div className='border-solid border-2 flex h-screen overflow-hidden'>
       <div className='relative border-solid border-2 flex max-h-full'>
@@ -36,7 +52,7 @@ function TravelPlan() {
 
           <div className='list_container flex flex-col border-solid border-2 box-content overflow-auto'>
             {rcPlace.map((item, idx) => (
-              <PlaceListBlock key={idx}>
+              <PlaceListBlock key={idx} variant='default'>
                 <div>{item}</div>
                 <div className='absolute right-3'>
                   <TravelPlanCheckButton changeSelectCountFunction={changeSelectCount} />
@@ -48,23 +64,22 @@ function TravelPlan() {
         {/* // */}
         <div
           //부모 ref 가져와서
+          ref={componentRef}
           id='temp_place_edit_container'
-          className='relative border-solid border-2 border-green-500 w-[120px]'
+          className='relative  border-solid border-2 border-green-500 w-[300px] '
         >
-          <div className=''>
-            <div className='text-2xl'>{placeSelectCount}</div>
+          <div
+            className={`${!isExpanded ? 'flex flex-col items-center mt-5 gap-5' : 'flex flex-col items-center mt-5 gap-5 overflow-hidden'}`}
+          >
+            <div>
+              <div className='text-2xl'>{placeSelectCount}</div>
+            </div>
+            <ControlDisplayBlock pointWidth={parentWidth} placeSelectCount={placeSelectCount} />
+            <div>
+              <ExpandButton isExpanded={isExpanded} toggleExpand={toggleExpand} />
+            </div>
+            {/* width: 120px ~ 300px */}
           </div>
-          <ControlDisplayBlock width={parentWidth} />
-          {/* 여기서 쓰기 */}
-          {/* <div>
-            <PlaceListBlock>
-              <div>333</div>
-            </PlaceListBlock>
-          </div> */}
-          <div>
-            <ExpandButton />
-          </div>
-          {/* width: 120px ~ 300px */}
         </div>
         {/* // */}
         <div className='border-solid border-2 border-red-500 w-screen h-screen rounded-md border max-h-full overflow-auto relative'>

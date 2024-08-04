@@ -1,7 +1,6 @@
 'use client';
 
 import { Button } from '@/components/ui/button.tsx';
-import { cn } from '@/lib/utils.ts';
 import { useState } from 'react';
 
 const TravelPlanCheckButton = (prop: { changeSelectCountFunction: Function }) => {
@@ -11,26 +10,20 @@ const TravelPlanCheckButton = (prop: { changeSelectCountFunction: Function }) =>
     return !isChecked
       ? {
           value: 'off',
-          variant: 'outline',
-          className:
-            'inline-flex items-center justify-center whitespace-nowrap border border-input w-1 h-10 px-4 py-2 rounded-md bg-accent text-2xl text-gray-500/50',
         }
       : {
           value: 'on',
-          variant: 'outline',
-          className:
-            'inline-flex items-center justify-center whitespace-nowrap border-none w-1 h-10 px-4 py-2 rounded-md bg-cyan-500/50 text-white text-xl',
         };
   };
 
-  const { className, variant, ...rest } = getButtonStyles();
-
+  const { ...rest } = getButtonStyles();
+  // className, variant,
   function toggleActive() {
     setIsChecked((prev) => !prev);
   }
   return !isChecked ? (
     <Button
-      className={cn(className)}
+      className='w-1 h-10 px-4 py-2 text-2xl text-gray-500/50 font-bold'
       onClick={
         () => {
           prop.changeSelectCountFunction(isChecked), toggleActive();
@@ -44,7 +37,7 @@ const TravelPlanCheckButton = (prop: { changeSelectCountFunction: Function }) =>
     </Button>
   ) : (
     <Button
-      className={cn(className)}
+      className='w-1 h-10 px-4 py-2 text-xl text-white font-bold'
       onClick={() => {
         prop.changeSelectCountFunction(isChecked), toggleActive();
       }}
