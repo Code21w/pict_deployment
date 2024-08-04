@@ -3,11 +3,13 @@
 import { Button } from '@/components/ui/button.tsx';
 import { useState } from 'react';
 
-const ExpandButton = () => {
+function ExpandButton() {
   const [isClicked, setIsClicked] = useState(false);
+
   function toggleActive() {
     setIsClicked((prev) => !prev);
   }
+
   if (typeof document !== 'undefined') {
     const temp = document.getElementById('temp_place_edit_container');
     const getButtonStyles = () => {
@@ -16,15 +18,15 @@ const ExpandButton = () => {
             ? (temp.className = 'slideIn relative border-solid border-2 border-green-500 w-[120px]')
             : '',
           {
-            value: 'on',
+            value: 'off',
             content: '>',
           })
         : (temp
             ? (temp.className =
-                'slideOut relative border-solid border-2 border-green-500 w-[400px]')
+                'slideOut relative border-solid border-2 border-green-500 w-[300px]')
             : '',
           {
-            value: 'off',
+            value: 'on',
             content: '<',
           });
     };
@@ -41,6 +43,7 @@ const ExpandButton = () => {
       </Button>
     );
   }
-};
+}
+// }
 
 export default ExpandButton;

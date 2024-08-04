@@ -11,7 +11,7 @@ import imageIcon from '@/assets/images/image_icon.png';
 import CloudAnimation from '@/components/main/Cloud';
 import { DialogDemo } from '@/components/resultModal/ResultModal';
 import { Dialog } from '@/components/ui/dialog';
-import useWindowSize from '@/hooks/useWindowSize';
+import useWindowHeightSize from '@/hooks/useWindowHeightSize';
 
 import AirplaneAnimation from '@/components/main/Airplane';
 import Globe from '@/components/main/Globe';
@@ -27,7 +27,7 @@ function Main() {
   const [isUploadedImageVisible, setIsUploadedImageVisible] = useState(false);
   const [locationInfo, setLocationInfo] = useState('');
 
-  useWindowSize();
+  useWindowHeightSize();
   const onDrop = useCallback((acceptedFiles: File[], fileRejections: any[]) => {
     // 파일 형식 오류가 있는 경우
     if (fileRejections.length > 0) {

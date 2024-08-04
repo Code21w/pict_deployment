@@ -123,12 +123,12 @@ body {
     width: 120px;
   }
   100% {
-    width: 400px;
+    width: 300px;
   }
 }
 @keyframes slideIn {
   0% {
-    width: 400px;
+    width: 300px;
   }
   100% {
     width: 120px;
