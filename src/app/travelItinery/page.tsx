@@ -1,10 +1,10 @@
 //app/travelItinery/page.tsx
 'use client';
 
-import SplitPane from "react-split-pane-next";
-import React, { useState, useEffect } from 'react';
-import Map from '../../components/kakaoMap/kakaoMap';
+import React, { useEffect, useState } from 'react';
+import SplitPane from 'react-split-pane-next';
 import TravelHeader from '../../components/shared/TravelHeader';
+import Map from '../../components/shared/kakaoMap';
 
 const App: React.FC = () => {
   const [latitude, setLatitude] = useState(0);
@@ -21,36 +21,32 @@ const App: React.FC = () => {
         console.error('Error getting current position:', error);
         // 기본 위치 설정
         setLatitude(37.5665);
-        setLongitude(126.9780);
+        setLongitude(126.978);
       }
     );
   }, []);
 
   return (
-    <div className="h-screen">
-      <SplitPane split="vertical" minSize={50}>
-        <div className="bg-white h-full flex flex-col">
-          <div className="bg-gray-200 p-4">
+    <div className='h-screen'>
+      <SplitPane split='vertical' minSize={50}>
+        <div className='bg-white h-full flex flex-col'>
+          <div className='bg-gray-200 p-4'>
             <TravelHeader />
           </div>
-          <div className="bg-gray-100 p-4 flex-1">
+          <div className='bg-gray-100 p-4 flex-1'>
             {/* 여기에 일정 목록 박스 내용을 추가하세요 */}
           </div>
         </div>
-        
-        <div className="bg-yellow-500 h-full">
-          {latitude !== 0 && longitude !== 0 && (
-            <Map latitude={latitude} longitude={longitude} />
-          )}
+
+        <div className='bg-yellow-500 h-full'>
+          {latitude !== 0 && longitude !== 0 && <Map latitude={latitude} longitude={longitude} />}
         </div>
       </SplitPane>
     </div>
   );
-}
+};
 
 export default App;
-
-
 
 //app/travelItinery/page.tsx
 // 'use client';
@@ -86,7 +82,7 @@ export default App;
 //       <div className="flex-1">
 //         <SplitPane split="vertical" minSize={40}>
 //           <div className="bg-white h-full"></div>
-          
+
 //           <div className="bg-white-500 h-full">
 //             {latitude !== 0 && longitude !== 0 && (
 //               <Map latitude={latitude} longitude={longitude} />
@@ -100,17 +96,12 @@ export default App;
 
 // export default App;
 
-
-
-
-
 //app/travelItinery/page.tsx
 // 'use client';
 
 // import SplitPane from "react-split-pane-next";
 // import React, { useState, useEffect } from 'react';
 // import Map from '../../components/kakaoMap/kakaoMap';
-
 
 // const App: React.FC = () => {
 //   const [latitude, setLatitude] = useState(0);
@@ -136,7 +127,7 @@ export default App;
 //     <div className="h-screen">
 //       <SplitPane split="vertical" minSize={40}>
 //         <div className="bg-red-500 h-full">This is a div</div>
-        
+
 //         <div className="bg-white-500 h-full">
 //           {latitude !== 0 && longitude !== 0 && (
 //             <Map latitude={latitude} longitude={longitude} />
@@ -149,16 +140,11 @@ export default App;
 
 // export default App;
 
-
-
-
-
 // 디폴트2 + 구분자 20px
 // 'use client';
 
 // import SplitPane from "react-split-pane-next";
 // import React from 'react';
-
 
 // export default function App() {
 //   return (
@@ -170,12 +156,6 @@ export default App;
 //     </div>
 //   );
 // }
-
-
-
-
-
-
 
 // 디폴트
 // 'use client';
@@ -196,9 +176,6 @@ export default App;
 
 // export default App;
 
-
-
-
 // 'use client';
 
 // import { useState, useEffect } from 'react';
@@ -234,10 +211,6 @@ export default App;
 //   );
 // }
 
-
-
-
-
 // 'use client';
 
 // import { useState, useEffect } from 'react';
@@ -272,4 +245,3 @@ export default App;
 //     </div>
 //   );
 // }
-

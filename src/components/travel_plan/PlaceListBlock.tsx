@@ -1,24 +1,30 @@
 import ImageIcon from '@/assets/images/image_icon.png';
 import Image from 'next/image';
+import { LegacyRef } from 'react';
 interface PlaceListBlockProps {
-  children: React.ReactNode;
-  variant: string;
+  children?: React.ReactNode;
+  variant?: string;
+  Ref?: LegacyRef<HTMLDivElement>;
+  item?: string;
 }
-const PlaceListBlock = ({ children, variant }: PlaceListBlockProps) => {
+const PlaceListBlock = ({ children, variant, Ref, item }: PlaceListBlockProps) => {
   return (
-    <div
-      className={`list_component flex items-center w-full ${variant === 'small' ? 'w-[200px] h-[64px]' : 'w-[300px] h-[100px]'} `}
-    >
+    <div>
       <div
-        className={`image_component rounded-md mx-[15px] ${variant === 'small' ? 'w-[48px] h-[48px]' : 'w-[64px] h-[64px]'} `}
+        className={`list_component flex items-center w-full ${variant === 'small' ? 'w-[200px] h-[64px]' : 'w-[300px] h-[100px]'} `}
       >
-        <Image
-          src={ImageIcon}
-          alt='recommended_place'
-          className={`object-scale-down ${variant === 'small' ? 'w-[48px] h-[48px]' : 'w-[64px] h-[64px]'}`}
-        />
+        <div
+          className={`image_component rounded-md mx-[15px] ${variant === 'small' ? 'w-[48px] h-[48px]' : 'w-[64px] h-[64px]'} `}
+        >
+          <Image
+            src={ImageIcon}
+            alt='recommended_place'
+            className={`object-scale-down ${variant === 'small' ? 'w-[48px] h-[48px]' : 'w-[64px] h-[64px]'}`}
+          />
+        </div>
+        <div ref={Ref}>{item}</div>
+        {children}
       </div>
-      {children}
     </div>
   );
 };

@@ -1,4 +1,5 @@
 'use client';
+import Map from '@/components/shared/kakaoMap';
 import ControlDisplayBlock from '@/components/travel_plan/ControlDisplayBlock';
 import ExpandButton from '@/components/travel_plan/ExpandButton';
 import PlaceCategory from '@/components/travel_plan/PlaceCategory';
@@ -8,21 +9,15 @@ import { useEffect, useRef, useState } from 'react';
 function TravelPlan() {
   const [period, setPeriod] = useState(3);
   const [areaName, setAreaName] = useState('광명');
-  const [rcPlace, setRcPlace] = useState(['']);
+  const [rcPlace, setRcPlace] = useState<string[]>(['']);
+  const [tempPlace, setTempPlace] = useState<string[]>([]);
   const [placeSelectCount, setPlaceSelectCount] = useState(0);
   const [parentWidth, setParentWidth] = useState<number | undefined>();
   const componentRef = useRef<HTMLDivElement>(null);
+  const placeNameRef = useRef<HTMLDivElement>(null);
   const [isExpanded, setIsExpanded] = useState(false);
-
-  function toggleExpand() {
-    setIsExpanded((prev) => !prev);
-  }
-  const changeSelectCount = (isChecked: boolean) => {
-    !isChecked
-      ? setPlaceSelectCount(placeSelectCount + 1)
-      : setPlaceSelectCount(placeSelectCount - 1);
-  };
-
+  const [latitude, setLatitude] = useState(0);
+  const [longitude, setLongitude] = useState(0);
   //페이지 첫 렌더링 시 ai가 생성해준 데이터로 설정
   useEffect(() => {
     setPeriod(4), setAreaName('제주'), setRcPlace(['해수욕장', '절', '샘플3']);
@@ -36,6 +31,37 @@ function TravelPlan() {
     };
     updateWidth();
   }, [isExpanded]);
+  useEffect(() => {
+    // 현재 위치 가져오기
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        setLatitude(position.coords.latitude);
+        setLongitude(position.coords.longitude);
+      },
+      (error) => {
+        console.error('Error getting current position:', error);
+        // 기본 위치 설정
+        setLatitude(37.5665);
+        setLongitude(126.978);
+      }
+    );
+  }, []);
+
+  function toggleExpand() {
+    setIsExpanded((prev) => !prev);
+  }
+  const changeSelectCount = (isChecked: boolean) => {
+    !isChecked
+      ? setPlaceSelectCount(placeSelectCount + 1)
+      : setPlaceSelectCount(placeSelectCount - 1);
+  };
+  const changeTempPlaceList = (isChecked: boolean) => {
+    !isChecked
+      ? placeNameRef.current
+        ? setTempPlace([...tempPlace, placeNameRef.current.innerHTML])
+        : null
+      : setTempPlace(tempPlace.filter((e) => e !== placeNameRef.current?.innerHTML));
+  };
 
   return (
     <div className='border-solid border-2 flex h-screen overflow-hidden'>
@@ -52,10 +78,12 @@ function TravelPlan() {
 
           <div className='list_container flex flex-col border-solid border-2 box-content overflow-auto'>
             {rcPlace.map((item, idx) => (
-              <PlaceListBlock key={idx} variant='default'>
-                <div>{item}</div>
+              <PlaceListBlock key={idx} Ref={placeNameRef} item={item}>
                 <div className='absolute right-3'>
-                  <TravelPlanCheckButton changeSelectCountFunction={changeSelectCount} />
+                  <TravelPlanCheckButton
+                    changeSelectCount={changeSelectCount}
+                    changeTempPlaceList={changeTempPlaceList}
+                  />
                 </div>
               </PlaceListBlock>
             ))}
@@ -74,7 +102,11 @@ function TravelPlan() {
             <div>
               <div className='text-2xl'>{placeSelectCount}</div>
             </div>
-            <ControlDisplayBlock pointWidth={parentWidth} placeSelectCount={placeSelectCount} />
+            <ControlDisplayBlock
+              pointWidth={parentWidth}
+              placeSelectCount={placeSelectCount}
+              tempPlace={tempPlace}
+            />
             <div>
               <ExpandButton isExpanded={isExpanded} toggleExpand={toggleExpand} />
             </div>
@@ -83,11 +115,7 @@ function TravelPlan() {
         </div>
         {/* // */}
         <div className='border-solid border-2 border-red-500 w-screen h-screen rounded-md border max-h-full overflow-auto relative'>
-          <div className='flex rounded-md bg-gray-500/50 items-center m-[30px] -mb-[10px]'>
-            <div className='rounded-md m-[5px] active:bg-white'>Travel Plan</div>
-          </div>
-
-          <div className='rounded-md bg-gray-500/50 w-[80%] h-[700px] overflow-auto m-[30px]'></div>
+          {latitude !== 0 && longitude !== 0 && <Map latitude={latitude} longitude={longitude} />}
         </div>
       </div>
     </div>

@@ -2,8 +2,13 @@ import PlaceListBlock from './PlaceListBlock';
 interface ControlDisplayBlockProps {
   pointWidth: number | undefined;
   placeSelectCount: number;
+  tempPlace: string[] | [];
 }
-const ControlDisplayBlock = ({ pointWidth, placeSelectCount }: ControlDisplayBlockProps) => {
+const ControlDisplayBlock = ({
+  pointWidth,
+  placeSelectCount,
+  tempPlace,
+}: ControlDisplayBlockProps) => {
   return Number(pointWidth) > 150 ? (
     <div className='flex justify-center items-center border-none rounded-full text-xl text-white font-bold w-[20px] h-[20px] bg-gray-500/25'>
       +
@@ -13,11 +18,12 @@ const ControlDisplayBlock = ({ pointWidth, placeSelectCount }: ControlDisplayBlo
       장소를 추가해주세요
     </div>
   ) : (
-    <div className='border-solid border-2 rounded-md shadow-md'>
-      <PlaceListBlock variant='small'>
-        <div>333</div>
-      </PlaceListBlock>
-    </div>
+    (console.log(tempPlace),
+    tempPlace.map((item, idx) => (
+      <div key={idx} className='border-solid border-2 rounded-md shadow-md w-[200px]'>
+        <PlaceListBlock variant='small' item={item}></PlaceListBlock>
+      </div>
+    )))
   );
 };
 
