@@ -92,6 +92,18 @@
   }
 }
 
+@media (min-width: 1201px) and (max-height: 750px) {
+  .big-screen-size {
+    margin-top: calc(-300px + (750px - var(--inner-height)));
+  }
+}
+
+@media (max-width: 1200px) and (max-height: 850px) {
+  .small-screen-size {
+    margin-top: calc(-300px + (850px - var(--inner-height)));
+  }
+}
+
 body {
   color: black;
   /* color: rgb(var(--foreground-rgb)); */
@@ -106,6 +118,28 @@ body {
   }
 }
 
+@keyframes slideOut {
+  0% {
+    width: 120px;
+  }
+  100% {
+    width: 300px;
+  }
+}
+@keyframes slideIn {
+  0% {
+    width: 300px;
+  }
+  100% {
+    width: 120px;
+  }
+}
+.slideOut {
+  animation: slideOut 0.3s linear;
+}
+.slideIn {
+  animation: slideIn 0.3s linear;
+}
 @keyframes floatRight {
   0% {
     transform: translateX(calc(var(--start-x) + 0px));
@@ -211,4 +245,12 @@ body {
 
 .cafe24-font {
   font-family: 'Cafe24Moyamoya-Face-v1.0', sans-serif;
+}
+
+html,
+body,
+#__next {
+  height: 100%;
+  margin: 0;
+  padding: 0;
 }
