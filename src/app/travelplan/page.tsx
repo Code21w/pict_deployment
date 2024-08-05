@@ -10,17 +10,21 @@ function TravelPlan() {
   const [period, setPeriod] = useState(3);
   const [areaName, setAreaName] = useState('광명');
   const [rcPlace, setRcPlace] = useState<string[]>(['']);
+  //recommendedPlace
+  const [checkedPlace, setCheckedPlace] = useState([{ name: '', isChecked: false }]);
   const [tempPlace, setTempPlace] = useState<string[]>([]);
   const [placeSelectCount, setPlaceSelectCount] = useState(0);
+  //tempPlace의 배열의 length로 카운트
   const [parentWidth, setParentWidth] = useState<number | undefined>();
   const componentRef = useRef<HTMLDivElement>(null);
-  const placeNameRef = useRef<HTMLDivElement>(null);
   const [isExpanded, setIsExpanded] = useState(false);
   const [latitude, setLatitude] = useState(0);
   const [longitude, setLongitude] = useState(0);
   //페이지 첫 렌더링 시 ai가 생성해준 데이터로 설정
   useEffect(() => {
-    setPeriod(4), setAreaName('제주'), setRcPlace(['해수욕장', '절', '샘플3']);
+    setPeriod(4);
+    setAreaName('제주');
+    setRcPlace(['해수욕장', '절', '샘플3']);
   }, []);
 
   useEffect(() => {
@@ -55,12 +59,12 @@ function TravelPlan() {
       ? setPlaceSelectCount(placeSelectCount + 1)
       : setPlaceSelectCount(placeSelectCount - 1);
   };
-  const changeTempPlaceList = (isChecked: boolean) => {
+  const changeTempPlaceList = (item: string, isChecked: boolean) => {
     !isChecked
-      ? placeNameRef.current
-        ? setTempPlace([...tempPlace, placeNameRef.current.innerHTML])
-        : null
-      : setTempPlace(tempPlace.filter((e) => e !== placeNameRef.current?.innerHTML));
+      ? setCheckedPlace([...checkedPlace, { name: item, isChecked: !isChecked }])
+      : setCheckedPlace(checkedPlace.filter((e) => e.name !== item));
+    const temp = checkedPlace.filter((place) => place.isChecked === true).map((item) => item.name);
+    setTempPlace(temp);
   };
 
   return (
@@ -78,18 +82,19 @@ function TravelPlan() {
 
           <div className='list_container flex flex-col border-solid border-2 box-content overflow-auto'>
             {rcPlace.map((item, idx) => (
-              <PlaceListBlock key={idx} Ref={placeNameRef} item={item}>
+              <PlaceListBlock key={idx} item={item}>
                 <div className='absolute right-3'>
                   <TravelPlanCheckButton
                     changeSelectCount={changeSelectCount}
                     changeTempPlaceList={changeTempPlaceList}
+                    item={item}
                   />
                 </div>
               </PlaceListBlock>
             ))}
           </div>
         </div>
-        {/* // */}
+
         <div
           //부모 ref 가져와서
           ref={componentRef}
@@ -113,7 +118,7 @@ function TravelPlan() {
             {/* width: 120px ~ 300px */}
           </div>
         </div>
-        {/* // */}
+
         <div className='border-solid border-2 border-red-500 w-screen h-screen rounded-md border max-h-full overflow-auto relative'>
           {latitude !== 0 && longitude !== 0 && <Map latitude={latitude} longitude={longitude} />}
         </div>

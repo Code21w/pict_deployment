@@ -1,6 +1,6 @@
 // components/kakaoMap/kakaoMap.tsx
-import styled from "@emotion/styled";
-import { useEffect } from "react";
+import styled from '@emotion/styled';
+import { useEffect } from 'react';
 
 interface MapProps {
   latitude: number;
@@ -9,7 +9,7 @@ interface MapProps {
 
 function Map({ latitude, longitude }: MapProps) {
   useEffect(() => {
-    const mapScript = document.createElement("script");
+    const mapScript = document.createElement('script');
 
     mapScript.async = true;
     mapScript.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAOMAP_APPKEY}&autoload=false`;
@@ -18,7 +18,7 @@ function Map({ latitude, longitude }: MapProps) {
 
     const onLoadKakaoMap = () => {
       window.kakao.maps.load(() => {
-        const container = document.getElementById("map");
+        const container = document.getElementById('map');
         const options = {
           center: new window.kakao.maps.LatLng(latitude, longitude),
         };
@@ -32,7 +32,7 @@ function Map({ latitude, longitude }: MapProps) {
         };
 
         handleResize(); // 초기 크기 설정
-        window.addEventListener("resize", handleResize); // 창 크기 변경 시 지도 크기 조절
+        window.addEventListener('resize', handleResize); // 창 크기 변경 시 지도 크기 조절
 
         const markerPosition = new window.kakao.maps.LatLng(latitude, longitude);
         const marker = new window.kakao.maps.Marker({
@@ -41,14 +41,12 @@ function Map({ latitude, longitude }: MapProps) {
         marker.setMap(map);
       });
     };
-    mapScript.addEventListener("load", onLoadKakaoMap);
+    mapScript.addEventListener('load', onLoadKakaoMap);
 
-    return () => mapScript.removeEventListener("load", onLoadKakaoMap);
+    return () => mapScript.removeEventListener('load', onLoadKakaoMap);
   }, [latitude, longitude]);
 
-  return (
-    <MapContainer id="map" />
-  );
+  return <MapContainer id='map' />;
 }
 
 const MapContainer = styled.div`

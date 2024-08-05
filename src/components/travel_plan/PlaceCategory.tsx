@@ -1,23 +1,47 @@
 'use client';
 
 import { Badge } from '@/components/ui/badge';
+import { cn } from '@/lib/utils.ts';
 import { useState } from 'react';
-const categoryList = ['인문장소', '자연', '액티비티', '문화시설'];
+const categoryList = [
+  {
+    key: 'location',
+    label: '인문장소',
+  },
+  {
+    key: 'nature',
+    label: '자연',
+  },
+  {
+    key: 'activity',
+    label: '액티비티',
+  },
+  {
+    key: 'culture',
+    label: '문화시설',
+  },
+];
 function PlaceCategory() {
-  const [btnActive, setBtnActive] = useState(1);
+  const [currentCategory, setCurrentCategory] = useState(categoryList[0].key);
 
-  function handleSubmit(num: number) {
-    setBtnActive(num);
-  }
-  return categoryList.map((item, idx) => (
-    <Badge
-      key={idx}
-      variant='outline'
-      className={`hover:cursor-pointer ${btnActive === idx ? 'bg-cyan-400 text-white' : ''}`}
-      onClick={() => handleSubmit(idx)}
-    >
-      {item}
-    </Badge>
-  ));
+  const onClickBadge = (categoryKey: string) => {
+    setCurrentCategory(categoryKey);
+  };
+
+  return categoryList.map((category) => {
+    const { key, label } = category;
+    const isActive = currentCategory === key;
+    return (
+      <Badge
+        key={key}
+        variant='outline'
+        className={cn('hover:cursor-pointer', isActive && 'bg-cyan-400 text-white')}
+        onClick={() => onClickBadge(key)}
+      >
+        {label}
+      </Badge>
+    );
+  });
 }
+
 export default PlaceCategory;

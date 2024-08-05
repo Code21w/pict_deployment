@@ -1,7 +1,7 @@
 'use client';
 
 import { Button } from '@/components/ui/button.tsx';
-interface ExpandButtonProps {
+export interface ExpandButtonProps {
   isExpanded: boolean;
   toggleExpand: () => void;
 }

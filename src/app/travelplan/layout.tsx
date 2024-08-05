@@ -1,16 +1,16 @@
 import TravelHeader from '@/components/shared/TravelHeader';
-import { ReactNode } from 'react';
+import { PropsWithChildren } from 'react';
 import '../globals.css';
 export const metadata = {
   title: 'My App',
   description: 'This is my app',
 };
 
-export default function TravelPlanLayout({ children }: { children: ReactNode }) {
+export default function TravelPlanLayout({ children }: PropsWithChildren) {
   return (
     <div className='bg-white'>
       <TravelHeader />
-      <main className='ml-[85px] h-full '>{children}</main>
+      <div className='ml-[85px] h-full'>{children}</div>
     </div>
   );
 }

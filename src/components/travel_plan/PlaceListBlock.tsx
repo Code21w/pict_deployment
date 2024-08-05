@@ -1,13 +1,13 @@
 import ImageIcon from '@/assets/images/image_icon.png';
 import Image from 'next/image';
 import { LegacyRef } from 'react';
-interface PlaceListBlockProps {
+export interface PlaceListBlockProps {
   children?: React.ReactNode;
   variant?: string;
   Ref?: LegacyRef<HTMLDivElement>;
   item?: string;
 }
-const PlaceListBlock = ({ children, variant, Ref, item }: PlaceListBlockProps) => {
+const PlaceListBlock = ({ children, variant, item }: PlaceListBlockProps) => {
   return (
     <div>
       <div
@@ -22,7 +22,7 @@ const PlaceListBlock = ({ children, variant, Ref, item }: PlaceListBlockProps) =
             className={`object-scale-down ${variant === 'small' ? 'w-[48px] h-[48px]' : 'w-[64px] h-[64px]'}`}
           />
         </div>
-        <div ref={Ref}>{item}</div>
+        <div>{item}</div>
         {children}
       </div>
     </div>
