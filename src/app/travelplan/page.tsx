@@ -11,7 +11,7 @@ function TravelPlan() {
   const [areaName, setAreaName] = useState('광명');
   const [rcPlace, setRcPlace] = useState<string[]>(['']);
   //recommendedPlace
-  const [checkedPlace, setCheckedPlace] = useState([{ name: '', isChecked: false }]);
+  const [checkedPlace, setCheckedPlace] = useState<Array<checkedPlaceType>>([]);
   const [tempPlace, setTempPlace] = useState<string[]>([]);
   // const [placeSelectCount, setPlaceSelectCount] = useState(0);
   //tempPlace의 배열의 length로 카운트
@@ -21,6 +21,10 @@ function TravelPlan() {
   const [latitude, setLatitude] = useState(0);
   const [longitude, setLongitude] = useState(0);
   //페이지 첫 렌더링 시 ai가 생성해준 데이터로 설정
+  interface checkedPlaceType {
+    name: string;
+    isChecked: boolean;
+  }
   useEffect(() => {
     setPeriod(4);
     setAreaName('제주');
@@ -35,30 +39,26 @@ function TravelPlan() {
     };
     updateWidth();
   }, [isExpanded]);
-  useEffect(() => {
-    // 현재 위치 가져오기
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        setLatitude(position.coords.latitude);
-        setLongitude(position.coords.longitude);
-      },
-      (error) => {
-        console.error('Error getting current position:', error);
-        // 기본 위치 설정
-        setLatitude(37.5665);
-        setLongitude(126.978);
-      }
-    );
-  }, []);
+  // useEffect(() => {
+  //   // 현재 위치 가져오기
+  //   navigator.geolocation.getCurrentPosition(
+  //     (position) => {
+  //       setLatitude(position.coords.latitude);
+  //       setLongitude(position.coords.longitude);
+  //     },
+  //     (error) => {
+  //       console.error('Error getting current position:', error);
+  //       // 기본 위치 설정
+  //       setLatitude(37.5665);
+  //       setLongitude(126.978);
+  //     }
+  //   );
+  // }, []);
 
   function toggleExpand() {
     setIsExpanded((prev) => !prev);
   }
-  // const changeSelectCount = (isChecked: boolean) => {
-  //   !isChecked
-  //     ? setPlaceSelectCount(placeSelectCount + 1)
-  //     : setPlaceSelectCount(placeSelectCount - 1);
-  // };
+
   const changeTempPlaceList = (item: string, isChecked: boolean) => {
     !isChecked
       ? setCheckedPlace([...checkedPlace, { name: item, isChecked: !isChecked }])
@@ -124,7 +124,7 @@ function TravelPlan() {
         </div>
 
         <div className='border-solid border-2 border-red-500 w-screen h-screen rounded-md border max-h-full overflow-auto relative'>
-          {latitude !== 0 && longitude !== 0 && <Map latitude={latitude} longitude={longitude} />}
+          <Map latitude={latitude} longitude={longitude} />
         </div>
       </div>
     </div>
