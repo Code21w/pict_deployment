@@ -1,4 +1,6 @@
-import PlaceListBlock from './PlaceListBlock';
+'use client';
+
+import PlaceListBlock from '@/components/travel_plan/PlaceListBlock';
 export interface ControlDisplayBlockProps {
   pointWidth: number | undefined;
   // placeSelectCount: number;

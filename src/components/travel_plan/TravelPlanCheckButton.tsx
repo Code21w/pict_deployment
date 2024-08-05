@@ -8,12 +8,14 @@ export interface TravelPlanCheckButtonProps {
   changeTempPlaceList: Function;
   item: string;
 }
+
 const TravelPlanCheckButton = ({
   // changeSelectCount,
   changeTempPlaceList,
   item,
 }: TravelPlanCheckButtonProps) => {
   const [isChecked, setIsChecked] = useState(false);
+
   const getButtonStyles = (): { value: ReactNode } & Pick<HTMLAttributes<'button'>, 'className'> &
     Pick<ButtonProps, 'variant'> => {
     return !isChecked

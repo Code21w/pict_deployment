@@ -98,8 +98,7 @@ function TravelPlan() {
         <div
           //부모 ref 가져와서
           ref={componentRef}
-          id='temp_place_edit_container'
-          className='relative  border-solid border-2 border-green-500 w-[300px] '
+          className='relative border-solid border-2 border-green-500 w-[300px]'
         >
           <div
             className={`${!isExpanded ? 'flex flex-col items-center mt-5 gap-5' : 'flex flex-col items-center mt-5 gap-5 overflow-hidden'}`}
@@ -113,9 +112,13 @@ function TravelPlan() {
               // placeSelectCount={placeSelectCount}
               tempPlace={tempPlace}
             />
-            <div>
-              <ExpandButton isExpanded={isExpanded} toggleExpand={toggleExpand} />
-            </div>
+
+            <ExpandButton
+              componentRef={componentRef}
+              isExpanded={isExpanded}
+              toggleExpand={toggleExpand}
+            />
+
             {/* width: 120px ~ 300px */}
           </div>
         </div>

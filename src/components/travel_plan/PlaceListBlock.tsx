@@ -1,3 +1,5 @@
+'use client';
+
 import ImageIcon from '@/assets/images/image_icon.png';
 import Image from 'next/image';
 import { LegacyRef } from 'react';
