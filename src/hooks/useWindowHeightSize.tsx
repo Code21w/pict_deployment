@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
-interface HeightSize {
+export interface HeightSize {
   height: number | undefined;
 }
 
-function useWindowSize(): HeightSize {
+function useWindowHeightSize(): HeightSize {
   // Initialize state with undefined width/height so server and client renders match
   const [windowHeight, setWindowHeight] = useState<HeightSize>({
     height: undefined,
@@ -27,6 +27,7 @@ function useWindowSize(): HeightSize {
     // Remove event listener on cleanup
     return () => window.removeEventListener('resize', handleResize);
   }, []); // empty array ensures that effect is only run on mount
+
   return windowHeight;
 }
-export default useWindowSize;
+export default useWindowHeightSize;

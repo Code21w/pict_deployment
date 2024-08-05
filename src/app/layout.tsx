@@ -1,7 +1,7 @@
 import Footer from '@/components/shared/Footer';
 import Header from '@/components/shared/Header';
 import Script from 'next/script';
-import { ReactNode } from 'react';
+import { PropsWithChildren } from 'react';
 import './globals.css';
 
 export const metadata = {
@@ -15,7 +15,7 @@ declare global {
   }
 }
 
-export default function RootLayout({ children }: { children: ReactNode }) {
+export default function RootLayout({ children }: PropsWithChildren) {
   return (
     <html lang='en'>
       <head>

@@ -1,26 +1,72 @@
 'use client';
+import Map from '@/components/shared/kakaoMap';
 import ControlDisplayBlock from '@/components/travel_plan/ControlDisplayBlock';
 import ExpandButton from '@/components/travel_plan/ExpandButton';
 import PlaceCategory from '@/components/travel_plan/PlaceCategory';
 import PlaceListBlock from '@/components/travel_plan/PlaceListBlock';
 import TravelPlanCheckButton from '@/components/travel_plan/TravelPlanCheckButton';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 function TravelPlan() {
   const [period, setPeriod] = useState(3);
   const [areaName, setAreaName] = useState('광명');
-  const [rcPlace, setRcPlace] = useState(['']);
-  const [placeSelectCount, setPlaceSelectCount] = useState(0);
-  const [parentWidth, setParentWidth] = useState('');
-  const changeSelectCount = (isChecked: boolean) => {
-    !isChecked
-      ? setPlaceSelectCount(placeSelectCount + 1)
-      : setPlaceSelectCount(placeSelectCount - 1);
-  };
-
+  const [rcPlace, setRcPlace] = useState<string[]>(['']);
+  //recommendedPlace
+  const [checkedPlace, setCheckedPlace] = useState([{ name: '', isChecked: false }]);
+  const [tempPlace, setTempPlace] = useState<string[]>([]);
+  // const [placeSelectCount, setPlaceSelectCount] = useState(0);
+  //tempPlace의 배열의 length로 카운트
+  const [parentWidth, setParentWidth] = useState<number | undefined>();
+  const componentRef = useRef<HTMLDivElement>(null);
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [latitude, setLatitude] = useState(0);
+  const [longitude, setLongitude] = useState(0);
   //페이지 첫 렌더링 시 ai가 생성해준 데이터로 설정
   useEffect(() => {
-    setPeriod(4), setAreaName('제주'), setRcPlace(['해수욕장', '절', '샘플3']);
+    setPeriod(4);
+    setAreaName('제주');
+    setRcPlace(['해수욕장', '절', '샘플3']);
   }, []);
+
+  useEffect(() => {
+    const updateWidth = () => {
+      if (componentRef.current) {
+        setParentWidth(componentRef.current.offsetWidth);
+      }
+    };
+    updateWidth();
+  }, [isExpanded]);
+  useEffect(() => {
+    // 현재 위치 가져오기
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        setLatitude(position.coords.latitude);
+        setLongitude(position.coords.longitude);
+      },
+      (error) => {
+        console.error('Error getting current position:', error);
+        // 기본 위치 설정
+        setLatitude(37.5665);
+        setLongitude(126.978);
+      }
+    );
+  }, []);
+
+  function toggleExpand() {
+    setIsExpanded((prev) => !prev);
+  }
+  // const changeSelectCount = (isChecked: boolean) => {
+  //   !isChecked
+  //     ? setPlaceSelectCount(placeSelectCount + 1)
+  //     : setPlaceSelectCount(placeSelectCount - 1);
+  // };
+  const changeTempPlaceList = (item: string, isChecked: boolean) => {
+    !isChecked
+      ? setCheckedPlace([...checkedPlace, { name: item, isChecked: !isChecked }])
+      : setCheckedPlace(checkedPlace.filter((e) => e.name !== item));
+    const temp = checkedPlace.filter((place) => place.isChecked === true).map((item) => item.name);
+    setTempPlace(temp);
+  };
+
   return (
     <div className='border-solid border-2 flex h-screen overflow-hidden'>
       <div className='relative border-solid border-2 flex max-h-full'>
@@ -36,43 +82,46 @@ function TravelPlan() {
 
           <div className='list_container flex flex-col border-solid border-2 box-content overflow-auto'>
             {rcPlace.map((item, idx) => (
-              <PlaceListBlock key={idx}>
-                <div>{item}</div>
+              <PlaceListBlock key={idx} item={item}>
                 <div className='absolute right-3'>
-                  <TravelPlanCheckButton changeSelectCountFunction={changeSelectCount} />
+                  <TravelPlanCheckButton
+                    // changeSelectCount={changeSelectCount}
+                    changeTempPlaceList={changeTempPlaceList}
+                    item={item}
+                  />
                 </div>
               </PlaceListBlock>
             ))}
           </div>
         </div>
-        {/* // */}
+
         <div
           //부모 ref 가져와서
+          ref={componentRef}
           id='temp_place_edit_container'
-          className='relative border-solid border-2 border-green-500 w-[120px]'
+          className='relative  border-solid border-2 border-green-500 w-[300px] '
         >
-          <div className=''>
-            <div className='text-2xl'>{placeSelectCount}</div>
+          <div
+            className={`${!isExpanded ? 'flex flex-col items-center mt-5 gap-5' : 'flex flex-col items-center mt-5 gap-5 overflow-hidden'}`}
+          >
+            <div>
+              <div className='text-2xl'>{tempPlace.length}</div>
+              {/* {placeSelectCount} */}
+            </div>
+            <ControlDisplayBlock
+              pointWidth={parentWidth}
+              // placeSelectCount={placeSelectCount}
+              tempPlace={tempPlace}
+            />
+            <div>
+              <ExpandButton isExpanded={isExpanded} toggleExpand={toggleExpand} />
+            </div>
+            {/* width: 120px ~ 300px */}
           </div>
-          <ControlDisplayBlock width={parentWidth} />
-          {/* 여기서 쓰기 */}
-          {/* <div>
-            <PlaceListBlock>
-              <div>333</div>
-            </PlaceListBlock>
-          </div> */}
-          <div>
-            <ExpandButton />
-          </div>
-          {/* width: 120px ~ 300px */}
         </div>
-        {/* // */}
-        <div className='border-solid border-2 border-red-500 w-screen h-screen rounded-md border max-h-full overflow-auto relative'>
-          <div className='flex rounded-md bg-gray-500/50 items-center m-[30px] -mb-[10px]'>
-            <div className='rounded-md m-[5px] active:bg-white'>Travel Plan</div>
-          </div>
 
-          <div className='rounded-md bg-gray-500/50 w-[80%] h-[700px] overflow-auto m-[30px]'></div>
+        <div className='border-solid border-2 border-red-500 w-screen h-screen rounded-md border max-h-full overflow-auto relative'>
+          {latitude !== 0 && longitude !== 0 && <Map latitude={latitude} longitude={longitude} />}
         </div>
       </div>
     </div>
