@@ -7,7 +7,7 @@ function Header() {
   return (
     <header className='z-10 sticky top-0 flex h-16 items-center gap-4 px-4 md:px-6 flex justify-between'>
       <nav>
-        <ul className='w-full h-16 flex-row gap-6 text-lg font-medium flex flex-row items-center gap-5 text-sm lg:gap-10'>
+        <ul className='w-full flex h-16 flex-row gap-6 text-lg font-medium  lg:gap-10'>
           <li>
             <Link
               href={'/'}
