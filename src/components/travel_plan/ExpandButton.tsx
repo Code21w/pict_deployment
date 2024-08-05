@@ -6,12 +6,6 @@ export interface ExpandButtonProps {
   toggleExpand: () => void;
 }
 function ExpandButton({ isExpanded, toggleExpand }: ExpandButtonProps) {
-  // const [isClicked, setIsClicked] = useState(false);
-
-  // function toggleActive() {
-  //   setIsClicked((prev) => !prev);
-  // }
-
   if (typeof document !== 'undefined') {
     const temp = document.getElementById('temp_place_edit_container');
     const getButtonStyles = () => {

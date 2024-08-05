@@ -13,7 +13,7 @@ function TravelPlan() {
   //recommendedPlace
   const [checkedPlace, setCheckedPlace] = useState([{ name: '', isChecked: false }]);
   const [tempPlace, setTempPlace] = useState<string[]>([]);
-  const [placeSelectCount, setPlaceSelectCount] = useState(0);
+  // const [placeSelectCount, setPlaceSelectCount] = useState(0);
   //tempPlace의 배열의 length로 카운트
   const [parentWidth, setParentWidth] = useState<number | undefined>();
   const componentRef = useRef<HTMLDivElement>(null);
@@ -54,11 +54,11 @@ function TravelPlan() {
   function toggleExpand() {
     setIsExpanded((prev) => !prev);
   }
-  const changeSelectCount = (isChecked: boolean) => {
-    !isChecked
-      ? setPlaceSelectCount(placeSelectCount + 1)
-      : setPlaceSelectCount(placeSelectCount - 1);
-  };
+  // const changeSelectCount = (isChecked: boolean) => {
+  //   !isChecked
+  //     ? setPlaceSelectCount(placeSelectCount + 1)
+  //     : setPlaceSelectCount(placeSelectCount - 1);
+  // };
   const changeTempPlaceList = (item: string, isChecked: boolean) => {
     !isChecked
       ? setCheckedPlace([...checkedPlace, { name: item, isChecked: !isChecked }])
@@ -85,7 +85,7 @@ function TravelPlan() {
               <PlaceListBlock key={idx} item={item}>
                 <div className='absolute right-3'>
                   <TravelPlanCheckButton
-                    changeSelectCount={changeSelectCount}
+                    // changeSelectCount={changeSelectCount}
                     changeTempPlaceList={changeTempPlaceList}
                     item={item}
                   />
@@ -105,11 +105,12 @@ function TravelPlan() {
             className={`${!isExpanded ? 'flex flex-col items-center mt-5 gap-5' : 'flex flex-col items-center mt-5 gap-5 overflow-hidden'}`}
           >
             <div>
-              <div className='text-2xl'>{placeSelectCount}</div>
+              <div className='text-2xl'>{tempPlace.length}</div>
+              {/* {placeSelectCount} */}
             </div>
             <ControlDisplayBlock
               pointWidth={parentWidth}
-              placeSelectCount={placeSelectCount}
+              // placeSelectCount={placeSelectCount}
               tempPlace={tempPlace}
             />
             <div>

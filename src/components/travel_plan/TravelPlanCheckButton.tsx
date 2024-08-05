@@ -4,12 +4,12 @@ import { Button, ButtonProps } from '@/components/ui/button.tsx';
 import { cn } from '@/lib/utils.ts';
 import { HTMLAttributes, ReactNode, useState } from 'react';
 export interface TravelPlanCheckButtonProps {
-  changeSelectCount: Function;
+  // changeSelectCount: Function;
   changeTempPlaceList: Function;
   item: string;
 }
 const TravelPlanCheckButton = ({
-  changeSelectCount,
+  // changeSelectCount,
   changeTempPlaceList,
   item,
 }: TravelPlanCheckButtonProps) => {
@@ -23,7 +23,7 @@ const TravelPlanCheckButton = ({
           className: 'bg-accent text-2xl text-gray-500/50',
         }
       : {
-          value: 'on',
+          value: <>&#10003;</>,
           variant: 'check',
           className: 'text-xl text-white',
         };
@@ -34,7 +34,7 @@ const TravelPlanCheckButton = ({
     setIsChecked((prev) => !prev);
   }
   const handleClick = () => {
-    changeSelectCount(isChecked);
+    // changeSelectCount(isChecked);
     changeTempPlaceList(item, isChecked), toggleActive();
   };
   return (
@@ -43,7 +43,9 @@ const TravelPlanCheckButton = ({
       onClick={handleClick}
       variant={variant}
       {...rest}
-    ></Button>
+    >
+      {value}
+    </Button>
   );
 };
 export default TravelPlanCheckButton;
