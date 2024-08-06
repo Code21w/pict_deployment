@@ -1,8 +1,8 @@
 function TravelHeader() {
   return (
     <header className='fixed left-0 w-[85px] z-1 overflow-hidden h-full justify-between'>
-      <nav className='h-full font-medium flex flex-col items-center gap-20 mt-[20px]'>
-        <ul>
+      <nav>
+        <ul className='h-full font-medium flex flex-col items-center gap-20 mt-20'>
           <li className='text-center text-base text-cyan-500'>
             STEP 1 <br />
             장소 선택
