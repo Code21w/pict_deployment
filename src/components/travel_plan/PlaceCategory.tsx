@@ -3,7 +3,7 @@
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils.ts';
 import { useState } from 'react';
-const categoryList = [
+const CATEGORY = [
   {
     key: 'location',
     label: '인문장소',
@@ -22,13 +22,13 @@ const categoryList = [
   },
 ];
 function PlaceCategory() {
-  const [currentCategory, setCurrentCategory] = useState(categoryList[0].key);
+  const [currentCategory, setCurrentCategory] = useState(CATEGORY[0].key);
 
   const onClickBadge = (categoryKey: string) => {
     setCurrentCategory(categoryKey);
   };
 
-  return categoryList.map((category) => {
+  return CATEGORY.map((category) => {
     const { key, label } = category;
     const isActive = currentCategory === key;
     return (

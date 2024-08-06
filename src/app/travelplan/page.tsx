@@ -25,35 +25,36 @@ function TravelPlan() {
     name: string;
     isChecked: boolean;
   }
+  const PLACE = [
+    '해수욕장',
+    '절',
+    '샘플3',
+    '2',
+    '23',
+    '24',
+    '25',
+    '26',
+    '27',
+    '28',
+    '29',
+    '30',
+    '31',
+    '32',
+    '33',
+    '200',
+    '201',
+    '202',
+    '203',
+    '204',
+    '205',
+    '206',
+    '207',
+    '끝',
+  ];
   useEffect(() => {
     setPeriod(4);
     setAreaName('제주');
-    setRecommendedPlace([
-      '해수욕장',
-      '절',
-      '샘플3',
-      '2',
-      '23',
-      '24',
-      '25',
-      '26',
-      '27',
-      '28',
-      '29',
-      '30',
-      '31',
-      '32',
-      '33',
-      '200',
-      '201',
-      '202',
-      '203',
-      '204',
-      '205',
-      '206',
-      '207',
-      '끝',
-    ]);
+    setRecommendedPlace(PLACE);
   }, []);
 
   useEffect(() => {
@@ -105,6 +106,10 @@ function TravelPlan() {
     setCheckedPlace(newCheckedPlace);
     setTempPlace(temp);
   };
+  const resetTempPlaceList = () => {
+    setCheckedPlace([]);
+    setTempPlace([]);
+  };
 
   return (
     <div className='border-solid border-2 h-screen flex overflow-hidden'>
@@ -138,10 +143,18 @@ function TravelPlan() {
           <div
             className={`${!isExpanded ? 'flex flex-col items-center mt-5 gap-5' : 'flex flex-col items-center mt-5 gap-5 overflow-hidden'}`}
           >
-            <div>
+            <div className='w-full flex items-center justify-around'>
               <div className='text-2xl'>{tempPlace.length}</div>
-              {/* {placeSelectCount} */}
+              {isExpanded && (
+                <div
+                  className='text-xs text-red-500 hover:cursor-pointer'
+                  onClick={resetTempPlaceList}
+                >
+                  장소 설정 초기화
+                </div>
+              )}
             </div>
+
             <ControlDisplayBlock
               pointWidth={parentWidth}
               // placeSelectCount={placeSelectCount}
@@ -157,7 +170,7 @@ function TravelPlan() {
           </div>
         </div>
 
-        <div className='border-solid border-2 border-red-500 w-screen h-screen rounded-md border max-h-full overflow-auto relative'>
+        <div className='w-screen h-screen rounded-md'>
           <Map latitude={latitude} longitude={longitude} />
         </div>
       </div>
