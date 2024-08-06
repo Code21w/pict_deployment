@@ -41,7 +41,6 @@ const TravelPlanCheckButton = ({
     // changeSelectCount(isChecked);
     toggleActive();
     changeTempPlaceList(item, isChecked);
-    console.log(isChecked);
   };
   return (
     <Button

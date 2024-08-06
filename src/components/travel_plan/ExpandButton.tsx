@@ -11,18 +11,12 @@ function ExpandButton({ componentRef, isExpanded, toggleExpand }: ExpandButtonPr
   const slideDiv = componentRef.current;
   const getButtonStyles = () => {
     return !isExpanded
-      ? (slideDiv
-          ? (slideDiv.className =
-              'slideIn relative border-solid border-2 border-green-500 font-bold w-[120px]')
-          : '',
+      ? (slideDiv ? (slideDiv.className = 'slideIn relative font-bold w-[120px]') : '',
         {
           value: 'off',
           content: '>',
         })
-      : (slideDiv
-          ? (slideDiv.className =
-              'slideOut relative border-solid border-2 border-green-500 font-bold w-[300px]')
-          : '',
+      : (slideDiv ? (slideDiv.className = 'slideOut relative font-bold w-[300px]') : '',
         {
           value: 'on',
           content: '<',

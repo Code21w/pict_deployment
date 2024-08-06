@@ -23,7 +23,7 @@ const ControlDisplayBlock = ({
   ) : (
     // (console.log(tempPlace),
     tempPlace.map((item, idx) => (
-      <div key={idx} className='border-solid border-2 rounded-md shadow-md w-[200px]'>
+      <div key={idx} className='border-solid border-2 rounded-md w-[200px]'>
         <PlaceListBlock variant='small' item={item}></PlaceListBlock>
       </div>
     ))
