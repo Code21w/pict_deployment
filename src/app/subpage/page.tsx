@@ -1,9 +1,12 @@
 'use client';
 import React, { useEffect, useState } from 'react';
+import { Button } from '@/components/ui/button';
 // import KakaoMap from '../../components/subpage/kakaoMap';
 
 function SubPage() {
   const [imageUrl, setImageUrl] = useState('');
+  const [insertImage, setInsertImage] = useState('');
+  const [isImage, setIsImage] = useState(false);
   const [location, setLocation] = useState('');
   const [explanation, setExplanation] = useState('');
   const [similarity, setSimilarity] = useState('');
@@ -15,16 +18,25 @@ function SubPage() {
     if (uploadFileResponse && locationInfoResponse) {
       const result = uploadFileResponse.result[0];
       setImageUrl(result.image_url);
+      setInsertImage(result.base64_image);
       setLocation(result.location);
       setExplanation(locationInfoResponse.response[0].explanation);
       setSimilarity(result.similarity);
     }
   }, []);
 
+  const handleToggleImage = () => {
+    setIsImage((prev) => !prev);
+  };
+
   return (
     <main className='bg-white h-screen'>
       <div className='flex items-center justify-center py-4'>
-        {imageUrl && <img src={imageUrl} alt='location' />}
+        {isImage ? (
+          <img src={`${insertImage}`} alt='location' />
+        ) : (
+          <img src={imageUrl} alt='location' />
+        )}
       </div>
       <div className={`font-['Cafe24Moyamoya-Face-v1.0'] text-center text-5xl`}>
         여기는 {location} 같아요!

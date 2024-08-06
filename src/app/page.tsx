@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { useCallback, useState } from 'react';
+import { useCallback, useState, useEffect } from 'react';
 import { useDropzone } from 'react-dropzone';
 
 import UploadFile from '@/api/SendingImage';
@@ -96,6 +96,22 @@ function Main() {
       setLoading(false); // 에러가 발생해도 로딩 상태 해제 추후 출력 페이지 작성
     }
   };
+
+  useEffect(() => {
+    if (dialogOpen && image) {
+      // 이미지 데이터를 Base64로 변환하여 세션 스토리지에 저장
+      fetch(image)
+        .then((response) => response.blob())
+        .then((blob) => {
+          const reader = new FileReader();
+          reader.onloadend = () => {
+            sessionStorage.setItem('uploadedImage', reader.result);
+          };
+          reader.readAsDataURL(blob);
+        })
+        .catch((error) => console.error('Error converting image to Base64:', error));
+    }
+  }, [dialogOpen, image]);
 
   // if (typeof window !== 'undefined') {
   //   const windowHeight = window.innerHeight;
