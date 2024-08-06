@@ -18,13 +18,18 @@ function TravelPlan() {
   const [parentWidth, setParentWidth] = useState<number | undefined>();
   const componentRef = useRef<HTMLDivElement>(null);
   const [isExpanded, setIsExpanded] = useState(false);
-  const [latitude, setLatitude] = useState(0);
-  const [longitude, setLongitude] = useState(0);
-  //페이지 첫 렌더링 시 ai가 생성해준 데이터로 설정
+
+  // const location = window.localStorage.getItem('location');
+  // const id = window.localStorage.getItem('id');
+
+  //페이지 첫 렌더링 시 ai가 생성해준 데이터를 로컬 스토리지에서 가져오기
   interface checkedPlaceType {
     name: string;
     isChecked: boolean;
   }
+
+  // const place = fetch()~~~ id로 데이터 place 변수값에 담기
+
   const PLACE = [
     '해수욕장',
     '절',
@@ -53,7 +58,9 @@ function TravelPlan() {
   ];
   useEffect(() => {
     setPeriod(4);
+    // setAreaName(location);
     setAreaName('제주');
+    // setRecommendedPlace(place);
     setRecommendedPlace(PLACE);
   }, []);
 
@@ -171,7 +178,7 @@ function TravelPlan() {
         </div>
 
         <div className='w-screen h-screen rounded-md'>
-          <Map latitude={latitude} longitude={longitude} />
+          <Map />
         </div>
       </div>
     </div>
