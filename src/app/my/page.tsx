@@ -4,9 +4,8 @@ import React, { useState } from 'react';
 
 const initialTravelPlans = [
   { id: 1, title: '서울 여행' },
-  // { id: 2, title: '부산 여행' },
-  // { id: 3, title: '제주도 여행' }, 
-	// 수정 일자 , 일차수 -> 가장 높은 일차수? 
+  { id: 2, title: '부산 여행' },
+  { id: 3, title: '제주도 여행' },
 ];
 
 function MyPage() {
@@ -42,24 +41,25 @@ function MyPage() {
     <main className='bg-white h-screen grid grid-cols-2 divide-x'>
       <div className='items-center justify-center py-4'>
         <div className='flex items-center justify-center py-4'>
-          <div className='items-center justify-center py-4 mr-44'>
+          <div className='items-center justify-center py-4 mr-44 pt-10 ' >
             <div>Sherlock Holmes</div>
             <div>Sherlock Holmes@gmail.com</div>
           </div>
           <p>회원정보 변경</p>
         </div>
-        <div className='flex justify-center items-center'>
-          <svg
-            viewBox='0 0 509 716.1'
-            className='size-4/5 border-solid border-2 rounded-xl'
-            style={{ background: 'new 0 0 509 716.1' }} // enableBackground 대신 background 사용
-          >
-            <style type="text/css">
-              {`
-                .st0 { fill: #B8B8B8; stroke: #FFFFFF; stroke-width: 0.5; }
-                .st1 { fill: none; stroke: #000000; stroke-width: 0.5; }
-              `}
-            </style>
+        <div className='flex justify-center items-center mt-10 p-4 border '>
+          <div style={{ padding: '20px', border: '2px solid gray', borderRadius: '0.75rem' , width:"75%" }}>
+            <svg
+              viewBox='0 0 509 716.1'
+              className='size-4/5'
+              style={{ background: 'new 0 0 509 716.1' }}
+            >
+              <style type="text/css">
+                {`
+                  .st0 { fill: #B8B8B8; stroke: #FFFFFF; stroke-width: 0.5; }
+                  .st1 { fill: none; stroke: #000000; stroke-width: 0.5; }
+                `}
+              </style>
 						<g id="제주특별자치도">
               <path id="서귀포시" className="st0" d="M454.8,669.3l21.4-9.5l0.4,0.6l0.2,0l2.8,0.5l-0.6,3.2l1.7-3.6l1.2,3.3l-14.3,22.6l-8.1,0.8
                 l-4.3,4.4l-11.2,0.7l-7.8,5.9l-10.3-0.9l-6.5,2.3l-1.8-2.5l-11.5,1.5l-5.7-1.6l-7.5,7l-13.2-13.7l3.1-2l6.9,3.7l0-2.4l6.6-4.4
@@ -803,6 +803,7 @@ function MyPage() {
           </svg>
         </div>
       </div>
+			</div>
       <div className={`font-['Cafe24Moyamoya-Face-v1.0'] text-center text-5xl`}>
         <div className='pt-10 pb-10'>나의 여행 플레이리스트</div>
         <div className='w-full px-4'>
@@ -853,7 +854,7 @@ function MyPage() {
                 </div>
               ))
             ) : (
-              <p className='text-sm'>여행 계획이 없습니다.</p>
+              <p>여행 계획이 없습니다.</p>
             )}
           </div>
         </div>
