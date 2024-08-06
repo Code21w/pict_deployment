@@ -29,6 +29,7 @@ function Main() {
 
   const windowHeight = useWindowHeightSize();
   const onDrop = useCallback((acceptedFiles: File[], fileRejections: any[]) => {
+    // useCallback을 써야하는가 생각해보기
     // 파일 형식 오류가 있는 경우
     if (fileRejections.length > 0) {
       setErrorMessage('이미지 형식이 아닙니다!');
@@ -77,27 +78,19 @@ function Main() {
     setLoading(true);
 
     try {
-      const response = await UploadFile(formData);
-      console.log('Server response:', response);
-
-      const { image_url, location, similarity } = response;
+      const { imageInfo, externalImageUrl } = await UploadFile(formData);
+      const { image_url, location, similarity } = imageInfo;
 
       const roundedSimilarity = Math.round(similarity);
 
       setResponseImage(image_url);
       setLocation(location);
       setSimilarity(roundedSimilarity);
-
-      console.log(`Fetching location info for: ${location}`);
+      // 위의 set값은 제대로 받아오로 아래 fetch 를 받는데 문제가 생겼다면 어떻게 처리할 것인가
       const fetchedLocationInfo = await fetchLocationInfo(location);
-      console.log('Fetched location info:', fetchedLocationInfo);
       setLocationInfo(fetchedLocationInfo);
-
-      console.log(`Generating and storing image for: ${image_url}, ${location}`);
-      await generateAndStoreImage(image_url, location);
-      console.log('Image generation and storage complete');
-
       setLoading(false);
+      await generateAndStoreImage(externalImageUrl, location);
     } catch (error) {
       console.error('Error uploading file:', error);
       setLoading(false); // 에러가 발생해도 로딩 상태 해제 추후 출력 페이지 작성
@@ -145,6 +138,7 @@ function Main() {
             <b className='text-lg'>국내에서 가장 비슷한 곳</b>
             <div className='text-lg'>을 찾아드려요!</div>
           </div>
+
           <div
             {...getRootProps()}
             className={`flex items-center bg-gray-100 rounded-3xl shadow-md justify-center mt-[10px] ${
