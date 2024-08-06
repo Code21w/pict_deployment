@@ -8,11 +8,6 @@ console.log('Axios instance created with config:', api.defaults);
 
 async function generateAndStoreImage(imageUrl: string, locationName: string) {
   try {
-    // const params = {
-    //   imageUrl,
-    //   locationName,
-    // };
-
     const response = await api.get<Response>('/api/generate', {
       params: {
         imageUrl: imageUrl,

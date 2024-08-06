@@ -104,7 +104,7 @@ export function DialogDemo({
       </div>
       <DialogFooter>
         <Link href='/subpage'>
-          <Button variant='link'>더 많은 정보 보러 가기</Button>
+          <Button variant='link'>여행 계획 짜러 가기</Button>
         </Link>
       </DialogFooter>
     </DialogContent>
