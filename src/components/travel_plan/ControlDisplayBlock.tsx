@@ -33,19 +33,32 @@
 
 // export default ControlDisplayBlock;
 'use client';
-
+// import Imag from '@/assets/images/trashcan.svg';
+import TrashBin from '@/assets/images/trash_bin.png';
 import PlaceListBlock from '@/components/travel_plan/PlaceListBlock';
 import { cn } from '@/lib/utils';
+import Image from 'next/image';
 export interface ControlDisplayBlockProps {
   isExpanded: boolean;
   tempPlace: string[];
+  deleteTempPlaceList: Function;
 }
 
-const ControlDisplayBlock = ({ isExpanded, tempPlace }: ControlDisplayBlockProps) => {
+const ControlDisplayBlock = ({
+  isExpanded,
+  tempPlace,
+  deleteTempPlaceList,
+}: ControlDisplayBlockProps) => {
   const renderer = () => {
+    const handleClick = (item: string) => {
+      deleteTempPlaceList(item);
+    };
     const renderPlaceCount = () => {
       return tempPlace.map((item, idx) => (
-        <div className='flex items-center justify-center bg-cyan-500/50 border-none rounded-full w-[24px] h-[24px] text-white text-sm'>
+        <div
+          key={item}
+          className='flex items-center justify-center bg-cyan-500/50 border-none rounded-full w-[24px] h-[24px] text-white text-sm'
+        >
           {idx + 1}
         </div>
       ));
@@ -57,8 +70,21 @@ const ControlDisplayBlock = ({ isExpanded, tempPlace }: ControlDisplayBlockProps
             <div className='flex items-center justify-center bg-cyan-500/50 border-none rounded-full w-[24px] h-[24px] text-white text-sm'>
               {idx + 1}
             </div>
-            <div key={idx} className='border-solid border-2 rounded-md w-[200px]'>
-              <PlaceListBlock variant='small' item={item}></PlaceListBlock>
+            <div key={item} className='border-solid border-2 rounded-md w-[200px]'>
+              <PlaceListBlock variant='small' item={item}>
+                <div
+                  className='min-w-[24px] min-h-[24px] hover:cursor-pointer'
+                  onClick={() => handleClick(item)}
+                >
+                  {/* 이거 왜 작동이 안돼*/}
+                  <Image src={TrashBin} alt='delete' />
+                  {/* <Image
+                    src={TrashBin2}
+                    alt='delete_hover'
+                    className='hidden hover:visible peer-hover:visible'
+                  /> */}
+                </div>
+              </PlaceListBlock>
             </div>
           </div>
         ));

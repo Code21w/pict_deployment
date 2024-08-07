@@ -25,7 +25,7 @@ const PlaceListBlock = ({ children, variant, item }: PlaceListBlockProps) => {
               className={`object-scale-down ${variant === 'small' ? 'w-[48px] h-[48px]' : 'w-[64px] h-[64px]'}`}
             />
           </div>
-          <div>{item}</div>
+          <div className={`${variant === 'small' ? 'text-sm' : ''}`}>{item}</div>
         </div>
         {children}
       </div>

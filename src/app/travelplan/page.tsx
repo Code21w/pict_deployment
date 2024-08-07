@@ -175,7 +175,31 @@ function TravelPlan() {
   // };
 
   const resetTempPlaceList = () => {
-    setTempPlace([]);
+    tempPlace.map((item) => deleteTempPlaceList(item));
+    //delete 버튼을 한번에 다 누른 효과
+  };
+  const deleteTempPlaceList = (item: string) => {
+    // console.log(item);
+    setTempPlace((prevTempPlace) => {
+      const newTempPlace = prevTempPlace.filter((place) => place !== item);
+      //tempPlace를 item을 제외한 배열로 바꾼다.
+      //recommendedplace에서 일치하는 place의 ischecked를 바꾼다.
+      return newTempPlace;
+    });
+
+    setRecommendedPlace((prevPlace) => {
+      const newRecommendedPlace = prevPlace.map((place) => {
+        if (place.title === item) {
+          return { ...place, isChecked: !place.isChecked };
+        }
+
+        return place;
+      });
+      //recommendedPlace = {PLACE에서 선택한거만 isChecked = false}
+      return newRecommendedPlace;
+    });
+
+    //
   };
   const selectDay = (travelDays: string) => {
     setPeriod(travelDays);
@@ -228,6 +252,7 @@ function TravelPlan() {
               // placeSelectCount={placeSelectCount}
               isExpanded={isExpanded}
               tempPlace={tempPlace}
+              deleteTempPlaceList={deleteTempPlaceList}
             />
 
             <ExpandButton isExpanded={isExpanded} toggleExpand={toggleExpand} />
