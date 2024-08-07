@@ -67,7 +67,7 @@ function ExpandButton({ isExpanded, toggleExpand }: ExpandButtonProps) {
 
   return (
     <Button
-      className='absolute z-10 -right-11 top-[450px] hover:cursor-pointer'
+      className={`fixed z-10 ${isExpanded ? 'buttonSlideOut right-[525px]' : 'buttonSlideIn right-[705px]'} bottom-[450px] hover:cursor-pointer`}
       onClick={() => {
         toggleExpand();
       }}

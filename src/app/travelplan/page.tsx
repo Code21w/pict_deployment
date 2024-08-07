@@ -46,7 +46,7 @@ function TravelPlan() {
 
   // const place = fetch()~~~ id로 데이터 place 변수값에 담기
 
-  const PLACE = [
+  const PLACE_1 = [
     {
       id: 192,
       sigungu_id: 1,
@@ -56,7 +56,6 @@ function TravelPlan() {
       map_x: 128.4389748268,
       map_y: 38.3778814721,
       category: '인문명소',
-      isChecked: false,
     },
     {
       id: 715,
@@ -67,7 +66,6 @@ function TravelPlan() {
       map_x: 128.4644147196,
       map_y: 38.4489653345,
       category: '인문명소',
-      isChecked: false,
     },
     {
       id: 717,
@@ -78,7 +76,6 @@ function TravelPlan() {
       map_x: 128.4628176843,
       map_y: 38.4476432361,
       category: '인문명소',
-      isChecked: false,
     },
     {
       id: 761,
@@ -89,14 +86,126 @@ function TravelPlan() {
       map_x: 128.3781573424,
       map_y: 38.4037217209,
       category: '인문명소',
-      isChecked: false,
+    },
+    {
+      id: 12041,
+      sigungu_id: 1,
+      title: '오호어촌체험마을',
+      addr1: '강원특별자치도 고성군 심층수길 40-20',
+      firstimage: 'http://tong.visitkorea.or.kr/cms/resource/18/863118_image2_1.jpg',
+      map_x: 128.5290848757,
+      map_y: 38.3270974802,
+      category: '인문명소',
+    },
+    {
+      id: 12856,
+      sigungu_id: 1,
+      title: '울산바위촬영휴게소',
+      addr1: '강원특별자치도 고성군 토성면 미시령로 2653',
+      firstimage: 'NaN',
+      map_x: 128.496627685,
+      map_y: 38.2072219286,
+      category: '인문명소',
+    },
+    {
+      id: 13294,
+      sigungu_id: 1,
+      title: '육송정 홍교',
+      addr1: '강원특별자치도 고성군 해상리 1041',
+      firstimage: 'NaN',
+      map_x: 128.4088384086,
+      map_y: 38.3867298548,
+      category: '인문명소',
+    },
+    {
+      id: 13513,
+      sigungu_id: 1,
+      title: '이기붕별장',
+      addr1: '강원특별자치도 고성군 거진읍 화진포길 280',
+      firstimage: 'http://tong.visitkorea.or.kr/cms/resource/41/3007941_image2_1.jpg',
+      map_x: 128.4430325955,
+      map_y: 38.4725343883,
+      category: '인문명소',
+    },
+    {
+      id: 13518,
+      sigungu_id: 1,
+      title: '이덕균가옥',
+      addr1: '강원특별자치도 고성군 죽왕면 송지호로 198-12',
+      firstimage: 'NaN',
+      map_x: 128.5035454892,
+      map_y: 38.3285440368,
+      category: '인문명소',
+    },
+    {
+      id: 13566,
+      sigungu_id: 1,
+      title: '이승만별장(고성)',
+      addr1: '강원특별자치도 고성군 이승만별장길 33 이승만별장',
+      firstimage: 'http://tong.visitkorea.or.kr/cms/resource/01/2600601_image2_1.jpg',
+      map_x: 128.4363027064,
+      map_y: 38.4708816727,
+      category: '인문명소',
+    },
+    {
+      id: 13873,
+      sigungu_id: 1,
+      title: '일성설악온천콘도&리조트',
+      addr1: '강원특별자치도 고성군 토성면 고성대로 47-24',
+      firstimage: 'http://tong.visitkorea.or.kr/cms/resource/77/1581477_image2_1.jpg',
+      map_x: 128.5036742075,
+      map_y: 38.209127399,
+      category: '인문명소',
+    },
+    {
+      id: 14203,
+      sigungu_id: 1,
+      title: '장신유원지',
+      addr1: '강원특별자치도 고성군 간성읍 소똥령마을길 32',
+      firstimage: 'NaN',
+      map_x: 128.3782457171,
+      map_y: 38.3309579924,
+      category: '인문명소',
+    },
+    {
+      id: 15060,
+      sigungu_id: 1,
+      title: '죽정분교(구,죽정초등학교)',
+      addr1: '강원특별자치도 고성군 현내면 모정2길 2',
+      firstimage: 'http://tong.visitkorea.or.kr/cms/resource/46/3070046_image2_1.jpg',
+      map_x: 128.4197681178,
+      map_y: 38.4704730657,
+      category: '인문명소',
+    },
+    {
+      id: 15342,
+      sigungu_id: 1,
+      title: '진부령 흘리마을',
+      addr1: '강원특별자치도 고성군 간성읍 흘리길 185',
+      firstimage: 'http://tong.visitkorea.or.kr/cms/resource/66/3016266_image2_1.jpg',
+      map_x: 128.3741425923,
+      map_y: 38.2648711759,
+      category: '인문명소',
+    },
+    {
+      id: 15344,
+      sigungu_id: 1,
+      title: '진부리 마을관리휴양지',
+      addr1: '강원특별자치도 고성군 간성읍 진부리 133',
+      firstimage: 'http://tong.visitkorea.or.kr/cms/resource/50/2715750_image2_1.jpg',
+      map_x: 128.3640009632,
+      map_y: 38.2933982092,
+      category: '인문명소',
     },
   ];
   useEffect(() => {
     // setAreaName(location);
     setAreaName('제주');
     // setRecommendedPlace(place);
-    setRecommendedPlace(PLACE);
+    const place_1 = PLACE_1.map((item) => ({ ...item, isChecked: false }));
+    // const place_1 = PLACE_1.map((item) => Object.assign(item, { isChecked: false }));
+    // console.log(place_1);
+    setRecommendedPlace(place_1);
     setTempPlace([]);
   }, []);
 
@@ -217,10 +326,10 @@ function TravelPlan() {
             <PlaceCategory />
           </div>
 
-          <div className='list_container h-[calc(100vh_-_250px)] flex flex-col overflow-auto mb-1'>
+          <div className='list_container h-[calc(100vh_-_250px)] flex flex-col overflow-y-auto overflow-x-hidden mb-1'>
             {recommendedPlace.map((item, idx) => (
               <PlaceListBlock key={idx} item={item.title}>
-                <div className='mr-1'>
+                <div className='mr-3'>
                   <TravelPlanCheckButton
                     // changeSelectCount={changeSelectCount}
                     changeTempPlaceList={changeTempPlaceList}
@@ -232,7 +341,9 @@ function TravelPlan() {
           </div>
         </div>
 
-        <div className={`relative ${!isExpanded ? 'w-[120px] slideIn' : 'w-[300px] slideOut'} `}>
+        <div
+          className={`relative overflow-x-visible overflow-y-auto border-green-500 border-2 ${!isExpanded ? 'w-[120px] slideIn' : 'w-[300px] slideOut'} `}
+        >
           <div
             className={`${!isExpanded ? 'flex flex-col items-center mt-5 gap-5' : 'flex flex-col items-center mt-5 gap-5 overflow-hidden'}`}
           >

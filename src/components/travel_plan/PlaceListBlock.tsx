@@ -22,10 +22,10 @@ const PlaceListBlock = ({ children, variant, item }: PlaceListBlockProps) => {
             <Image
               src={ImageIcon}
               alt='recommended_place'
-              className={`object-scale-down ${variant === 'small' ? 'w-[48px] h-[48px]' : 'w-[64px] h-[64px]'}`}
+              className={`object-scale-down ${variant === 'small' ? 'min-w-[48px] min-h-[48px]' : 'w-[64px] h-[64px]'}`}
             />
           </div>
-          <div className={`${variant === 'small' ? 'text-sm' : ''}`}>{item}</div>
+          <div className={`${variant === 'small' ? 'text-sm' : ''} max-w-[120px]`}>{item}</div>
         </div>
         {children}
       </div>

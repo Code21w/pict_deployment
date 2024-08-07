@@ -127,6 +127,22 @@ body {
     text-wrap: balance;
   }
 }
+@keyframes buttonSlideOut {
+  0% {
+    right: 705px;
+  }
+  100% {
+    right: 525px;
+  }
+}
+@keyframes buttonSlideIn {
+  0% {
+    right: 525px;
+  }
+  100% {
+    right: 705px;
+  }
+}
 
 @keyframes slideOut {
   0% {
@@ -143,6 +159,12 @@ body {
   100% {
     width: 120px;
   }
+}
+.buttonSlideOut {
+  animation: buttonSlideOut 0.3s linear;
+}
+.buttonSlideIn {
+  animation: buttonSlideIn 0.3s linear;
 }
 .slideOut {
   animation: slideOut 0.3s linear;
