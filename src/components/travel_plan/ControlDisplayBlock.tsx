@@ -37,7 +37,7 @@ const ControlDisplayBlock = ({
             </div>
             <div
               key={item}
-              className='border-solid border-b-2 border-l-2 rounded-md mb-1 w-[200px]'
+              className='border-solid border-b-2 border-l-2 rounded-md mb-3 w-[200px]'
             >
               <PlaceListBlock variant='small' item={item}>
                 <div

@@ -406,7 +406,7 @@ function TravelPlan() {
             />
           </div>
 
-          <div className='list_container h-[calc(100vh_-_250px)] flex flex-col overflow-y-auto overflow-x-hidden mb-1'>
+          <div className='list_container h-[calc(100vh_-_200px)] flex flex-col overflow-y-auto overflow-x-hidden mb-1'>
             {recommendedPlace.map((item, idx) => (
               <PlaceListBlock key={idx} item={item.title}>
                 <div className='mr-3'>
@@ -422,7 +422,7 @@ function TravelPlan() {
         </div>
 
         <div
-          className={`relative overflow-x-visible overflow-y-auto border-green-500 border-2 ${!isExpanded ? 'w-[120px] slideIn' : 'w-[300px] slideOut'} `}
+          className={`relative h-[calc(100vh_-_100px)] overflow-x-visible overflow-y-auto ${!isExpanded ? 'w-[120px] slideIn' : 'w-[350px] slideOut'} `}
         >
           <div
             className={`${!isExpanded ? 'flex flex-col items-center mt-5 gap-5' : 'flex flex-col items-center mt-5 gap-5 overflow-hidden'}`}

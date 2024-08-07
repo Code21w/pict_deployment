@@ -1,5 +1,3 @@
-import Footer from '@/components/shared/Footer';
-import Header from '@/components/shared/Header';
 import Script from 'next/script';
 import { PropsWithChildren } from 'react';
 import './globals.css';
@@ -29,9 +27,7 @@ export default function RootLayout({ children }: PropsWithChildren) {
         />
       </head>
       <body className='bg-gradient-to-b from-cyan-500 to-white-500 to-90% overflow-hidden h-full min-w-[720px]'>
-        <Header />
         <main className='h-full'>{children}</main>
-        <Footer />
       </body>
     </html>
   );
