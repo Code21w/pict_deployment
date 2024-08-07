@@ -5,12 +5,12 @@ import { cn } from '@/lib/utils.ts';
 import { useState } from 'react';
 const CATEGORY = [
   {
-    key: 'location',
-    label: '인문장소',
+    key: 'attractions',
+    label: '인문명소',
   },
   {
     key: 'nature',
-    label: '자연',
+    label: '자연명소',
   },
   {
     key: 'activity',
@@ -21,13 +21,17 @@ const CATEGORY = [
     label: '문화시설',
   },
 ];
-function PlaceCategory() {
+// export interface PlaceCategoryProps {
+//   storeCategory: Function;
+// }
+function PlaceCategory(props: { storeCategory: Function; checkTempPlaceWithCategory: Function }) {
   const [currentCategory, setCurrentCategory] = useState(CATEGORY[0].key);
 
   const onClickBadge = (categoryKey: string) => {
     setCurrentCategory(categoryKey);
+    props.storeCategory(categoryKey);
+    props.checkTempPlaceWithCategory();
   };
-
   return CATEGORY.map((category) => {
     const { key, label } = category;
     const isActive = currentCategory === key;

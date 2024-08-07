@@ -21,13 +21,14 @@ interface Place {
 export interface RecommendedPlace extends Place {
   isChecked: boolean;
 }
+
 function TravelPlan() {
   // interface checkedPlaceType {
   //   name: string;
   //   isChecked: boolean;
   // }
 
-  const [period, setPeriod] = useState<string | null>('4');
+  const [period, setPeriod] = useState<string | null>('?');
   const [areaName, setAreaName] = useState('광명');
   const [recommendedPlace, setRecommendedPlace] = useState<RecommendedPlace[]>([]);
 
@@ -147,71 +148,124 @@ function TravelPlan() {
       map_y: 38.4708816727,
       category: '인문명소',
     },
+  ];
+  const PLACE_2 = [
     {
-      id: 13873,
+      id: 124,
       sigungu_id: 1,
-      title: '일성설악온천콘도&리조트',
-      addr1: '강원특별자치도 고성군 토성면 고성대로 47-24',
-      firstimage: 'http://tong.visitkorea.or.kr/cms/resource/77/1581477_image2_1.jpg',
-      map_x: 128.5036742075,
-      map_y: 38.209127399,
-      category: '인문명소',
-    },
-    {
-      id: 14203,
-      sigungu_id: 1,
-      title: '장신유원지',
-      addr1: '강원특별자치도 고성군 간성읍 소똥령마을길 32',
+      title: '가진항',
+      addr1: '강원특별자치도 고성군 죽왕면 가진해변길 121-12',
       firstimage: 'NaN',
-      map_x: 128.3782457171,
-      map_y: 38.3309579924,
-      category: '인문명소',
+      map_x: 128.5133183548,
+      map_y: 38.3682229327,
+      category: '자연명소',
     },
     {
-      id: 15060,
+      id: 125,
       sigungu_id: 1,
-      title: '죽정분교(구,죽정초등학교)',
-      addr1: '강원특별자치도 고성군 현내면 모정2길 2',
-      firstimage: 'http://tong.visitkorea.or.kr/cms/resource/46/3070046_image2_1.jpg',
-      map_x: 128.4197681178,
-      map_y: 38.4704730657,
-      category: '인문명소',
+      title: '가진해변',
+      addr1: '강원특별자치도 고성군 죽왕면 가진리 495-6',
+      firstimage: 'NaN',
+      map_x: 128.4546324706,
+      map_y: 38.4428575247,
+      category: '자연명소',
     },
     {
-      id: 15342,
+      id: 712,
       sigungu_id: 1,
-      title: '진부령 흘리마을',
-      addr1: '강원특별자치도 고성군 간성읍 흘리길 185',
-      firstimage: 'http://tong.visitkorea.or.kr/cms/resource/66/3016266_image2_1.jpg',
-      map_x: 128.3741425923,
-      map_y: 38.2648711759,
-      category: '인문명소',
+      title: '거진 등대',
+      addr1: '강원특별자치도 고성군 거진읍 등대길 17-2',
+      firstimage: 'http://tong.visitkorea.or.kr/cms/resource/14/2714114_image2_1.jpg',
+      map_x: 128.462573187,
+      map_y: 38.4500568379,
+      category: '자연명소',
     },
     {
-      id: 15344,
+      id: 713,
       sigungu_id: 1,
-      title: '진부리 마을관리휴양지',
-      addr1: '강원특별자치도 고성군 간성읍 진부리 133',
-      firstimage: 'http://tong.visitkorea.or.kr/cms/resource/50/2715750_image2_1.jpg',
-      map_x: 128.3640009632,
-      map_y: 38.2933982092,
-      category: '인문명소',
+      title: '거진11리해변',
+      addr1: '강원특별자치도 고성군 거진읍 거진리',
+      firstimage: 'NaN',
+      map_x: 128.4536129346,
+      map_y: 38.4487262643,
+      category: '자연명소',
+    },
+    {
+      id: 714,
+      sigungu_id: 1,
+      title: '거진1리해변',
+      addr1: '강원특별자치도 고성군 거진읍 거진1리',
+      firstimage: 'http://tong.visitkorea.or.kr/cms/resource/47/176147_image2_1.jpg',
+      map_x: 128.4547464127,
+      map_y: 38.4408494282,
+      category: '자연명소',
+    },
+    {
+      id: 718,
+      sigungu_id: 1,
+      title: '거진항',
+      addr1: '강원특별자치도 고성군 거진읍 거진항1길 62-3',
+      firstimage: 'NaN',
+      map_x: 128.4598152167,
+      map_y: 38.4465127542,
+      category: '자연명소',
     },
   ];
+  const PLACE_3 = [
+    {
+      id: 404,
+      sigungu_id: 1,
+      title: '강원도 세계잼버리 수련장',
+      addr1: '강원특별자치도 고성군 토성면 잼버리로 244',
+      firstimage: 'NaN',
+      map_x: 128.4976743306,
+      map_y: 38.2226840374,
+      category: '액티비티',
+    },
+    {
+      id: 420,
+      sigungu_id: 1,
+      title: '강원평화누리길 16코스 고성 울산바위비경길',
+      addr1: '강원특별자치도 고성군 간성읍 고성중앙길 9',
+      firstimage: 'http://tong.visitkorea.or.kr/cms/resource/78/2747978_image2_1.jpg',
+      map_x: 128.4678859929,
+      map_y: 38.3806733748,
+      category: '액티비티',
+    },
+  ];
+  const PLACE_4 = [
+    {
+      id: 1218,
+      sigungu_id: 1,
+      title: '고성 DMZ박물관',
+      addr1: '강원특별자치도 고성군 현내면 통일전망대로 369',
+      firstimage: 'http://tong.visitkorea.or.kr/cms/resource/51/2921751_image2_1.jpg',
+      map_x: 128.3826570629,
+      map_y: 38.5763238583,
+      category: '문화시설',
+    },
+  ];
+
   useEffect(() => {
     // setAreaName(location);
     setAreaName('제주');
     // setRecommendedPlace(place);
-    const place_1 = PLACE_1.map((item) => ({ ...item, isChecked: false }));
-    // const place_1 = PLACE_1.map((item) => Object.assign(item, { isChecked: false }));
-    // console.log(place_1);
-    setRecommendedPlace(place_1);
+    const place = addCheckProp();
+    setRecommendedPlace(place.attractions);
     setTempPlace([]);
   }, []);
 
-  function toggleExpand() {
+  const addCheckProp = () => {
+    const attractions = PLACE_1.map((item) => ({ ...item, isChecked: false }));
+    const nature = PLACE_2.map((item) => ({ ...item, isChecked: false }));
+    const activity = PLACE_3.map((item) => ({ ...item, isChecked: false }));
+    const culture = PLACE_4.map((item) => ({ ...item, isChecked: false }));
+    return { attractions, nature, activity, culture };
+  };
+
+  const toggleExpand = () => {
     setIsExpanded((prev) => !prev);
-  }
+  };
 
   // const changeTempPlaceList = (item: string, isChecked: boolean) => {
   //   const newCheckedPlace = !isChecked
@@ -313,6 +367,29 @@ function TravelPlan() {
   const selectDay = (travelDays: string) => {
     setPeriod(travelDays);
   };
+  const storeCategory = (Key: string) => {
+    const key = Key;
+    const place = addCheckProp();
+    if (key === 'attractions') setRecommendedPlace(place.attractions);
+    else if (key === 'nature') setRecommendedPlace(place.nature);
+    else if (key === 'culture') setRecommendedPlace(place.culture);
+    else setRecommendedPlace(place.activity);
+  };
+  const checkTempPlaceWithCategory = () => {
+    tempPlace.map((item) => {
+      setRecommendedPlace((prevPlace) => {
+        const newRecommendedPlace = prevPlace.map((place) => {
+          if (place.title === item) {
+            return { ...place, isChecked: !place.isChecked };
+          }
+          return place;
+        });
+        return newRecommendedPlace;
+      });
+      // TempPlace가 recommendedPlace에서 순회하여 찾음
+      // 있으면 isChecked를 on 시켜준다.
+    });
+  };
   return (
     <div className='border-solid border-2 h-screen flex overflow-hidden'>
       <div className='relative flex max-h-full'>
@@ -323,7 +400,10 @@ function TravelPlan() {
           </div>
 
           <div className='flex my-6 gap-2 w-[300px]'>
-            <PlaceCategory />
+            <PlaceCategory
+              storeCategory={storeCategory}
+              checkTempPlaceWithCategory={checkTempPlaceWithCategory}
+            />
           </div>
 
           <div className='list_container h-[calc(100vh_-_250px)] flex flex-col overflow-y-auto overflow-x-hidden mb-1'>
