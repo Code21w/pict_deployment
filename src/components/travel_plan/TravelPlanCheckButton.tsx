@@ -2,7 +2,7 @@
 
 import { Button, ButtonProps } from '@/components/ui/button.tsx';
 import { cn } from '@/lib/utils.ts';
-import { HTMLAttributes, ReactNode, useEffect, useState } from 'react';
+import { HTMLAttributes, ReactNode, useState } from 'react';
 export interface TravelPlanCheckButtonProps {
   // changeSelectCount: Function;
   changeTempPlaceList: Function;
@@ -15,9 +15,9 @@ const TravelPlanCheckButton = ({
   item,
 }: TravelPlanCheckButtonProps) => {
   const [isChecked, setIsChecked] = useState(false);
-  useEffect(() => {
-    setIsChecked(isChecked);
-  }, [isChecked]);
+  // useEffect(() => {
+  //   setIsChecked(isChecked);
+  // }, [isChecked]);
   const getButtonStyles = (): { value: ReactNode } & Pick<HTMLAttributes<'button'>, 'className'> &
     Pick<ButtonProps, 'variant'> => {
     return !isChecked

@@ -1,4 +1,5 @@
 'use client';
+import { TravelDaysSelector } from '@/components/selectDays/TravelDaysSelector';
 import Map from '@/components/shared/kakaoMap';
 import ControlDisplayBlock from '@/components/travel_plan/ControlDisplayBlock';
 import ExpandButton from '@/components/travel_plan/ExpandButton';
@@ -6,8 +7,14 @@ import PlaceCategory from '@/components/travel_plan/PlaceCategory';
 import PlaceListBlock from '@/components/travel_plan/PlaceListBlock';
 import TravelPlanCheckButton from '@/components/travel_plan/TravelPlanCheckButton';
 import { useEffect, useRef, useState } from 'react';
+
 function TravelPlan() {
-  const [period, setPeriod] = useState(3);
+  interface checkedPlaceType {
+    name: string;
+    isChecked: boolean;
+  }
+
+  const [period, setPeriod] = useState<string | null>('4');
   const [areaName, setAreaName] = useState('광명');
   const [recommendedPlace, setRecommendedPlace] = useState<string[]>(['']);
 
@@ -19,14 +26,10 @@ function TravelPlan() {
   const componentRef = useRef<HTMLDivElement>(null);
   const [isExpanded, setIsExpanded] = useState(false);
 
-  // const location = window.localStorage.getItem('location');
-  // const id = window.localStorage.getItem('id');
+  // const location = sessionStorage.getItem('location');
+  // const id = sessionStorage.getItem('id');
 
   //페이지 첫 렌더링 시 ai가 생성해준 데이터를 로컬 스토리지에서 가져오기
-  interface checkedPlaceType {
-    name: string;
-    isChecked: boolean;
-  }
 
   // const place = fetch()~~~ id로 데이터 place 변수값에 담기
 
@@ -57,7 +60,11 @@ function TravelPlan() {
     '끝',
   ];
   useEffect(() => {
-    setPeriod(4);
+    // const newPeriod = sessionStorage.getItem('travelDays')
+    //   ? sessionStorage.getItem('travelDays')
+    //   : '3';
+    // console.log(newPeriod);
+    // setPeriod(newPeriod);
     // setAreaName(location);
     setAreaName('제주');
     // setRecommendedPlace(place);
@@ -117,7 +124,11 @@ function TravelPlan() {
     setCheckedPlace([]);
     setTempPlace([]);
   };
-
+  const selectDay = (travelDays: string) => {
+    const newtravelDays = travelDays;
+    setPeriod(newtravelDays);
+    console.log(newtravelDays);
+  };
   return (
     <div className='border-solid border-2 h-screen flex overflow-hidden'>
       <div className='relative flex max-h-full'>
@@ -181,6 +192,7 @@ function TravelPlan() {
           <Map />
         </div>
       </div>
+      <TravelDaysSelector selectDay={selectDay} />
     </div>
   );
 }
