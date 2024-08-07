@@ -1,5 +1,5 @@
 'use client';
-import React, { FormEvent, useState } from 'react';
+import React, { useContext, useState, useEffect, FormEvent } from 'react';
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -23,9 +23,50 @@ function UserMenu () {
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [isEditingUserName, setIsEditingUserName] = useState(false);
-  const [userName, setUserName] = useState("John Doe");
+  const [userName, setUserName] = useState('');
+  const [email, setEmail] = useState('');
+  const [error, setError] = useState('');
 
   const router = useRouter();
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await axios.get('http://localhost:3000/api/user',{
+          withCredentials: true, 
+        }); 
+        const userData = response.data;
+        setUserName(userData.display_name); 
+        setEmail(userData.email); 
+      } catch (error) {
+        console.error('Failed to fetch user data:', error);
+      }
+    };
+
+    fetchUserData();
+  }, []);
+
+  const handleUserNameChange = async () => {
+    if (userName.trim() === '') {
+      setError('닉네임을 입력해야 합니다.'); // Message in case of empty input
+      return;
+    }
+
+    try {
+      const response = await axios.post('http://localhost:3000/api/mypage/display-name', {
+        userName, withCredentials: true, 
+      });
+
+      if (response.status === 200) {
+        setIsEditingUserName(false); // Exit editing mode
+        setError(''); // Clear any previous errors
+        console.log('Username updated successfully:', response.data);
+      }
+    } catch (err) {
+      setError('닉네임 업데이트 실패. 다시 시도해주세요.'); // Generic error message
+      console.error('Error updating username:', err);
+    }
+  };
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -110,36 +151,54 @@ function UserMenu () {
           <div className="flex flex-col space-y-4">
             {/* Username Section */}
             <div>
-              <span className="text-sm font-medium text-gray-700">닉네임</span>
-              <div className="flex items-center">
-                {isEditingUserName ? (
-                  <input
-                    type="text"
-                    value={userName}
-                    onChange={(e) => setUserName(e.target.value)}
-                    className="border p-2 rounded"
-                  />
-                ) : (
-                  <span>{userName}</span>
-                )}
-                <Button
-                  className="ml-auto"
-                  onClick={() => setIsEditingUserName(!isEditingUserName)}
-                >
-                  {isEditingUserName ? "Save" : "Change"}
-                </Button>
-              </div>
+        <span className="text-sm font-medium text-gray-700">닉네임</span>
+        <div className="flex items-center">
+          {isEditingUserName ? (
+            <>
+              <input
+                type="text"
+                value={userName}
+                onChange={(e) => setUserName(e.target.value)}
+                className="border p-2 rounded"
+                placeholder="닉네임 입력"
+              />
+              <Button
+                className="ml-2"
+                onClick={handleUserNameChange} // Save username
+              >
+                Save
+              </Button>
+              <Button
+                className="ml-2"
+                onClick={() => setIsEditingUserName(false)} // Cancel editing
+              >
+                Cancel
+              </Button>
+            </>
+          ) : (
+            <>
+              <span>{userName}</span>
+              <Button
+                className="ml-auto"
+                onClick={() => setIsEditingUserName(true)} // Start editing
+              >
+                Change
+              </Button>
+            </>
+          )}
+        </div>
+        {error && <span className="text-red-500 text-sm">{error}</span>} {/* Display error messages */}
             </div>
 
-            {/* Password Section */}
+            {/* Email Section */}
             <div className="flex flex-col space-y-2 pt-2">
               <span className="text-sm font-medium text-gray-700">이메일</span>
-              <span className="pt-1">yoolim0108@naver.com</span>
+              <span className="pt-1">{email}</span>
             </div>
   
             {/* Password Section */}
             <div className="pt-2">
-              <span className="text-sm font-medium text-gray-700 ">비밀번호</span>
+              <span className="text-sm font-medium text-gray-700">비밀번호</span>
               {isEditingPassword ? (
                 <form onSubmit={handleSubmit}>
                   <input
@@ -196,4 +255,6 @@ function UserMenu () {
 }
 
 export default UserMenu;
+
+
 

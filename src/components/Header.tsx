@@ -1,16 +1,31 @@
+'use client';
 import Link from 'next/link';
 
 import Join from './login-join/Join';
 import Login from './login-join/Login';
-
+import { useEffect, useState } from 'react';
 import UserMenu from './user-menu/UserMenu';
-
-
+import axios from 'axios';
 /** image */
-// import { Menu } from 'lucide-react';
-// import logo from '../../assets/images/logo.png';
+
 
 function Header() {
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const response = await axios.get('http://localhost:3000/api/user', {
+          withCredentials: true,
+        });
+        setUser(response.data);
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+    };
+
+    fetchUser();
+  }, []);
   return (
     <header className='z-10 sticky top-0 flex h-16 items-center gap-4 px-4 md:px-6 flex justify-between'>
       <nav className='w-full h-16 flex-row gap-6 text-lg font-medium flex flex-row items-center gap-5 text-sm lg:gap-10'>
@@ -25,9 +40,15 @@ function Header() {
         <Link href='/' className='text-foreground transition-colors hover:text-muted'>
           메인2
         </Link>
-        <Login />
-        <Join />
-        <UserMenu />
+      
+        {user ? (
+           <UserMenu/ >
+        ) : (
+          <>
+           <Login />
+           <Join />
+         </>
+        )}
       </nav>
     </header>
   );
