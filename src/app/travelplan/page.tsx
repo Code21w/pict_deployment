@@ -6,24 +6,37 @@ import ExpandButton from '@/components/travel_plan/ExpandButton';
 import PlaceCategory from '@/components/travel_plan/PlaceCategory';
 import PlaceListBlock from '@/components/travel_plan/PlaceListBlock';
 import TravelPlanCheckButton from '@/components/travel_plan/TravelPlanCheckButton';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 
+interface Place {
+  id: number;
+  sigungu_id: number;
+  title: string;
+  addr1: string;
+  firstimage: string;
+  map_x: number;
+  map_y: number;
+  category: string;
+}
+export interface RecommendedPlace extends Place {
+  isChecked: boolean;
+}
 function TravelPlan() {
-  interface checkedPlaceType {
-    name: string;
-    isChecked: boolean;
-  }
+  // interface checkedPlaceType {
+  //   name: string;
+  //   isChecked: boolean;
+  // }
 
   const [period, setPeriod] = useState<string | null>('4');
   const [areaName, setAreaName] = useState('광명');
-  const [recommendedPlace, setRecommendedPlace] = useState<string[]>(['']);
+  const [recommendedPlace, setRecommendedPlace] = useState<RecommendedPlace[]>([]);
 
-  const [checkedPlace, setCheckedPlace] = useState<Array<checkedPlaceType>>([]);
+  // const [checkedPlace, setCheckedPlace] = useState<Array<checkedPlaceType>>([]);
   const [tempPlace, setTempPlace] = useState<string[]>([]);
   // const [placeSelectCount, setPlaceSelectCount] = useState(0);
   //tempPlace의 배열의 length로 카운트
-  const [parentWidth, setParentWidth] = useState<number | undefined>();
-  const componentRef = useRef<HTMLDivElement>(null);
+  // const [parentWidth, setParentWidth] = useState<number | undefined>();
+  // const componentRef = useRef<HTMLDivElement>(null);
   const [isExpanded, setIsExpanded] = useState(false);
 
   // const location = sessionStorage.getItem('location');
@@ -34,100 +47,138 @@ function TravelPlan() {
   // const place = fetch()~~~ id로 데이터 place 변수값에 담기
 
   const PLACE = [
-    '해수욕장',
-    '절',
-    '샘플3',
-    '2',
-    '23',
-    '24',
-    '25',
-    '26',
-    '27',
-    '28',
-    '29',
-    '30',
-    '31',
-    '32',
-    '33',
-    '200',
-    '201',
-    '202',
-    '203',
-    '204',
-    '205',
-    '206',
-    '207',
-    '끝',
+    {
+      id: 192,
+      sigungu_id: 1,
+      title: '간성향교',
+      addr1: '강원특별자치도 고성군 간성읍 진부령로 2659',
+      firstimage: 'NaN',
+      map_x: 128.4389748268,
+      map_y: 38.3778814721,
+      category: '인문명소',
+      isChecked: false,
+    },
+    {
+      id: 715,
+      sigungu_id: 1,
+      title: '거진등대해맞이공원',
+      addr1: '강원특별자치도 고성군 거진읍 거탄진로209번길 19',
+      firstimage: 'NaN',
+      map_x: 128.4644147196,
+      map_y: 38.4489653345,
+      category: '인문명소',
+      isChecked: false,
+    },
+    {
+      id: 717,
+      sigungu_id: 1,
+      title: '거진어촌체험휴양마을',
+      addr1: '강원특별자치도 고성군 거진읍 거진리',
+      firstimage: 'NaN',
+      map_x: 128.4628176843,
+      map_y: 38.4476432361,
+      category: '인문명소',
+      isChecked: false,
+    },
+    {
+      id: 761,
+      sigungu_id: 1,
+      title: '건봉사',
+      addr1: '강원특별자치도 고성군 거진읍 건봉사로 723',
+      firstimage: 'http://tong.visitkorea.or.kr/cms/resource/49/2659849_image2_1.jpg',
+      map_x: 128.3781573424,
+      map_y: 38.4037217209,
+      category: '인문명소',
+      isChecked: false,
+    },
   ];
   useEffect(() => {
-    // const newPeriod = sessionStorage.getItem('travelDays')
-    //   ? sessionStorage.getItem('travelDays')
-    //   : '3';
-    // console.log(newPeriod);
-    // setPeriod(newPeriod);
     // setAreaName(location);
     setAreaName('제주');
     // setRecommendedPlace(place);
     setRecommendedPlace(PLACE);
+    setTempPlace([]);
   }, []);
-
-  useEffect(() => {
-    const updateWidth = () => {
-      if (componentRef.current) {
-        setParentWidth(componentRef.current.offsetWidth);
-      }
-    };
-    updateWidth();
-  }, [isExpanded]);
-  // useEffect(() => {
-  //   // 현재 위치 가져오기
-  //   navigator.geolocation.getCurrentPosition(
-  //     (position) => {
-  //       setLatitude(position.coords.latitude);
-  //       setLongitude(position.coords.longitude);
-  //     },
-  //     (error) => {
-  //       console.error('Error getting current position:', error);
-  //       // 기본 위치 설정
-  //       setLatitude(37.5665);
-  //       setLongitude(126.978);
-  //     }
-  //   );
-  // }, []);
 
   function toggleExpand() {
     setIsExpanded((prev) => !prev);
   }
 
   // const changeTempPlaceList = (item: string, isChecked: boolean) => {
-  //   !isChecked
-  //     ? setCheckedPlace([...checkedPlace, { name: item, isChecked: !isChecked }])
-  //     : setCheckedPlace(checkedPlace.filter((e) => e.name !== item));
-  //   const temp = checkedPlace.filter((place) => place.isChecked === true).map((item) => item.name);
+  //   const newCheckedPlace = !isChecked
+  //     ? [
+  //         ...checkedPlace,
+  //         {
+  //           name: item,
+  //           isChecked: !isChecked,
+  //         },
+  //       ]
+  //     : checkedPlace.filter((e) => e.name !== item);
+  //   const temp = newCheckedPlace.filter((place) => place.isChecked).map((item) => item.name);
+  //   setCheckedPlace(newCheckedPlace);
   //   setTempPlace(temp);
   // };
-  const changeTempPlaceList = (item: string, isChecked: boolean) => {
-    const newCheckedPlace = !isChecked
-      ? [
-          ...checkedPlace,
-          {
-            name: item,
-            isChecked: !isChecked,
-          },
-        ]
-      : checkedPlace.filter((e) => e.name !== item);
-    const temp = newCheckedPlace.filter((place) => place.isChecked).map((item) => item.name);
-    setCheckedPlace(newCheckedPlace);
-    setTempPlace(temp);
+  const changeTempPlaceList = (item: RecommendedPlace) => {
+    setRecommendedPlace((prevPlace) => {
+      const newRecommendedPlace = prevPlace.map((place) => {
+        if (place.id === item.id) {
+          return { ...place, isChecked: !place.isChecked };
+        }
+
+        return place;
+      });
+      //recommendedPlace = {PLACE에서 선택한거만 isChecked = true}
+      return newRecommendedPlace;
+    });
+
+    setTempPlace((prevTempPlace) => {
+      let newTempPlace;
+      if (!item.isChecked) {
+        newTempPlace = [...(prevTempPlace ?? []), item.title];
+      } else {
+        newTempPlace = prevTempPlace.filter((place) => place !== item.title);
+      }
+      // console.log(newTempPlace);
+      return newTempPlace;
+    });
+
+    // const newTempPlace = recommendedPlace.filter((place) => {
+    //   place.isChecked === true;
+    // });
+    // console.log(newTempPlace);
+    // item.isChecked = true 인거만 넣고싶어요
+    // return [...prevTempPlace, item];
+    // setTempPlace(newTempPlace);
   };
+
+  // const changeTempPlaceList = (item: RecommendedPlace) => {
+  //   setRecommendedPlace((prevPlace) => {
+  //     const newRecommendedPlace = prevPlace.map((place) => {
+  //       if (place.id === item.id) {
+  //         return { ...place, isChecked: !place.isChecked };
+  //       }
+
+  //       return place;
+  //     });
+  //     //recommendedPlace = {PLACE에서 선택한거만 isChecked = true}
+  //     return newRecommendedPlace;
+  //   });
+
+  //   setTempPlace((prevTempPlace) => {
+  //     const newTempPlace = recommendedPlace.find((place) => {
+  //       place.isChecked === true;
+  //     });
+  //     // item.isChecked = true 인거만 넣고싶어요
+  //     // return [...prevTempPlace, item];
+  //     return newTempPlace;
+  //   });
+  // };
+
   const resetTempPlaceList = () => {
-    setCheckedPlace([]);
     setTempPlace([]);
   };
   const selectDay = (travelDays: string) => {
-    const newtravelDays = travelDays;
-    setPeriod(newtravelDays);
-    console.log(newtravelDays);
+    setPeriod(travelDays);
   };
   return (
     <div className='border-solid border-2 h-screen flex overflow-hidden'>
@@ -144,7 +195,7 @@ function TravelPlan() {
 
           <div className='list_container h-[calc(100vh_-_250px)] flex flex-col overflow-auto mb-1'>
             {recommendedPlace.map((item, idx) => (
-              <PlaceListBlock key={idx} item={item}>
+              <PlaceListBlock key={idx} item={item.title}>
                 <div className='mr-1'>
                   <TravelPlanCheckButton
                     // changeSelectCount={changeSelectCount}
@@ -157,7 +208,7 @@ function TravelPlan() {
           </div>
         </div>
 
-        <div ref={componentRef} className='relative w-[300px]'>
+        <div className={`relative ${!isExpanded ? 'w-[120px] slideIn' : 'w-[300px] slideOut'} `}>
           <div
             className={`${!isExpanded ? 'flex flex-col items-center mt-5 gap-5' : 'flex flex-col items-center mt-5 gap-5 overflow-hidden'}`}
           >
@@ -174,16 +225,12 @@ function TravelPlan() {
             </div>
 
             <ControlDisplayBlock
-              pointWidth={parentWidth}
               // placeSelectCount={placeSelectCount}
+              isExpanded={isExpanded}
               tempPlace={tempPlace}
             />
 
-            <ExpandButton
-              componentRef={componentRef}
-              isExpanded={isExpanded}
-              toggleExpand={toggleExpand}
-            />
+            <ExpandButton isExpanded={isExpanded} toggleExpand={toggleExpand} />
             {/* width: 120px ~ 300px */}
           </div>
         </div>
