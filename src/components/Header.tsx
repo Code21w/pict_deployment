@@ -3,6 +3,9 @@ import Link from 'next/link';
 import Join from './login-join/Join';
 import Login from './login-join/Login';
 
+import UserMenu from './user-menu/UserMenu';
+
+
 /** image */
 // import { Menu } from 'lucide-react';
 // import logo from '../../assets/images/logo.png';
@@ -24,6 +27,7 @@ function Header() {
         </Link>
         <Login />
         <Join />
+        <UserMenu />
       </nav>
     </header>
   );

@@ -198,7 +198,7 @@ function Login() {
   const [isSecondDialogOpen, setIsSecondDialogOpen] = useState(false);
   const [isThirdDialogOpen, setIsThirdDialogOpen] = useState(false);
   const [email, setEmail] = useState('');
-  const { setUser } = useContext(UserContext);
+  useContext(UserContext);
 
   type FormData = z.infer<typeof FormSchema>;
   type EmailData = z.infer<typeof EmailSchema>;

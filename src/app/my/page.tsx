@@ -40,13 +40,13 @@ function MyPage() {
   return (
     <main className='bg-white h-screen grid grid-cols-2 divide-x'>
       <div className='items-center justify-center py-4'>
-        <div className='flex items-center justify-center py-4'>
+        {/* <div className='flex items-center justify-center py-4'>
           <div className='items-center justify-center py-4 mr-44 pt-10 ' >
             <div>Sherlock Holmes</div>
             <div>Sherlock Holmes@gmail.com</div>
           </div>
           <p>회원정보 변경</p>
-        </div>
+        </div> */}
         <div className='flex justify-center items-center mt-10 p-4 border '>
           <div style={{ padding: '20px', border: '2px solid gray', borderRadius: '0.75rem' , width:"75%" }}>
             <svg
