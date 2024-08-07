@@ -13,7 +13,7 @@ const PlaceListBlock = ({ children, variant, item }: PlaceListBlockProps) => {
   return (
     <div>
       <div
-        className={`list_component flex items-center justify-between w-full ${variant === 'small' ? 'w-[200px] h-[64px]' : 'w-[300px] h-[100px]'} `}
+        className={`list_component flex items-center justify-between ${variant === 'small' ? 'w-[200px] h-[64px]' : 'w-[300px] h-[100px]'} `}
       >
         <div className='flex items-center'>
           <div
