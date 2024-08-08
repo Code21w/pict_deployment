@@ -1,17 +1,21 @@
-/* eslint-disable import/no-extraneous-dependencies */
 'use client';
 
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '../ui/dialog';
-import { Input } from '../ui/input';
-
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form';
-// import { toast } from '@/components/ui/use-toast';
+import React from 'react';
+import Image from 'next/image';
+import { useState } from 'react';
+import { Button } from '../ui/button';
+import Link from 'next/link';
+import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
 import { z } from 'zod';
+import axios from 'axios';
+import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle } from '../ui/dialog';
+import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '../ui/form';
+import { Input } from '../ui/input'; // Adjust the import according to your setup
+import { useRouter } from "next/navigation";
+const baseURL = process.env.NEXT_PUBLIC_BASE_URL;
 
-import { Button } from '@/components/ui/button';
-
+const api = axios.create({ baseURL });
 const FormSchema = z.object({
   email: z.string().email({
     message: '올바른 이메일 형식이 아닙니다.',
@@ -21,8 +25,23 @@ const FormSchema = z.object({
   }),
 });
 
+const EmailSchema = z.object({
+  email: z.string().email({ message: '올바른 이메일 형식이 아닙니다.' }),
+});
+
 function Login() {
-  const form = useForm<z.infer<typeof FormSchema>>({
+
+  const [isFirstDialogOpen, setIsFirstDialogOpen] = useState(false);
+  const [isSecondDialogOpen, setIsSecondDialogOpen] = useState(false);
+  const [isThirdDialogOpen, setIsThirdDialogOpen] = useState(false);
+  const [email, setEmail] = useState('');
+  
+  const router = useRouter();
+  type FormData = z.infer<typeof FormSchema>;
+  type EmailData = z.infer<typeof EmailSchema>;
+
+
+  const form = useForm<FormData>({
     resolver: zodResolver(FormSchema),
     mode: 'onChange',
     defaultValues: {
@@ -31,94 +50,176 @@ function Login() {
     },
   });
 
-  function onSubmit(data: z.infer<typeof FormSchema>) {
-    // eslint-disable-next-line no-console
-    console.log(data);
-  }
+  const emailForm = useForm<EmailData>({
+    resolver: zodResolver(EmailSchema),
+    mode: 'onChange',
+    defaultValues: {
+      email: '',
+    },
+  });
+
+  const onSubmit = async (data: z.infer<typeof FormSchema>) => {
+    try {
+      const response = await api.post('/api/login', data, {
+        withCredentials: true,
+      });
+      console.log('Login successful:', response.data);
+      setIsFirstDialogOpen(false);
+  
+      location.reload();
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response) {
+        const message = error.response.data.message;
+        
+        form.setError('root', { type: 'manual', message: '비밀번호 또는 이메일이 틀렸습니다.' });
+        
+      }
+    }
+  };
+
+  const handleGoogleLogin = () => {
+    window.location.href = `${ baseURL }/api/login/federated/google`;
+  };
+  
+
+  const handleKakaoLogin = () => {
+    window.location.href = '${ baseURL }/api/login/federated/kakao';
+  };
+
+
+  const onEmailSubmit = async (data: { email: React.SetStateAction<string>; }) => {
+    try {
+      setEmail(data.email);
+      const response = await api.post('/api/reset-password', data);
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response) {
+        const message = error.response.data.message;
+        if (message === '이메일이 존재하지 않습니다.') {
+          emailForm.setError('email', { type: 'manual', message });
+        }
+      }
+    }
+  };
 
   return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <button className='text-foreground transition-colors hover:text-muted'>로그인</button>
-      </DialogTrigger>
-      <DialogContent className='sm:max-w-[425px]'>
-        <DialogHeader>
-          <DialogTitle className={`font-['Cafe24Moyamoya-Face-v1.0'] text-center text-3xl`}>
-            로그인
-          </DialogTitle>
-          {/* <DialogDescription>
-            Make changes to your profile here. Click save when you're done.
-          </DialogDescription> */}
-        </DialogHeader>
-        {/* <div className='grid gap-4 py-4'>
-          <div className='grid grid-cols-4 items-center gap-4'>
-            <Label htmlFor='name' className='text-right'>
-              Name
-            </Label>
-            <Input id='name' defaultValue='Pedro Duarte' className='col-span-3' />
-          </div>
-          <div className='grid grid-cols-4 items-center gap-4'>
-            <Label htmlFor='username' className='text-right'>
-              Email
-            </Label>
-            <Input type='password' id='username' defaultValue='@peduarte' className='col-span-3' />
-          </div>
-        </div> */}
-        <div className='space-y-7'>
+    <>
+          <Dialog open={isFirstDialogOpen} onOpenChange={setIsFirstDialogOpen}>
+        <DialogTrigger asChild>
+          <button className='text-foreground transition-colors hover:text-muted'>로그인</button>
+        </DialogTrigger>
+        <DialogContent className='sm:max-w-[425px]'>
+          <DialogHeader>
+            <DialogTitle className='font-["Cafe24Moyamoya-Face-v1.0"] text-center text-3xl'>로그인</DialogTitle>
+          </DialogHeader>
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)}>
-              <div className='space-y-6'>
-                <FormField
-                  control={form.control}
-                  name='email'
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>이메일</FormLabel>
-                      <FormControl>
-                        <Input placeholder='이메일을 입력하세요.' {...field} />
-                      </FormControl>
-                      {/* <FormDescription>This is your public display name.</FormDescription> */}
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name='password'
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>비밀번호</FormLabel>
-                      <FormControl>
-                        <Input type='password' placeholder='비밀번호를 입력하세요.' {...field} />
-                      </FormControl>
-                      {/* <FormDescription>This is your public display name.</FormDescription> */}
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <Button type='submit' className='w-full' disabled={!form.formState.isValid}>
-                  로그인
-                </Button>
-              </div>
+          <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-6'>
+          {form.formState.errors.root && (
+    <div className="text-red-500">{form.formState.errors.root.message}</div>
+  )}
+  
+      <FormField
+        control={form.control}
+        name='email'
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>이메일</FormLabel>
+            <FormControl>
+              <Input
+                placeholder='이메일을 입력하세요.'
+                {...field}
+              />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+      <FormField
+        control={form.control}
+        name='password'
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>비밀번호</FormLabel>
+            <FormControl>
+              <Input
+                type='password'
+                placeholder='비밀번호를 입력하세요.'
+                {...field} // Use field instead of form.register
+              />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+              <Button type='submit' className='w-full' disabled={!form.formState.isValid} >
+                로그인
+              </Button>
             </form>
           </Form>
           <div className='hr-sect'>또는</div>
           <div className='space-y-2'>
-            <Button type='submit' className='w-full bg-green-500 hover:bg-green-600'>
-              <img src='naver.svg' alt='naver' width={23} className='mr-2' />
-              네이버로 시작하기
+            <Button
+              type='submit'
+              className='w-full bg-gray-200 hover:bg-gray-300 text-black'
+              onClick={handleGoogleLogin}
+            >
+              <Image src='google.svg' alt='google' width={23} height={23} className='mr-2' />
+              구글로 시작하기
             </Button>
-            <Button type='submit' className='w-full bg-yellow-400 hover:bg-yellow-500'>
-              <img src='kakao.svg' alt='kakao' width={23} className='mr-2' />
+            <Button
+              type='submit'
+              className='w-full bg-yellow-400 hover:bg-yellow-500 text-black'
+              onClick={handleKakaoLogin}
+            >
+              <Image src='kakao.svg' alt='kakao' width={23} height={23} className='mr-2' />
               카카오로 시작하기
             </Button>
           </div>
-        </div>
-        {/* <DialogFooter> */}
-        {/* <button type='submit'>Save changes</button> */}
-        {/* </DialogFooter> */}
-      </DialogContent>
-    </Dialog>
+          <Link href='#' onClick={() => { setIsFirstDialogOpen(false); setIsSecondDialogOpen(true); }}  className="link">
+            비밀번호를 잊으셨나요?
+          </Link>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={isSecondDialogOpen} onOpenChange={setIsSecondDialogOpen}>
+        <DialogContent className='sm:max-w-[425px]'>
+          <DialogHeader>
+            <DialogTitle className='font-["Cafe24Moyamoya-Face-v1.0"] text-center text-3xl'>비밀번호 재설정</DialogTitle>
+          </DialogHeader>
+          <p style={{ fontSize: '12px' }}>걱정하지 마세요! 가입할 때 사용한 이메일을 입력해 주시면, 비밀번호를 재설정할 수 있게 도와드릴게요.</p>
+          <Form {...emailForm}>
+            <form onSubmit={emailForm.handleSubmit(onEmailSubmit)} className='space-y-8'>
+              <FormField
+                control={emailForm.control}
+                name='email'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>이메일</FormLabel>
+                    <FormControl>
+                      <Input placeholder='이메일을 입력하세요.' {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <Button type='submit' className='w-full' disabled={!emailForm.formState.isValid} onClick={() => { setIsSecondDialogOpen(false); setIsThirdDialogOpen(true); }}>
+                계속하기
+              </Button>
+            </form>
+          </Form>
+        </DialogContent>
+      </Dialog>
+
+      {isThirdDialogOpen && (
+        <Dialog open={isThirdDialogOpen} onOpenChange={setIsThirdDialogOpen}>
+          <DialogContent className='sm:max-w-[425px]'>
+            <DialogHeader>
+              <DialogTitle className='font-["Cafe24Moyamoya-Face-v1.0"] text-center text-3xl'>비밀번호 재설정</DialogTitle>
+            </DialogHeader>
+            <p style={{ fontSize: '12px' }}>{email} 계정이 존재한다면, 비밀번호 재설정 링크를 이메일로 보내드렸습니다. 받은 편지함을 확인하시고, 링크를 통해 비밀번호를 새롭게 설정하세요.</p>
+          </DialogContent>
+        </Dialog>
+      )}
+    </>
   );
 }
 
