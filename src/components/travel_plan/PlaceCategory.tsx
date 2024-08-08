@@ -24,12 +24,12 @@ const CATEGORY = [
 // export interface PlaceCategoryProps {
 //   storeCategory: Function;
 // }
-function PlaceCategory(props: { storeCategory: Function; checkTempPlaceWithCategory: Function }) {
+function PlaceCategory(props: { changeCategory: Function; checkTempPlaceWithCategory: Function }) {
   const [currentCategory, setCurrentCategory] = useState(CATEGORY[0].key);
 
   const onClickBadge = (categoryKey: string) => {
     setCurrentCategory(categoryKey);
-    props.storeCategory(categoryKey);
+    props.changeCategory(categoryKey);
     props.checkTempPlaceWithCategory();
   };
   return CATEGORY.map((category) => {

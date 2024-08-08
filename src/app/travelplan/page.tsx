@@ -24,21 +24,11 @@ export interface RecommendedPlace extends Place {
 }
 
 function TravelPlan() {
-  // interface checkedPlaceType {
-  //   name: string;
-  //   isChecked: boolean;
-  // }
-
   const [period, setPeriod] = useState<string | null>('?');
   const [areaName, setAreaName] = useState('광명');
   const [recommendedPlace, setRecommendedPlace] = useState<RecommendedPlace[]>([]);
-
-  // const [checkedPlace, setCheckedPlace] = useState<Array<checkedPlaceType>>([]);
   const [tempPlace, setTempPlace] = useState<RecommendedPlace[]>([]);
-  // const [placeSelectCount, setPlaceSelectCount] = useState(0);
-  //tempPlace의 배열의 length로 카운트
-  // const [parentWidth, setParentWidth] = useState<number | undefined>();
-  // const componentRef = useRef<HTMLDivElement>(null);
+
   const [isExpanded, setIsExpanded] = useState(false);
   const setCurrentCart = useCartStore((state) => state.setCurrentCart);
   const currentCart = useCartStore((state) => state.currentCart);
@@ -247,6 +237,7 @@ function TravelPlan() {
       category: '문화시설',
     },
   ];
+
   //첫 시작시 렌더링
   useEffect(() => {
     // setAreaName(location);
@@ -257,58 +248,15 @@ function TravelPlan() {
     setTempPlace([]);
   }, []);
 
-  // useEffect(() => {
-  //   updateCurrentCart();
+  useEffect(() => {
+    setCurrentCart(tempPlace);
+    // useCartStore.setState(() => ({ currentCart: tempPlace }));와 동일
+    //이건 currentCart에 바로 newCart 넣어버리니 업데이트가 한박자 느림
+  }, [tempPlace]);
 
-  //   // useCartStore.setState(() => ({ currentCart: newCart }));와 동일
-  //   //이건 currentCart에 바로 newCart 넣어버리니 업데이트가 한박자 느림
-  // }, [tempPlace]);
-
-  // const updateCurrentCart = () => {
-  //   const newCart = findMatchingPlaces();
-  //   setCurrentCart(newCart);
-  //   console.log(newCart);
-  // };
-
-  // const findMatchingPlaces = () => {
-  //   let cart: RecommendedPlace[] = [];
-  //   tempPlace.map((item) => {
-  //     recommendedPlace.map((place) => {
-  //       if (place.isChecked) {
-  //         if (place.title === item) cart.push(place);
-  //         return cart;
-  //       }
-  //     });
-  //   });
-  //   return cart;
-  // };
-
-  // tempPlace.map((item) => {
-  //   recommendedPlace.map((place) => {
-  //     //isChecked를 검사(업데이트 된 isChecked는 어떻게 검사?)
-  //     //isChecked가 true일때
-  //     if (place.isChecked) {
-  //       cart = [...(cart ?? []), place];
-  //       // 전이 없으면 빈배열, {}:RecommendedPlace를 추가
-  //     }
-  //     //isChecked가 false일때
-  //     else {
-  //       cart = cart.filter((place) => place.title !== item);
-  //       //place의 title이 tempPlace에 있는 것과 다른거만 찾아냄
-  //     }
-  //   });
-  // });
-  // tempPlace.map((item) => {
-  //   recommendedPlace.map((place) => {
-  //     if (place.category)
-  //       if (place.title === item) {
-  //         cart.push(place);
-  //         return cart;
-  //       }
-  //   });
-  // });
-  // return cart;
-  // TempPlace에 해당하는 애들만 currentCart에 추가 (카테고리가 달라져도 유지해야됌)
+  useEffect(() => {
+    //그래서 currentCart가 업데이트 될때 렌더링 해주도록함
+  }, [currentCart]);
 
   //isChecked를 추가해주는 함수
   const addCheckProp = () => {
@@ -319,38 +267,35 @@ function TravelPlan() {
     return { attractions, nature, activity, culture };
   };
 
+  //TravelCheckButton 누를때 recommendedPlace의 isChecked를 반전시키고 TempPlace를 갱신
   const changeTempPlaceList = (item: RecommendedPlace) => {
     setRecommendedPlace((prevPlace) => {
       const newRecommendedPlace = prevPlace.map((place) => {
         if (place.id === item.id) {
+          //id를 비교하여 같을 때 isChecked만 반전
           return { ...place, isChecked: !place.isChecked };
         }
 
         return place;
       });
-      //recommendedPlace = {PLACE에서 선택한거만 isChecked = true}
       return newRecommendedPlace;
     });
 
     setTempPlace((prevTempPlace) => {
       let newTempPlace;
+      //isChecked가 off 되어있었다면 배열에 장소를 추가(isChecked는 버튼 누르면 반전되지만 아직 업데이트가 되기 전이므로 off로 검사)
       if (!item.isChecked) {
         newTempPlace = [...(prevTempPlace ?? []), item];
-        console.log(newTempPlace);
       } else {
+        //반대의 경우 id가 같지 않은 장소들만 뽑아냄
         newTempPlace = prevTempPlace.filter((place) => place.id !== item.id);
-        console.log(newTempPlace);
       }
       return newTempPlace;
     });
   };
 
-  const resetTempPlaceList = () => {
-    tempPlace.map((item) => deleteTempPlaceList(item));
-    //delete 버튼을 한번에 다 누른 효과
-  };
+  //delete 버튼은 chageTempPlaceList 함수의 ischecked == true 일때와 비슷하게 동작
   const deleteTempPlaceList = (item: RecommendedPlace) => {
-    // console.log(item);
     setTempPlace((prevTempPlace) => {
       const newTempPlace = prevTempPlace.filter((place) => place.id !== item.id);
       //tempPlace를 item을 제외한 배열로 바꾼다.
@@ -361,19 +306,22 @@ function TravelPlan() {
     setRecommendedPlace((prevPlace) => {
       const newRecommendedPlace = prevPlace.map((place) => {
         if (place.id === item.id) {
+          //id를 비교하여 같을 때 isChecked만 반전
           return { ...place, isChecked: !place.isChecked };
         }
-
         return place;
       });
-      //recommendedPlace = {PLACE에서 선택한거만 isChecked = false}
       return newRecommendedPlace;
     });
-
-    //
   };
 
-  const storeCategory = (Key: string) => {
+  //reset 버튼은 delete 버튼을 한번에 다 누른 효과
+  const resetTempPlaceList = () => {
+    tempPlace.map((item) => deleteTempPlaceList(item));
+  };
+
+  // 카테고리에 따라 recommendedPlaceList를 갱신
+  const changeCategory = (Key: string) => {
     const key = Key;
     const place = addCheckProp();
     if (key === 'attractions') setRecommendedPlace(place.attractions);
@@ -381,6 +329,8 @@ function TravelPlan() {
     else if (key === 'culture') setRecommendedPlace(place.culture);
     else setRecommendedPlace(place.activity);
   };
+
+  // 카테고리가 바뀔 때 isChecked가 false로 돌아가므로 다시 true로 만들어줌
   const checkTempPlaceWithCategory = () => {
     tempPlace.map((item) => {
       setRecommendedPlace((prevPlace) => {
@@ -396,12 +346,17 @@ function TravelPlan() {
       // 있으면 isChecked를 on 시켜준다.
     });
   };
+
+  //여행 기간 설정
   const selectDay = (travelDays: string) => {
     setPeriod(travelDays);
   };
+
+  //확장 버튼 토글
   const toggleExpand = () => {
     setIsExpanded((prev) => !prev);
   };
+
   return (
     <div className='border-solid border-2 h-screen flex overflow-hidden'>
       <div className='relative flex max-h-full'>
@@ -413,7 +368,7 @@ function TravelPlan() {
 
           <div className='flex my-6 gap-2 w-[300px]'>
             <PlaceCategory
-              storeCategory={storeCategory}
+              changeCategory={changeCategory}
               checkTempPlaceWithCategory={checkTempPlaceWithCategory}
             />
           </div>
