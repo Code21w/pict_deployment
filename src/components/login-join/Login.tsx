@@ -1,6 +1,6 @@
 'use client';
 
-import React, { ReactNode, useContext } from 'react';
+import React from 'react';
 import Image from 'next/image';
 import { useState } from 'react';
 import { Button } from '../ui/button';
@@ -12,6 +12,7 @@ import axios from 'axios';
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle } from '../ui/dialog';
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '../ui/form';
 import { Input } from '../ui/input'; // Adjust the import according to your setup
+import { useRouter } from "next/navigation";
 
 const FormSchema = z.object({
   email: z.string().email({
@@ -27,11 +28,13 @@ const EmailSchema = z.object({
 });
 
 function Login() {
+
   const [isFirstDialogOpen, setIsFirstDialogOpen] = useState(false);
   const [isSecondDialogOpen, setIsSecondDialogOpen] = useState(false);
   const [isThirdDialogOpen, setIsThirdDialogOpen] = useState(false);
   const [email, setEmail] = useState('');
-
+  
+  const router = useRouter();
   type FormData = z.infer<typeof FormSchema>;
   type EmailData = z.infer<typeof EmailSchema>;
 
@@ -55,9 +58,13 @@ function Login() {
 
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
     try {
-      const response = await axios.post('http://localhost:3000/api/login', data);
+      const response = await axios.post('http://localhost:3000/api/login', data, {
+        withCredentials: true,
+      } );
       console.log('Login successful:', response.data);
       setIsFirstDialogOpen(false);
+
+      location.reload();
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
         const message = error.response.data.message;
@@ -70,11 +77,20 @@ function Login() {
     }
   };
 
+  const handleGoogleLogin = () => {
+    window.location.href = `http://localhost:3000/api/login/federated/google`;
+  };
+  
+
+  const handleKakaoLogin = () => {
+    window.location.href = 'http://localhost:3000/api/login/federated/kakao';
+  };
+
+
   const onEmailSubmit = async (data: { email: React.SetStateAction<string>; }) => {
     try {
       setEmail(data.email);
       const response = await axios.post('http://localhost:3000/api/reset-password', data);
-      // Handle successful response
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
         const message = error.response.data.message;
@@ -106,7 +122,7 @@ function Login() {
             <FormControl>
               <Input
                 placeholder='이메일을 입력하세요.'
-                {...field} // Use field instead of form.register
+                {...field}
               />
             </FormControl>
             <FormMessage />
@@ -137,12 +153,20 @@ function Login() {
           </Form>
           <div className='hr-sect'>또는</div>
           <div className='space-y-2'>
-            <Button className='w-full bg-gray-200 hover:bg-gray-300 text-black'>
-              <Image src='/google.svg' alt='google' width={23} height={23} className='mr-2' />
+            <Button
+              type='submit'
+              className='w-full bg-gray-200 hover:bg-gray-300 text-black'
+              onClick={handleGoogleLogin}
+            >
+              <Image src='google.svg' alt='google' width={23} height={23} className='mr-2' />
               구글로 시작하기
             </Button>
-            <Button className='w-full bg-yellow-400 hover:bg-yellow-500 text-black'>
-              <Image src='/kakao.svg' alt='kakao' width={23} height={23} className='mr-2' />
+            <Button
+              type='submit'
+              className='w-full bg-yellow-400 hover:bg-yellow-500 text-black'
+              onClick={handleKakaoLogin}
+            >
+              <Image src='kakao.svg' alt='kakao' width={23} height={23} className='mr-2' />
               카카오로 시작하기
             </Button>
           </div>

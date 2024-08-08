@@ -1,29 +1,32 @@
-'use client';
+'use client'
+import React, { createContext, useContext, useState, ReactNode } from 'react';
 
-import React, { createContext, useState, ReactNode, Dispatch, SetStateAction } from 'react';
+const AuthContext = createContext<any>(null);
 
-interface User {
-  displayName: string;
-  email: string;
+interface AuthProviderProps {
+  children: ReactNode; // children의 타입을 명시적으로 지정
 }
 
-interface UserContextType {
-  user: User | null;
-  setUser: Dispatch<SetStateAction<User | null>>;
-}
+export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
+  const [user, setUser] = useState(null);
 
-export const UserContext = createContext<UserContextType | undefined>(undefined);
+  const login = (userData: any) => {
+    setUser(userData);
+  };
 
-const UserProvider = ({ children }: { children: ReactNode }) => {
-  const [user, setUser] = useState<User | null>(null);
+  const logout = () => {
+    setUser(null);
+  };
 
   return (
-    <UserContext.Provider value={{ user, setUser }}>
+    <AuthContext.Provider value={{ user, login, logout }}>
       {children}
-    </UserContext.Provider>
+    </AuthContext.Provider>
   );
 };
 
-export default UserProvider;
+export function useAuth() {
+  return useContext(AuthContext);
+}
 
 
