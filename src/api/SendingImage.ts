@@ -1,6 +1,7 @@
 import axios from 'axios';
+import { getErrorMessage } from './errorHandler';
 
-const baseURL = `http://localhost:3000`;
+const baseURL = process.env.NEXT_PUBLIC_BASE_URL;
 
 const api = axios.create({ baseURL });
 
@@ -21,15 +22,13 @@ async function UploadFile(formData: FormData) {
       },
     });
 
-    // Access the first item in the response array
-    const imageInfo = data.result[0]; // Get the first object from the response array
+    const imageInfo = data.result[0];
     const externalImageUrl = data.image_url;
 
     sessionStorage.setItem('uploadFileResponse', JSON.stringify(data));
-    // Return the image URL or other relevant data as needed
-    return { imageInfo, externalImageUrl }; // Return the image URL or whatever is needed
-  } catch (error: any) {
-    console.error(error.message);
+    return { imageInfo, externalImageUrl };
+  } catch (error: unknown) {
+    console.error(getErrorMessage(error));
     throw error;
   }
 }

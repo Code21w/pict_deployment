@@ -2,24 +2,24 @@
 
 import Image from 'next/image';
 import { useCallback, useState, useEffect } from 'react';
-import { useDropzone } from 'react-dropzone';
+import { ErrorCode, FileRejection, useDropzone } from 'react-dropzone';
 
 import UploadFile from '@/api/SendingImage';
 import fetchLocationInfo from '@/api/fetchLocationInfo';
 import generateAndStoreImage from '@/api/generateAndStoreImage';
 import imageIcon from '@/assets/images/image_icon.png';
 import CloudAnimation from '@/components/main/Cloud';
-import { DialogDemo } from '@/components/resultModal/ResultModal';
+import { DialogDemo } from '@/components/resultmodal/ResultModal';
 import { Dialog } from '@/components/ui/dialog';
 
 import AirplaneAnimation from '@/components/main/Airplane';
 import Globe from '@/components/main/Globe';
 import useWindowHeightSize from '@/hooks/useWindowHeightSize';
 function Main() {
-  const [image, setImage] = useState(null);
-  const [file, setFile] = useState(null);
+  const [image, setImage] = useState<string | null>(null);
+  const [file, setFile] = useState<File | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [responseImage, setResponseImage] = useState(null);
+  const [responseImage, setResponseImage] = useState<string | null>(null);
   const [location, setLocation] = useState('');
   const [loading, setLoading] = useState(false);
   const [similarity, setSimilarity] = useState(0);
@@ -28,19 +28,25 @@ function Main() {
   const [locationInfo, setLocationInfo] = useState('');
 
   const windowHeight = useWindowHeightSize();
-  const onDrop = useCallback((acceptedFiles: File[], fileRejections: any[]) => {
+  const onDrop = useCallback((acceptedFiles: File[], fileRejections: FileRejection[]) => {
     // useCallback을 써야하는가 생각해보기
+    // const foundTooManyFiles = fileRejections.find(
+    //   (rejection) => rejection.error.find[ErrorCode['TooManyFiles']]
+    // );
     // 파일 형식 오류가 있는 경우
     if (fileRejections.length > 0) {
-      setErrorMessage('이미지 형식이 아닙니다!');
-      setImage(null);
-      setFile(null);
-      return;
-    }
+      const tooManyFilesError = fileRejections.find((rejection) =>
+        rejection.errors.find((error) => error.code === ErrorCode.TooManyFiles)
+      );
 
-    // 여러 파일이 드롭된 경우
-    if (acceptedFiles.length > 1) {
-      setErrorMessage('하나의 이미지 파일만 업로드 해주세요!');
+      if (tooManyFilesError) {
+        setErrorMessage('하나의 이미지 파일만 업로드 해주세요!');
+        setImage(null);
+        setFile(null);
+        return;
+      }
+
+      setErrorMessage('이미지 형식이 아닙니다!');
       setImage(null);
       setFile(null);
       return;
@@ -105,7 +111,11 @@ function Main() {
         .then((blob) => {
           const reader = new FileReader();
           reader.onloadend = () => {
-            sessionStorage.setItem('uploadedImage', reader.result);
+            if (typeof reader.result === 'string') {
+              sessionStorage.setItem('uploadedImage', reader.result);
+            } else {
+              console.error('FileReader result is not a string');
+            }
           };
           reader.readAsDataURL(blob);
         })
@@ -164,10 +174,12 @@ function Main() {
             <input {...getInputProps()} className='w-[300px] h-[100px] bg-transparent pl-[10px]' />
             {!image && <Image src={imageIcon} alt='UploadImageIcon.png' />}
             {image && (
-              <img
+              <Image
                 src={image}
                 alt='Uploaded Preview'
-                className='w-[300px] h-[100px] object-cover'
+                width={300}
+                height={100}
+                objectFit='cover'
               />
             )}
           </div>
