@@ -13,7 +13,9 @@ import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle } from 
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '../ui/form';
 import { Input } from '../ui/input'; // Adjust the import according to your setup
 import { useRouter } from "next/navigation";
+const baseURL = process.env.NEXT_PUBLIC_BASE_URL;
 
+const api = axios.create({ baseURL });
 const FormSchema = z.object({
   email: z.string().email({
     message: '올바른 이메일 형식이 아닙니다.',
@@ -58,39 +60,37 @@ function Login() {
 
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
     try {
-      const response = await axios.post('http://localhost:3000/api/login', data, {
+      const response = await api.post('/api/login', data, {
         withCredentials: true,
-      } );
+      });
       console.log('Login successful:', response.data);
       setIsFirstDialogOpen(false);
-
+  
       location.reload();
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
         const message = error.response.data.message;
-        if (message === '비밀번호가 일치하지 않습니다.') {
-          form.setError('password', { type: 'manual', message });
-        } else if (message === '이메일이 존재하지 않습니다.') {
-          form.setError('email', { type: 'manual', message });
-        }
+        
+        form.setError('root', { type: 'manual', message: '비밀번호 또는 이메일이 틀렸습니다.' });
+        
       }
     }
   };
 
   const handleGoogleLogin = () => {
-    window.location.href = `http://localhost:3000/api/login/federated/google`;
+    window.location.href = `${ baseURL }/api/login/federated/google`;
   };
   
 
   const handleKakaoLogin = () => {
-    window.location.href = 'http://localhost:3000/api/login/federated/kakao';
+    window.location.href = '${ baseURL }/api/login/federated/kakao';
   };
 
 
   const onEmailSubmit = async (data: { email: React.SetStateAction<string>; }) => {
     try {
       setEmail(data.email);
-      const response = await axios.post('http://localhost:3000/api/reset-password', data);
+      const response = await api.post('/api/reset-password', data);
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
         const message = error.response.data.message;
@@ -113,6 +113,10 @@ function Login() {
           </DialogHeader>
           <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-6'>
+          {form.formState.errors.root && (
+    <div className="text-red-500">{form.formState.errors.root.message}</div>
+  )}
+  
       <FormField
         control={form.control}
         name='email'
