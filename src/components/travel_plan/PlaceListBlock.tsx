@@ -1,5 +1,6 @@
 'use client';
 
+import { RecommendedPlace } from '@/app/travelplan/page';
 import ImageIcon from '@/assets/images/image_icon.png';
 import Image from 'next/image';
 import { LegacyRef } from 'react';
@@ -7,7 +8,7 @@ export interface PlaceListBlockProps {
   children?: React.ReactNode;
   variant?: string;
   Ref?: LegacyRef<HTMLDivElement>;
-  item?: string;
+  item?: RecommendedPlace;
 }
 const PlaceListBlock = ({ children, variant, item }: PlaceListBlockProps) => {
   return (
@@ -25,7 +26,9 @@ const PlaceListBlock = ({ children, variant, item }: PlaceListBlockProps) => {
               className={`object-scale-down ${variant === 'small' ? 'min-w-[44px] min-h-[44px]' : 'w-[64px] h-[64px]'}`}
             />
           </div>
-          <div className={`${variant === 'small' ? 'text-sm' : ''} max-w-[120px]`}>{item}</div>
+          <div className={`${variant === 'small' ? 'text-sm' : ''} max-w-[120px]`}>
+            {item?.title}
+          </div>
         </div>
         {children}
       </div>

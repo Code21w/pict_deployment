@@ -6,6 +6,7 @@ import ExpandButton from '@/components/travel_plan/ExpandButton';
 import PlaceCategory from '@/components/travel_plan/PlaceCategory';
 import PlaceListBlock from '@/components/travel_plan/PlaceListBlock';
 import TravelPlanCheckButton from '@/components/travel_plan/TravelPlanCheckButton';
+import useCartStore from '@/store/store';
 import { useEffect, useState } from 'react';
 
 interface Place {
@@ -33,13 +34,14 @@ function TravelPlan() {
   const [recommendedPlace, setRecommendedPlace] = useState<RecommendedPlace[]>([]);
 
   // const [checkedPlace, setCheckedPlace] = useState<Array<checkedPlaceType>>([]);
-  const [tempPlace, setTempPlace] = useState<string[]>([]);
+  const [tempPlace, setTempPlace] = useState<RecommendedPlace[]>([]);
   // const [placeSelectCount, setPlaceSelectCount] = useState(0);
   //tempPlace의 배열의 length로 카운트
   // const [parentWidth, setParentWidth] = useState<number | undefined>();
   // const componentRef = useRef<HTMLDivElement>(null);
   const [isExpanded, setIsExpanded] = useState(false);
-
+  const setCurrentCart = useCartStore((state) => state.setCurrentCart);
+  const currentCart = useCartStore((state) => state.currentCart);
   // const location = sessionStorage.getItem('location');
   // const id = sessionStorage.getItem('id');
 
@@ -245,7 +247,7 @@ function TravelPlan() {
       category: '문화시설',
     },
   ];
-
+  //첫 시작시 렌더링
   useEffect(() => {
     // setAreaName(location);
     setAreaName('제주');
@@ -255,6 +257,60 @@ function TravelPlan() {
     setTempPlace([]);
   }, []);
 
+  // useEffect(() => {
+  //   updateCurrentCart();
+
+  //   // useCartStore.setState(() => ({ currentCart: newCart }));와 동일
+  //   //이건 currentCart에 바로 newCart 넣어버리니 업데이트가 한박자 느림
+  // }, [tempPlace]);
+
+  // const updateCurrentCart = () => {
+  //   const newCart = findMatchingPlaces();
+  //   setCurrentCart(newCart);
+  //   console.log(newCart);
+  // };
+
+  // const findMatchingPlaces = () => {
+  //   let cart: RecommendedPlace[] = [];
+  //   tempPlace.map((item) => {
+  //     recommendedPlace.map((place) => {
+  //       if (place.isChecked) {
+  //         if (place.title === item) cart.push(place);
+  //         return cart;
+  //       }
+  //     });
+  //   });
+  //   return cart;
+  // };
+
+  // tempPlace.map((item) => {
+  //   recommendedPlace.map((place) => {
+  //     //isChecked를 검사(업데이트 된 isChecked는 어떻게 검사?)
+  //     //isChecked가 true일때
+  //     if (place.isChecked) {
+  //       cart = [...(cart ?? []), place];
+  //       // 전이 없으면 빈배열, {}:RecommendedPlace를 추가
+  //     }
+  //     //isChecked가 false일때
+  //     else {
+  //       cart = cart.filter((place) => place.title !== item);
+  //       //place의 title이 tempPlace에 있는 것과 다른거만 찾아냄
+  //     }
+  //   });
+  // });
+  // tempPlace.map((item) => {
+  //   recommendedPlace.map((place) => {
+  //     if (place.category)
+  //       if (place.title === item) {
+  //         cart.push(place);
+  //         return cart;
+  //       }
+  //   });
+  // });
+  // return cart;
+  // TempPlace에 해당하는 애들만 currentCart에 추가 (카테고리가 달라져도 유지해야됌)
+
+  //isChecked를 추가해주는 함수
   const addCheckProp = () => {
     const attractions = PLACE_1.map((item) => ({ ...item, isChecked: false }));
     const nature = PLACE_2.map((item) => ({ ...item, isChecked: false }));
@@ -263,24 +319,6 @@ function TravelPlan() {
     return { attractions, nature, activity, culture };
   };
 
-  const toggleExpand = () => {
-    setIsExpanded((prev) => !prev);
-  };
-
-  // const changeTempPlaceList = (item: string, isChecked: boolean) => {
-  //   const newCheckedPlace = !isChecked
-  //     ? [
-  //         ...checkedPlace,
-  //         {
-  //           name: item,
-  //           isChecked: !isChecked,
-  //         },
-  //       ]
-  //     : checkedPlace.filter((e) => e.name !== item);
-  //   const temp = newCheckedPlace.filter((place) => place.isChecked).map((item) => item.name);
-  //   setCheckedPlace(newCheckedPlace);
-  //   setTempPlace(temp);
-  // };
   const changeTempPlaceList = (item: RecommendedPlace) => {
     setRecommendedPlace((prevPlace) => {
       const newRecommendedPlace = prevPlace.map((place) => {
@@ -297,54 +335,24 @@ function TravelPlan() {
     setTempPlace((prevTempPlace) => {
       let newTempPlace;
       if (!item.isChecked) {
-        newTempPlace = [...(prevTempPlace ?? []), item.title];
+        newTempPlace = [...(prevTempPlace ?? []), item];
+        console.log(newTempPlace);
       } else {
-        newTempPlace = prevTempPlace.filter((place) => place !== item.title);
+        newTempPlace = prevTempPlace.filter((place) => place.id !== item.id);
+        console.log(newTempPlace);
       }
-      // console.log(newTempPlace);
       return newTempPlace;
     });
-
-    // const newTempPlace = recommendedPlace.filter((place) => {
-    //   place.isChecked === true;
-    // });
-    // console.log(newTempPlace);
-    // item.isChecked = true 인거만 넣고싶어요
-    // return [...prevTempPlace, item];
-    // setTempPlace(newTempPlace);
   };
-
-  // const changeTempPlaceList = (item: RecommendedPlace) => {
-  //   setRecommendedPlace((prevPlace) => {
-  //     const newRecommendedPlace = prevPlace.map((place) => {
-  //       if (place.id === item.id) {
-  //         return { ...place, isChecked: !place.isChecked };
-  //       }
-
-  //       return place;
-  //     });
-  //     //recommendedPlace = {PLACE에서 선택한거만 isChecked = true}
-  //     return newRecommendedPlace;
-  //   });
-
-  //   setTempPlace((prevTempPlace) => {
-  //     const newTempPlace = recommendedPlace.find((place) => {
-  //       place.isChecked === true;
-  //     });
-  //     // item.isChecked = true 인거만 넣고싶어요
-  //     // return [...prevTempPlace, item];
-  //     return newTempPlace;
-  //   });
-  // };
 
   const resetTempPlaceList = () => {
     tempPlace.map((item) => deleteTempPlaceList(item));
     //delete 버튼을 한번에 다 누른 효과
   };
-  const deleteTempPlaceList = (item: string) => {
+  const deleteTempPlaceList = (item: RecommendedPlace) => {
     // console.log(item);
     setTempPlace((prevTempPlace) => {
-      const newTempPlace = prevTempPlace.filter((place) => place !== item);
+      const newTempPlace = prevTempPlace.filter((place) => place.id !== item.id);
       //tempPlace를 item을 제외한 배열로 바꾼다.
       //recommendedplace에서 일치하는 place의 ischecked를 바꾼다.
       return newTempPlace;
@@ -352,7 +360,7 @@ function TravelPlan() {
 
     setRecommendedPlace((prevPlace) => {
       const newRecommendedPlace = prevPlace.map((place) => {
-        if (place.title === item) {
+        if (place.id === item.id) {
           return { ...place, isChecked: !place.isChecked };
         }
 
@@ -364,9 +372,7 @@ function TravelPlan() {
 
     //
   };
-  const selectDay = (travelDays: string) => {
-    setPeriod(travelDays);
-  };
+
   const storeCategory = (Key: string) => {
     const key = Key;
     const place = addCheckProp();
@@ -379,7 +385,7 @@ function TravelPlan() {
     tempPlace.map((item) => {
       setRecommendedPlace((prevPlace) => {
         const newRecommendedPlace = prevPlace.map((place) => {
-          if (place.title === item) {
+          if (place.id === item.id) {
             return { ...place, isChecked: !place.isChecked };
           }
           return place;
@@ -389,6 +395,12 @@ function TravelPlan() {
       // TempPlace가 recommendedPlace에서 순회하여 찾음
       // 있으면 isChecked를 on 시켜준다.
     });
+  };
+  const selectDay = (travelDays: string) => {
+    setPeriod(travelDays);
+  };
+  const toggleExpand = () => {
+    setIsExpanded((prev) => !prev);
   };
   return (
     <div className='border-solid border-2 h-screen flex overflow-hidden'>
@@ -408,7 +420,7 @@ function TravelPlan() {
 
           <div className='list_container h-[calc(100vh_-_200px)] flex flex-col overflow-y-auto overflow-x-hidden mb-1'>
             {recommendedPlace.map((item, idx) => (
-              <PlaceListBlock key={idx} item={item.title}>
+              <PlaceListBlock key={idx} item={item}>
                 <div className='mr-3'>
                   <TravelPlanCheckButton
                     // changeSelectCount={changeSelectCount}

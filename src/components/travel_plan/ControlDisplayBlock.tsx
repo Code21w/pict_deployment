@@ -1,11 +1,12 @@
 'use client';
+import { RecommendedPlace } from '@/app/travelplan/page';
 import TrashBin from '@/assets/images/trash_bin.png';
 import PlaceListBlock from '@/components/travel_plan/PlaceListBlock';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
 export interface ControlDisplayBlockProps {
   isExpanded: boolean;
-  tempPlace: string[];
+  tempPlace: RecommendedPlace[];
   deleteTempPlaceList: Function;
 }
 
@@ -15,13 +16,13 @@ const ControlDisplayBlock = ({
   deleteTempPlaceList,
 }: ControlDisplayBlockProps) => {
   const renderer = () => {
-    const handleClick = (item: string) => {
+    const handleClick = (item: RecommendedPlace) => {
       deleteTempPlaceList(item);
     };
     const renderPlaceCount = () => {
       return tempPlace.map((item, idx) => (
         <div
-          key={item}
+          key={item.id}
           className='flex items-center justify-center bg-cyan-500/50 border-none rounded-full w-[24px] h-[24px] text-white text-sm'
         >
           {idx + 1}
@@ -36,7 +37,7 @@ const ControlDisplayBlock = ({
               {idx + 1}
             </div>
             <div
-              key={item}
+              key={item.id}
               className='border-solid border-b-2 border-l-2 rounded-md mb-3 w-[200px]'
             >
               <PlaceListBlock variant='small' item={item}>
