@@ -35,7 +35,7 @@ function TravelPlan() {
   // const location = sessionStorage.getItem('location');
   // const id = sessionStorage.getItem('id');
 
-  //페이지 첫 렌더링 시 ai가 생성해준 데이터를 로컬 스토리지에서 가져오기
+  // 페이지 첫 렌더링 시 ai가 생성해준 데이터를 로컬 스토리지에서 가져오기
 
   // const place = fetch()~~~ id로 데이터 place 변수값에 담기
 
@@ -238,7 +238,7 @@ function TravelPlan() {
     },
   ];
 
-  //첫 시작시 렌더링
+  // 첫 시작시 렌더링
   useEffect(() => {
     // setAreaName(location);
     setAreaName('제주');
@@ -251,14 +251,14 @@ function TravelPlan() {
   useEffect(() => {
     setCurrentCart(tempPlace);
     // useCartStore.setState(() => ({ currentCart: tempPlace }));와 동일
-    //이건 currentCart에 바로 newCart 넣어버리니 업데이트가 한박자 느림
+    // 이건 currentCart에 바로 newCart 넣어버리니 업데이트가 한박자 느림
   }, [tempPlace]);
 
   useEffect(() => {
-    //그래서 currentCart가 업데이트 될때 렌더링 해주도록함
+    // 그래서 currentCart가 업데이트 될때 렌더링 해주도록함
   }, [currentCart]);
 
-  //isChecked를 추가해주는 함수
+  // isChecked를 추가해주는 함수
   const addCheckProp = () => {
     const attractions = PLACE_1.map((item) => ({ ...item, isChecked: false }));
     const nature = PLACE_2.map((item) => ({ ...item, isChecked: false }));
@@ -267,12 +267,12 @@ function TravelPlan() {
     return { attractions, nature, activity, culture };
   };
 
-  //TravelCheckButton 누를때 recommendedPlace의 isChecked를 반전시키고 TempPlace를 갱신
+  // TravelCheckButton 누를때 recommendedPlace의 isChecked를 반전시키고 TempPlace를 갱신
   const changeTempPlaceList = (item: RecommendedPlace) => {
     setRecommendedPlace((prevPlace) => {
       const newRecommendedPlace = prevPlace.map((place) => {
         if (place.id === item.id) {
-          //id를 비교하여 같을 때 isChecked만 반전
+          // id를 비교하여 같을 때 isChecked만 반전
           return { ...place, isChecked: !place.isChecked };
         }
 
@@ -283,30 +283,30 @@ function TravelPlan() {
 
     setTempPlace((prevTempPlace) => {
       let newTempPlace;
-      //isChecked가 off 되어있었다면 배열에 장소를 추가(isChecked는 버튼 누르면 반전되지만 아직 업데이트가 되기 전이므로 off로 검사)
+      // isChecked가 off 되어있었다면 배열에 장소를 추가(isChecked는 버튼 누르면 반전되지만 아직 업데이트가 되기 전이므로 off로 검사)
       if (!item.isChecked) {
         newTempPlace = [...(prevTempPlace ?? []), item];
       } else {
-        //반대의 경우 id가 같지 않은 장소들만 뽑아냄
+        // 반대의 경우 id가 같지 않은 장소들만 뽑아냄
         newTempPlace = prevTempPlace.filter((place) => place.id !== item.id);
       }
       return newTempPlace;
     });
   };
 
-  //delete 버튼은 chageTempPlaceList 함수의 ischecked == true 일때와 비슷하게 동작
+  // delete 버튼은 chageTempPlaceList 함수의 ischecked == true 일때와 비슷하게 동작
   const deleteTempPlaceList = (item: RecommendedPlace) => {
     setTempPlace((prevTempPlace) => {
       const newTempPlace = prevTempPlace.filter((place) => place.id !== item.id);
-      //tempPlace를 item을 제외한 배열로 바꾼다.
-      //recommendedplace에서 일치하는 place의 ischecked를 바꾼다.
+      // tempPlace를 item을 제외한 배열로 바꾼다.
+      // recommendedplace에서 일치하는 place의 ischecked를 바꾼다.
       return newTempPlace;
     });
 
     setRecommendedPlace((prevPlace) => {
       const newRecommendedPlace = prevPlace.map((place) => {
         if (place.id === item.id) {
-          //id를 비교하여 같을 때 isChecked만 반전
+          // id를 비교하여 같을 때 isChecked만 반전
           return { ...place, isChecked: !place.isChecked };
         }
         return place;
@@ -315,7 +315,7 @@ function TravelPlan() {
     });
   };
 
-  //reset 버튼은 delete 버튼을 한번에 다 누른 효과
+  // reset 버튼은 delete 버튼을 한번에 다 누른 효과
   const resetTempPlaceList = () => {
     tempPlace.map((item) => deleteTempPlaceList(item));
   };
@@ -347,12 +347,12 @@ function TravelPlan() {
     });
   };
 
-  //여행 기간 설정
+  // 여행 기간 설정
   const selectDay = (travelDays: string) => {
     setPeriod(travelDays);
   };
 
-  //확장 버튼 토글
+  // 확장 버튼 토글
   const toggleExpand = () => {
     setIsExpanded((prev) => !prev);
   };

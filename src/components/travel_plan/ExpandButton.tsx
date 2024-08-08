@@ -20,7 +20,7 @@ function ExpandButton({ isExpanded, toggleExpand }: ExpandButtonProps) {
         };
   };
 
-  const { value, content, ...rest } = getButtonStyles();
+  const { content, ...rest } = getButtonStyles();
 
   return (
     <Button

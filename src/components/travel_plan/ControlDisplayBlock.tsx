@@ -32,7 +32,7 @@ const ControlDisplayBlock = ({
     if (isExpanded) {
       if (tempPlace.length) {
         return tempPlace.map((item, idx) => (
-          <div className='flex gap-3 items-center'>
+          <div className='flex gap-3 items-center' key={item.id}>
             <div className='flex items-center justify-center bg-cyan-500/50 border-none rounded-full w-[24px] h-[24px] text-white text-sm'>
               {idx + 1}
             </div>

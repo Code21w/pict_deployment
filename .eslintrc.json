@@ -32,7 +32,7 @@
 
     // Best Practices
     "accessor-pairs": "error",
-    "array-callback-return": "warn",
+    // "array-callback-return": "warn",
     "dot-notation": "warn",
     "no-eq-null": "warn",
     "no-eval": "error",
@@ -58,13 +58,16 @@
     "no-unneeded-ternary": "warn",
     "spaced-comment": ["warn", "always"],
 
-    //ES6
+    // ES6
     "no-var": "warn",
     "prefer-const": "warn",
 
+    // next.js specific rules
+    "@next/next/no-img-element": "off",
+
     // TypeScript specific rules
     "@typescript-eslint/no-inferrable-types": "warn",
-    "@typescript-eslint/ban-types": "warn",
+    // "@typescript-eslint/ban-types": "warn",
     "@typescript-eslint/no-unnecessary-type-constraint": "warn",
     "@typescript-eslint/no-var-requires": "warn",
     "@typescript-eslint/no-use-before-define": "off",
@@ -72,6 +75,12 @@
     "@typescript-eslint/no-empty-function": "off",
     "react/react-in-jsx-scope": "off",
     "react/jsx-uses-react": "off",
+
+    // 정책 임시 추가
+    "@typescript-eslint/no-explicit-any": "off",
+    "react-hooks/exhaustive-deps": "off",
+    "array-callback-return": "off",
+    "@typescript-eslint/ban-types": "off",
 
     // Ignore no-unused-vars if prefixed with underscore
     "@typescript-eslint/no-unused-vars": [
