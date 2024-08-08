@@ -24,7 +24,6 @@ interface SelectDaysModalProps {
 }
 
 export const SelectDaysModal: React.FC<SelectDaysModalProps> = ({ initialDays, onSave }) => {
-export const SelectDaysModal: React.FC<SelectDaysModalProps> = ({ initialDays, onSave }) => {
   const [travelDays, setTravelDays] = useState(initialDays);
   const [location, setLocation] = useState('');
 
