@@ -12,7 +12,7 @@ import axios from 'axios';
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle } from '../ui/dialog';
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '../ui/form';
 import { Input } from '../ui/input'; // Adjust the import according to your setup
-import { useRouter } from "next/navigation";
+import { useRouter } from 'next/navigation';
 const baseURL = process.env.NEXT_PUBLIC_BASE_URL;
 
 const api = axios.create({ baseURL });
@@ -30,16 +30,14 @@ const EmailSchema = z.object({
 });
 
 function Login() {
-
   const [isFirstDialogOpen, setIsFirstDialogOpen] = useState(false);
   const [isSecondDialogOpen, setIsSecondDialogOpen] = useState(false);
   const [isThirdDialogOpen, setIsThirdDialogOpen] = useState(false);
   const [email, setEmail] = useState('');
-  
+
   const router = useRouter();
   type FormData = z.infer<typeof FormSchema>;
   type EmailData = z.infer<typeof EmailSchema>;
-
 
   const form = useForm<FormData>({
     resolver: zodResolver(FormSchema),
@@ -65,29 +63,26 @@ function Login() {
       });
       console.log('Login successful:', response.data);
       setIsFirstDialogOpen(false);
-  
+
       location.reload();
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
         const message = error.response.data.message;
-        
+
         form.setError('root', { type: 'manual', message: '비밀번호 또는 이메일이 틀렸습니다.' });
-        
       }
     }
   };
 
   const handleGoogleLogin = () => {
-    window.location.href = `${ baseURL }/api/login/federated/google`;
+    window.location.href = `${baseURL}/api/login/federated/google`;
   };
-  
 
   const handleKakaoLogin = () => {
     window.location.href = '${ baseURL }/api/login/federated/kakao';
   };
 
-
-  const onEmailSubmit = async (data: { email: React.SetStateAction<string>; }) => {
+  const onEmailSubmit = async (data: { email: React.SetStateAction<string> }) => {
     try {
       setEmail(data.email);
       const response = await api.post('/api/reset-password', data);
@@ -103,54 +98,53 @@ function Login() {
 
   return (
     <>
-          <Dialog open={isFirstDialogOpen} onOpenChange={setIsFirstDialogOpen}>
+      <Dialog open={isFirstDialogOpen} onOpenChange={setIsFirstDialogOpen}>
         <DialogTrigger asChild>
           <button className='text-foreground transition-colors hover:text-muted'>로그인</button>
         </DialogTrigger>
         <DialogContent className='sm:max-w-[425px]'>
           <DialogHeader>
-            <DialogTitle className='font-["Cafe24Moyamoya-Face-v1.0"] text-center text-3xl'>로그인</DialogTitle>
+            <DialogTitle className='font-["Cafe24Moyamoya-Face-v1.0"] text-center text-3xl'>
+              로그인
+            </DialogTitle>
           </DialogHeader>
           <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-6'>
-          {form.formState.errors.root && (
-    <div className="text-red-500">{form.formState.errors.root.message}</div>
-  )}
-  
-      <FormField
-        control={form.control}
-        name='email'
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>이메일</FormLabel>
-            <FormControl>
-              <Input
-                placeholder='이메일을 입력하세요.'
-                {...field}
+            <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-6'>
+              {form.formState.errors.root && (
+                <div className='text-red-500'>{form.formState.errors.root.message}</div>
+              )}
+
+              <FormField
+                control={form.control}
+                name='email'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>이메일</FormLabel>
+                    <FormControl>
+                      <Input placeholder='이메일을 입력하세요.' {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
-      <FormField
-        control={form.control}
-        name='password'
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>비밀번호</FormLabel>
-            <FormControl>
-              <Input
-                type='password'
-                placeholder='비밀번호를 입력하세요.'
-                {...field} // Use field instead of form.register
+              <FormField
+                control={form.control}
+                name='password'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>비밀번호</FormLabel>
+                    <FormControl>
+                      <Input
+                        type='password'
+                        placeholder='비밀번호를 입력하세요.'
+                        {...field} // Use field instead of form.register
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
-              <Button type='submit' className='w-full' disabled={!form.formState.isValid} >
+              <Button type='submit' className='w-full' disabled={!form.formState.isValid}>
                 로그인
               </Button>
             </form>
@@ -174,7 +168,14 @@ function Login() {
               카카오로 시작하기
             </Button>
           </div>
-          <Link href='#' onClick={() => { setIsFirstDialogOpen(false); setIsSecondDialogOpen(true); }}  className="link">
+          <Link
+            href='#'
+            onClick={() => {
+              setIsFirstDialogOpen(false);
+              setIsSecondDialogOpen(true);
+            }}
+            className='link'
+          >
             비밀번호를 잊으셨나요?
           </Link>
         </DialogContent>
@@ -183,9 +184,14 @@ function Login() {
       <Dialog open={isSecondDialogOpen} onOpenChange={setIsSecondDialogOpen}>
         <DialogContent className='sm:max-w-[425px]'>
           <DialogHeader>
-            <DialogTitle className='font-["Cafe24Moyamoya-Face-v1.0"] text-center text-3xl'>비밀번호 재설정</DialogTitle>
+            <DialogTitle className='font-["Cafe24Moyamoya-Face-v1.0"] text-center text-3xl'>
+              비밀번호 재설정
+            </DialogTitle>
           </DialogHeader>
-          <p style={{ fontSize: '12px' }}>걱정하지 마세요! 가입할 때 사용한 이메일을 입력해 주시면, 비밀번호를 재설정할 수 있게 도와드릴게요.</p>
+          <p style={{ fontSize: '12px' }}>
+            걱정하지 마세요! 가입할 때 사용한 이메일을 입력해 주시면, 비밀번호를 재설정할 수 있게
+            도와드릴게요.
+          </p>
           <Form {...emailForm}>
             <form onSubmit={emailForm.handleSubmit(onEmailSubmit)} className='space-y-8'>
               <FormField
@@ -201,7 +207,15 @@ function Login() {
                   </FormItem>
                 )}
               />
-              <Button type='submit' className='w-full' disabled={!emailForm.formState.isValid} onClick={() => { setIsSecondDialogOpen(false); setIsThirdDialogOpen(true); }}>
+              <Button
+                type='submit'
+                className='w-full'
+                disabled={!emailForm.formState.isValid}
+                onClick={() => {
+                  setIsSecondDialogOpen(false);
+                  setIsThirdDialogOpen(true);
+                }}
+              >
                 계속하기
               </Button>
             </form>
@@ -213,9 +227,14 @@ function Login() {
         <Dialog open={isThirdDialogOpen} onOpenChange={setIsThirdDialogOpen}>
           <DialogContent className='sm:max-w-[425px]'>
             <DialogHeader>
-              <DialogTitle className='font-["Cafe24Moyamoya-Face-v1.0"] text-center text-3xl'>비밀번호 재설정</DialogTitle>
+              <DialogTitle className='font-["Cafe24Moyamoya-Face-v1.0"] text-center text-3xl'>
+                비밀번호 재설정
+              </DialogTitle>
             </DialogHeader>
-            <p style={{ fontSize: '12px' }}>{email} 계정이 존재한다면, 비밀번호 재설정 링크를 이메일로 보내드렸습니다. 받은 편지함을 확인하시고, 링크를 통해 비밀번호를 새롭게 설정하세요.</p>
+            <p style={{ fontSize: '12px' }}>
+              {email} 계정이 존재한다면, 비밀번호 재설정 링크를 이메일로 보내드렸습니다. 받은
+              편지함을 확인하시고, 링크를 통해 비밀번호를 새롭게 설정하세요.
+            </p>
           </DialogContent>
         </Dialog>
       )}

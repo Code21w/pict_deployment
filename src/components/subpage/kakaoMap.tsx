@@ -13,7 +13,7 @@ function KakaoMap() {
     // 여기에서 우리가 기존에 발급 받았던 apiKey를 넣어주면 된다.
     mapScript.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=c97a2941e3a63026f2461c0db2f6e7e2&autoload=false`;
 
-    //이제 우리가 만든 script를 document에 붙여주자.
+    // 이제 우리가 만든 script를 document에 붙여주자.
     document.head.appendChild(mapScript);
 
     // script가 완전히 load 된 이후, 실행될 함수

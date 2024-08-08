@@ -5,15 +5,10 @@ import {
   DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuItem,
-} from "../ui/drop-down-menu"; 
-import { useRouter } from "next/navigation";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "../ui/dialog";
-import { Button } from "../ui/button";
+} from '../ui/drop-down-menu';
+import { useRouter } from 'next/navigation';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../ui/dialog';
+import { Button } from '../ui/button';
 import axios from 'axios';
 const baseURL = process.env.NEXT_PUBLIC_BASE_URL;
 
@@ -26,20 +21,19 @@ function UserMenu() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [Password, setPasswordError] = useState('');
 
-
   const [isEditingUserName, setIsEditingUserName] = useState(false);
-  const [originalUserName, setOriginalUserName] = useState(''); 
+  const [originalUserName, setOriginalUserName] = useState('');
   const [userName, setUserName] = useState('');
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
   const [local, setLocal] = useState('local');
   const [verified, setVerified] = useState(false);
-  const [userNameLimit, setUserNameLimit] = useState(20); 
+  const [userNameLimit, setUserNameLimit] = useState(20);
   const [emailSent, setEmailSent] = useState(false);
 
-  function deleteCookie(name:string ) {
-        document.cookie = name + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-}
+  function deleteCookie(name: string) {
+    document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+  }
   const router = useRouter();
 
   useEffect(() => {
@@ -71,8 +65,9 @@ function UserMenu() {
     }
 
     try {
-      const response = await api.put('/api/user/display-name', 
-        { newDisplayName: userName }, 
+      const response = await api.put(
+        '/api/user/display-name',
+        { newDisplayName: userName },
         { withCredentials: true }
       );
 
@@ -88,15 +83,15 @@ function UserMenu() {
   };
 
   const handleDeleteUser = async () => {
-    const userConfirmed = confirm("정말 탈퇴하시겠습니까?");
-  
+    const userConfirmed = confirm('정말 탈퇴하시겠습니까?');
+
     if (userConfirmed) {
       try {
         const response = await api.delete('/api/user', { withCredentials: true });
-  
+
         if (response.status === 200) {
-          alert("성공적으로 탈퇴하였습니다.");
-          deleteCookie("connect.sid");
+          alert('성공적으로 탈퇴하였습니다.');
+          deleteCookie('connect.sid');
           location.reload();
           console.log('User deleted successfully:', response.data);
         }
@@ -113,19 +108,19 @@ function UserMenu() {
     e.preventDefault();
 
     if (newPassword.length < 8) {
-      setPasswordError("새 비밀번호는 최소 8자 이상이어야 합니다.");
+      setPasswordError('새 비밀번호는 최소 8자 이상이어야 합니다.');
       return;
     }
 
     if (newPassword !== confirmPassword) {
-      setPasswordError("비밀번호가 일치하지 않습니다.");
+      setPasswordError('비밀번호가 일치하지 않습니다.');
       return;
     }
 
-    setPasswordError("");
-    setCurrentPassword("");
-    setNewPassword("");
-    setConfirmPassword("");
+    setPasswordError('');
+    setCurrentPassword('');
+    setNewPassword('');
+    setConfirmPassword('');
     setIsEditingPassword(false);
 
     if (newPassword !== confirmPassword) {
@@ -134,10 +129,14 @@ function UserMenu() {
     }
 
     try {
-      const response = await api.put('/api/user/password', {
-        currentPassword,
-        newPassword,
-      }, { withCredentials: true });
+      const response = await api.put(
+        '/api/user/password',
+        {
+          currentPassword,
+          newPassword,
+        },
+        { withCredentials: true }
+      );
 
       if (response.status === 200) {
         console.log('Password changed successfully.');
@@ -155,16 +154,16 @@ function UserMenu() {
 
   const handleMenuClick = async (action: string) => {
     switch (action) {
-      case "mypage":
-        router.push("/my");
+      case 'mypage':
+        router.push('/my');
         break;
-      case "myaccount":
+      case 'myaccount':
         setModalOpen(true);
         break;
-      case "logout":
+      case 'logout':
         try {
           await api.post('/api/logout', {}, { withCredentials: true });
-          deleteCookie("connect.sid");
+          deleteCookie('connect.sid');
 
           location.reload();
         } catch (error) {
@@ -175,7 +174,7 @@ function UserMenu() {
         break;
     }
   };
-  
+
   const onEmailSubmitCheck = async () => {
     if (!email) return;
     try {
@@ -202,15 +201,9 @@ function UserMenu() {
           <Button>메뉴</Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent sideOffset={4}>
-          <DropdownMenuItem onClick={() => handleMenuClick("mypage")}>
-            마이 페이지
-          </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => handleMenuClick("myaccount")}>
-            내 계정
-          </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => handleMenuClick("logout")}>
-            로그아웃
-          </DropdownMenuItem>
+          <DropdownMenuItem onClick={() => handleMenuClick('mypage')}>마이 페이지</DropdownMenuItem>
+          <DropdownMenuItem onClick={() => handleMenuClick('myaccount')}>내 계정</DropdownMenuItem>
+          <DropdownMenuItem onClick={() => handleMenuClick('logout')}>로그아웃</DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
       {verified === true ? (
@@ -221,33 +214,33 @@ function UserMenu() {
                 계정 관리
               </DialogTitle>
             </DialogHeader>
-            <div className="flex flex-col space-y-4">
+            <div className='flex flex-col space-y-4'>
               {/* Username Section */}
               <div>
-                <span className="text-sm font-medium text-gray-700">닉네임</span>
-                <div className="flex items-center">
+                <span className='text-sm font-medium text-gray-700'>닉네임</span>
+                <div className='flex items-center'>
                   {isEditingUserName ? (
                     <>
                       <input
-                        type="text"
+                        type='text'
                         value={userName}
                         onChange={(e) => setUserName(e.target.value)}
                         maxLength={userNameLimit}
-                        className="border p-2 rounded"
-                        placeholder="닉네임 입력"
+                        className='border p-2 rounded'
+                        placeholder='닉네임 입력'
                       />
                       <Button
-                        className="ml-2"
+                        className='ml-2'
                         onClick={handleUserNameChange} // Save username
                       >
                         저장
                       </Button>
                       <Button
-                        className="ml-2"
+                        className='ml-2'
                         onClick={() => {
                           setUserName(originalUserName); // 취소 시 원래 값으로 복구
                           setIsEditingUserName(false);
-                        }} 
+                        }}
                       >
                         취소
                       </Button>
@@ -256,8 +249,8 @@ function UserMenu() {
                     <>
                       <span>{userName}</span>
                       <Button
-                        className="ml-auto"
-                        onClick={() =>  {
+                        className='ml-auto'
+                        onClick={() => {
                           setUserName(userName);
                           setIsEditingUserName(true);
                         }}
@@ -267,69 +260,66 @@ function UserMenu() {
                     </>
                   )}
                 </div>
-                {error && <span className="text-red-500 text-sm">{error}</span>} {/* Display error messages */}
+                {error && <span className='text-red-500 text-sm'>{error}</span>}{' '}
+                {/* Display error messages */}
                 {isEditingUserName && (
-                  <span className="text-sm text-gray-500">
-                    {userName.length}/{userNameLimit} 글자 수 
+                  <span className='text-sm text-gray-500'>
+                    {userName.length}/{userNameLimit} 글자 수
                   </span>
                 )}
               </div>
-  
+
               {/* Email Section */}
-              <div className="flex flex-col space-y-2 pt-2">
-                <span className="text-sm font-medium text-gray-700">이메일</span>
-                <span className="pt-1">{email}</span>
+              <div className='flex flex-col space-y-2 pt-2'>
+                <span className='text-sm font-medium text-gray-700'>이메일</span>
+                <span className='pt-1'>{email}</span>
               </div>
-  
+
               {/* Password Section */}
               {local === 'local' && (
-                <div className="pt-2">
-                  <span className="text-sm font-medium text-gray-700">비밀번호</span>
+                <div className='pt-2'>
+                  <span className='text-sm font-medium text-gray-700'>비밀번호</span>
                   {isEditingPassword ? (
                     <form onSubmit={handleSubmit}>
                       <input
-                        type="password"
+                        type='password'
                         value={currentPassword}
                         onChange={(e) => setCurrentPassword(e.target.value)}
-                        placeholder="현재 비밀번호를 입력하세요"
-                        className="border p-2 rounded mb-1"
+                        placeholder='현재 비밀번호를 입력하세요'
+                        className='border p-2 rounded mb-1'
                       />
                       <input
-                        type="password"
+                        type='password'
                         value={newPassword}
                         onChange={(e) => setNewPassword(e.target.value)}
-                        placeholder="변경할 비밀번호를 입력하세요"
-                        className="border p-2 rounded mb-1"
+                        placeholder='변경할 비밀번호를 입력하세요'
+                        className='border p-2 rounded mb-1'
                       />
                       <input
-                        type="password"
+                        type='password'
                         value={confirmPassword}
                         onChange={(e) => setConfirmPassword(e.target.value)}
-                        placeholder="변경할 비밀번호를 확인하세요"
-                        className="border p-2 rounded"
+                        placeholder='변경할 비밀번호를 확인하세요'
+                        className='border p-2 rounded'
                       />
-                       {error && <p className="text-red-500">{Password}</p>}
-                      <div className="flex space-x-2 mt-4">
-                        <Button type="submit" className="ml-auto">
+                      {error && <p className='text-red-500'>{Password}</p>}
+                      <div className='flex space-x-2 mt-4'>
+                        <Button type='submit' className='ml-auto'>
                           저장
                         </Button>
                         <Button
-                          type="button"
-                          className="ml-auto"
-                          onClick={() =>
-                            setIsEditingPassword(false)}
+                          type='button'
+                          className='ml-auto'
+                          onClick={() => setIsEditingPassword(false)}
                         >
                           취소
                         </Button>
                       </div>
                     </form>
                   ) : (
-                    <div className="flex items-center">
+                    <div className='flex items-center'>
                       <span>********</span>
-                      <Button
-                        className="ml-auto"
-                        onClick={() => setIsEditingPassword(true)}
-                      >
+                      <Button className='ml-auto' onClick={() => setIsEditingPassword(true)}>
                         수정
                       </Button>
                     </div>
@@ -337,10 +327,7 @@ function UserMenu() {
                 </div>
               )}
               <div></div>
-              <Button
-                className="mt-4"
-                onClick={handleDeleteUser}
-              >
+              <Button className='mt-4' onClick={handleDeleteUser}>
                 탈퇴하기
               </Button>
             </div>
@@ -350,10 +337,13 @@ function UserMenu() {
         <Dialog open={modalOpen} onOpenChange={handleModalClose}>
           <DialogContent className='sm:max-w-[425px]'>
             <DialogHeader>
-              <DialogTitle className='font-["Cafe24Moyamoya-Face-v1.0"] text-center text-3xl'>이메일 인증</DialogTitle>
+              <DialogTitle className='font-["Cafe24Moyamoya-Face-v1.0"] text-center text-3xl'>
+                이메일 인증
+              </DialogTitle>
             </DialogHeader>
             <p style={{ fontSize: '15px' }}>
-              거의 다 왔습니다!<br />
+              거의 다 왔습니다!
+              <br />
               {email}으로 이메일 인증링크를 전송하려면,아래를 클릭해 주세요.:
             </p>
             {!emailSent ? (
@@ -366,7 +356,9 @@ function UserMenu() {
                 이메일 보내기
               </Button>
             ) : (
-              <p style={{ fontSize: '12px', fontWeight: 'bold' }}>이메일이 보내졌습니다. 메일함을 확인해 주세요.</p>
+              <p style={{ fontSize: '12px', fontWeight: 'bold' }}>
+                이메일이 보내졌습니다. 메일함을 확인해 주세요.
+              </p>
             )}
           </DialogContent>
         </Dialog>
@@ -375,4 +367,4 @@ function UserMenu() {
   );
 }
 
-export default UserMenu;  
+export default UserMenu;

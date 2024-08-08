@@ -9,11 +9,10 @@
       "jsx": true
     }
   },
-  "plugins": ["@typescript-eslint", "react", "react-hooks", "prettier", "import"],
+  "plugins": ["@typescript-eslint", "react", "react-hooks", "prettier"],
   "extends": [
     "eslint:recommended",
     "plugin:@next/next/recommended",
-    "plugin:@typescript-eslint/parser" ,
     "plugin:@typescript-eslint/recommended",
     "plugin:react/recommended",
     "plugin:react-hooks/recommended",
@@ -78,11 +77,10 @@
     "react/jsx-uses-react": "off",
 
     // 정책 임시 추가
-    "@typescript-eslint/no-explicit-any": "off",
-    "react-hooks/exhaustive-deps": "off",
-    "array-callback-return": "off",
-    "@typescript-eslint/ban-types": "off",
-    "import/no-extraneous-dependencies": "off",
+    // "@typescript-eslint/no-explicit-any": "off",
+    // "react-hooks/exhaustive-deps": "off",
+    // "array-callback-return": "off",
+    // "@typescript-eslint/ban-types": "off",
 
     // Ignore no-unused-vars if prefixed with underscore
     "@typescript-eslint/no-unused-vars": [

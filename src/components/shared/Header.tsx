@@ -42,14 +42,14 @@ function Header() {
         <Link href='/' className='text-foreground transition-colors hover:text-muted'>
           메인2
         </Link>
-      
+
         {user ? (
-           <UserMenu/ >
+          <UserMenu />
         ) : (
           <>
-           <Login />
-           <Join />
-         </>
+            <Login />
+            <Join />
+          </>
         )}
       </nav>
     </header>

@@ -4,53 +4,44 @@ import React, { useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import {
-  Dialog,   
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '../ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '../ui/dialog';
 import { Input } from '../ui/input';
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '../ui/form';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form';
 import { Button } from '../ui/button';
 import axios from 'axios';
 const baseURL = process.env.NEXT_PUBLIC_BASE_URL;
 
 const api = axios.create({ baseURL });
 
-const FormSchema = z.object({
-  display_name: z.string().min(2, {
-    message: '이름은 두 글자 이상이어야 합니다.',
-  }),
-  email: z.string().email({
-    message: '올바른 이메일 형식이 아닙니다.',
-  }),
-  password: z.string()
-    .min(1, {
-      message: '비밀번호가 입력되지 않았습니다.',
-    })
-    .min(8, {
-      message: '비밀번호는 여덟 글자 이상이어야 합니다.',
+const FormSchema = z
+  .object({
+    display_name: z.string().min(2, {
+      message: '이름은 두 글자 이상이어야 합니다.',
     }),
-  passwordCheck: z.string()
-    .min(1, {
-      message: '비밀번호가 입력되지 않았습니다.',
-    })
-    .min(8, {
-      message: '비밀번호는 여덟 글자 이상이어야 합니다.',
+    email: z.string().email({
+      message: '올바른 이메일 형식이 아닙니다.',
     }),
-}).refine((data) => data.password === data.passwordCheck, {
-  path: ['passwordCheck'],
-  message: '비밀번호가 일치하지 않습니다.',
-});
+    password: z
+      .string()
+      .min(1, {
+        message: '비밀번호가 입력되지 않았습니다.',
+      })
+      .min(8, {
+        message: '비밀번호는 여덟 글자 이상이어야 합니다.',
+      }),
+    passwordCheck: z
+      .string()
+      .min(1, {
+        message: '비밀번호가 입력되지 않았습니다.',
+      })
+      .min(8, {
+        message: '비밀번호는 여덟 글자 이상이어야 합니다.',
+      }),
+  })
+  .refine((data) => data.password === data.passwordCheck, {
+    path: ['passwordCheck'],
+    message: '비밀번호가 일치하지 않습니다.',
+  });
 
 function Join() {
   const [isRegistered, setIsRegistered] = useState(false);
@@ -135,7 +126,7 @@ function Join() {
             </DialogTitle>
           </DialogHeader>
           <div>
-            {errorMessage && <div className="error-message text-red-600">{errorMessage}</div>}
+            {errorMessage && <div className='error-message text-red-600'>{errorMessage}</div>}
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-8'>
                 <FormField
@@ -201,24 +192,27 @@ function Join() {
       <Dialog open={isSecondDialogOpen} onOpenChange={setIsSecondDialogOpen}>
         <DialogContent className='sm:max-w-[425px]'>
           <DialogHeader>
-            <DialogTitle className='font-["Cafe24Moyamoya-Face-v1.0"] text-center text-3xl'>이메일 인증</DialogTitle>
+            <DialogTitle className='font-["Cafe24Moyamoya-Face-v1.0"] text-center text-3xl'>
+              이메일 인증
+            </DialogTitle>
           </DialogHeader>
           <p style={{ fontSize: '15px' }}>
-            거의 다 왔습니다!<br />
-            {email}으로 이메일 확인 링크를 전송했습니다. 이메일을 확인하고 “내 이메일 주소 확인”을 클릭하세요.<br /><br />
+            거의 다 왔습니다!
+            <br />
+            {email}으로 이메일 확인 링크를 전송했습니다. 이메일을 확인하고 “내 이메일 주소 확인”을
+            클릭하세요.
+            <br />
+            <br />
             이메일을 받지 못하셨나요? 아래를 클릭하여 다시 보내주세요:
           </p>
           {!emailSent ? (
-            <Button
-              type='button'
-              className='w-full'
-              onClick={onEmailSubmitCheck}
-              disabled={!email}
-            >
+            <Button type='button' className='w-full' onClick={onEmailSubmitCheck} disabled={!email}>
               이메일 다시 보내기
             </Button>
           ) : (
-            <p style={{ fontSize: '12px', fontWeight: 'bold' }}>이메일이 보내졌습니다. 메일함을 확인해 주세요.</p>
+            <p style={{ fontSize: '12px', fontWeight: 'bold' }}>
+              이메일이 보내졌습니다. 메일함을 확인해 주세요.
+            </p>
           )}
         </DialogContent>
       </Dialog>
@@ -227,4 +221,3 @@ function Join() {
 }
 
 export default Join;
-

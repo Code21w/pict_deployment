@@ -1,10 +1,14 @@
 import { getErrorMessage } from './errorHandler';
-import instance from './instance';
+import axios from 'axios';
+
+const baseURL = process.env.NEXT_PUBLIC_BASE_URL;
+
+const api = axios.create({ baseURL });
 
 async function UploadFile(formData: FormData) {
   try {
     // Make the POST request
-    const { data } = await instance.post<{
+    const { data } = await api.post<{
       result: Array<{
         gal_title: string;
         image_url: string;
