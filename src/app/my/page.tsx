@@ -1,7 +1,9 @@
 'use client';
+
 import React, { useState, useEffect, MouseEvent } from 'react';
 import axios from 'axios';
 import Link from 'next/link';
+import MainLayout from '@/components/main/MainLayout'; // MainLayout import 추가
 
 axios.defaults.withCredentials = true;  // 쿠키를 포함한 요청 허용
 
@@ -167,32 +169,33 @@ function MyPage() {
   };
 
   return (
-    <main className='bg-white h-screen grid grid-cols-2 divide-x'>
-      <div className='items-center justify-center py-4'>
-        <div className='flex justify-center items-center mt-10 p-4'>
-          <div style={{ padding: '20px', border: '2px solid gray', borderRadius: '0.75rem', width: '75%' }}>
-            <svg
-              viewBox='0 0 509 716.1'
-              className='size-4/5'
-              style={{ background: 'new 0 0 509 716.1' }}
-            >
-              <style type="text/css">
-                {`
-                  .st0 { fill: gray; stroke: #FFFFFF; stroke-width: 0.5; }
-                  .st1 { fill: none; stroke: #000000; stroke-width: 0.5; }
-                  .tooltip {
-                    position: absolute;
-                    background-color: rgba(0, 0, 0, 0.7);
-                    color: white;
-                    padding: 5px;
-                    border-radius: 3px;
-                    pointer-events: none;
-                    white-space: nowrap;
-                    transform: translate(-50%, -100%);
-                  }
-                `}
-              </style>
-              <g id="제주특별자치도">
+    <MainLayout> {/* MainLayout으로 MyPage를 감쌉니다 */}
+      <div className='bg-white h-screen grid grid-cols-2 divide-x'>
+        <div className='items-center justify-center py-4'>
+          <div className='flex justify-center items-center mt-10 p-4'>
+            <div style={{ padding: '20px', border: '2px solid gray', borderRadius: '0.75rem', width: '75%' }}>
+              <svg
+                viewBox='0 0 509 716.1'
+                className='size-4/5'
+                style={{ background: 'new 0 0 509 716.1' }}
+              >
+                <style type="text/css">
+                  {`
+                    .st0 { fill: gray; stroke: #FFFFFF; stroke-width: 0.5; }
+                    .st1 { fill: none; stroke: #000000; stroke-width: 0.5; }
+                    .tooltip {
+                      position: absolute;
+                      background-color: rgba(0, 0, 0, 0.7);
+                      color: white;
+                      padding: 5px;
+                      border-radius: 3px;
+                      pointer-events: none;
+                      white-space: nowrap;
+                      transform: translate(-50%, -100%);
+                    }
+                  `}
+                </style>
+                <g id="제주특별자치도">
               <path id="서귀포시" className="st0" d="M454.8,669.3l21.4-9.5l0.4,0.6l0.2,0l2.8,0.5l-0.6,3.2l1.7-3.6l1.2,3.3l-14.3,22.6l-8.1,0.8
                 l-4.3,4.4l-11.2,0.7l-7.8,5.9l-10.3-0.9l-6.5,2.3l-1.8-2.5l-11.5,1.5l-5.7-1.6l-7.5,7l-13.2-13.7l3.1-2l6.9,3.7l0-2.4l6.6-4.4
                 l6.1-4.1l8.4,0.1l4.3-0.6l0.4-1.4l5.8-0.3l5.2-0.4l7.4-1.8l0.1,0l1.6-0.4l12-5.3l3.6-1.8l0,0l3.4,0L454.8,669.3z"/>
@@ -932,75 +935,76 @@ function MyPage() {
 						152.8,160.4 153.8,157.4 	"/>
 					<polygon id="성동구" className="st0" points="161.9,166.5 168,168.4 165.9,173.3 161.1,172.4 160,170.8 	"/>
 				</g>
-            </svg>
-            {tooltip.visible && (
-              <div className="tooltip" style={{ top: tooltip.y, left: tooltip.x }}>
-                {tooltip.name}
-              </div>
-            )}
+              </svg>
+              {tooltip.visible && (
+                <div className="tooltip" style={{ top: tooltip.y, left: tooltip.x }}>
+                  {tooltip.name}
+                </div>
+              )}
+            </div>
           </div>
         </div>
-      </div>
-      <div className={`font-['Cafe24Moyamoya-Face-v1.0'] text-center text-5xl`}>
-        <div className='pt-10 pb-10 mt-10'>나의 여행 플레이리스트</div>
-        <div className='w-full px-4'>
-          <div className='p-4 rounded-lg border'>
-            {travelPlans.length > 0 ? (
-              travelPlans.map(plan => (
-                <div key={plan.planner_id} className='mb-4 p-4 border rounded shadow'>
-                  {editId === plan.planner_id ? (
-                    <div>
-                      <input
-                        type='text'
-                        value={newTitle}
-                        onChange={(e) => setNewTitle(e.target.value)}
-                        className='border p-2 rounded w-full'
-                      />
-                      <button
-                        onClick={() => handleSaveClick(plan.planner_id)}
-                        className='mt-2 px-2 py-1 bg-blue-500 text-white rounded text-sm'
-                      >
-                        저장
-                      </button>
-                      <button
-                        onClick={handleCancelClick}
-                        className='mt-2 ml-2 px-2 py-1 bg-gray-500 text-white rounded text-sm'
-                      >
-                        취소
-                      </button>
-                    </div>
-                  ) : (
-                    <div className='flex justify-between items-center'>
-                      <h2 className='text-2xl font-bold'>
-                        <Link href={`/plans/${plan.planner_id}`} className='text-foreground transition-colors hover:text-muted'>  {/* 경하님 링크로 변경 */}
-                          {plan.title || '제목 없음'}
-                        </Link>
-                      </h2>
-                      <div className='flex'>
+        <div className={`font-['Cafe24Moyamoya-Face-v1.0'] text-center text-5xl`}>
+          <div className='pt-10 pb-10 mt-10'>나의 여행 플레이리스트</div>
+          <div className='w-full px-4'>
+            <div className='p-4 rounded-lg border'>
+              {travelPlans.length > 0 ? (
+                travelPlans.map(plan => (
+                  <div key={plan.planner_id} className='mb-4 p-4 border rounded shadow'>
+                    {editId === plan.planner_id ? (
+                      <div>
+                        <input
+                          type='text'
+                          value={newTitle}
+                          onChange={(e) => setNewTitle(e.target.value)}
+                          className='border p-2 rounded w-full'
+                        />
                         <button
-                          onClick={() => handleEditClick(plan.planner_id, plan.title)}
-                          className='ml-2 px-2 py-1 bg-yellow-500 text-white rounded text-sm'
+                          onClick={() => handleSaveClick(plan.planner_id)}
+                          className='mt-2 px-2 py-1 bg-blue-500 text-white rounded text-sm'
                         >
-                          수정
+                          저장
                         </button>
                         <button
-                          onClick={() => handleDeleteClick(plan.planner_id)}
-                          className='ml-2 px-2 py-1 bg-red-500 text-white rounded text-sm'
+                          onClick={handleCancelClick}
+                          className='mt-2 ml-2 px-2 py-1 bg-gray-500 text-white rounded text-sm'
                         >
-                          삭제
+                          취소
                         </button>
                       </div>
-                    </div>
-                  )}
-                </div>
-              ))
-            ) : (
-              <p>여행 계획이 없습니다.</p>
-            )}
+                    ) : (
+                      <div className='flex justify-between items-center'>
+                        <h2 className='text-2xl font-bold'>
+                          <Link href={`/plans/${plan.planner_id}`} className='text-foreground transition-colors hover:text-muted'>
+                            {plan.title || '제목 없음'}
+                          </Link>
+                        </h2>
+                        <div className='flex'>
+                          <button
+                            onClick={() => handleEditClick(plan.planner_id, plan.title)}
+                            className='ml-2 px-2 py-1 bg-yellow-500 text-white rounded text-sm'
+                          >
+                            수정
+                          </button>
+                          <button
+                            onClick={() => handleDeleteClick(plan.planner_id)}
+                            className='ml-2 px-2 py-1 bg-red-500 text-white rounded text-sm'
+                          >
+                            삭제
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                ))
+              ) : (
+                <p>여행 계획이 없습니다.</p>
+              )}
+            </div>
           </div>
         </div>
       </div>
-    </main>
+    </MainLayout>
   );
 }
 
