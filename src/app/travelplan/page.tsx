@@ -1,4 +1,5 @@
 'use client';
+import { fetchPlace } from '@/api/travelPlanApi';
 import { TravelDaysSelector } from '@/components/selectDays/TravelDaysSelector';
 import Map from '@/components/shared/kakaoMap';
 import ControlDisplayBlock from '@/components/travel_plan/ControlDisplayBlock';
@@ -8,7 +9,6 @@ import PlaceListBlock from '@/components/travel_plan/PlaceListBlock';
 import TravelPlanCheckButton from '@/components/travel_plan/TravelPlanCheckButton';
 import useCartStore from '@/store/store';
 import { useEffect, useState } from 'react';
-
 interface Place {
   id: number;
   sigungu_id: number;
@@ -32,12 +32,15 @@ function TravelPlan() {
   const [isExpanded, setIsExpanded] = useState(false);
   const setCurrentCart = useCartStore((state) => state.setCurrentCart);
   const currentCart = useCartStore((state) => state.currentCart);
+  const [id, setId] = useState(0);
+
   // const location = sessionStorage.getItem('location');
   // const id = sessionStorage.getItem('id');
 
   // 페이지 첫 렌더링 시 ai가 생성해준 데이터를 로컬 스토리지에서 가져오기
+  // 페이지 첫 렌더링 시 ai가 생성해준 데이터를 로컬 스토리지에서 가져오기
 
-  // const place = fetch()~~~ id로 데이터 place 변수값에 담기
+  // const place = fetch()~~~ id로 데이터 place 변수값에 담아오기
 
   const PLACE_1 = [
     {
@@ -240,13 +243,29 @@ function TravelPlan() {
 
   // 첫 시작시 렌더링
   useEffect(() => {
-    // setAreaName(location);
-    setAreaName('제주');
-    // setRecommendedPlace(place);
-    const place = addCheckProp();
-    setRecommendedPlace(place.attractions);
+    getSession();
+    const PLACE1 = fetchPlace(id, '인문명소');
+    const PLACE2 = fetchPlace(id, '자연명소');
+    const PLACE3 = fetchPlace(id, '액티비티');
+    const PLACE4 = fetchPlace(id, '문화시설');
+    console.log(PLACE1);
+    // const addCheckProp = () => {
+    //       const attractions = PLACE1.map((item) => ({ ...item, isChecked: false }));
+    //       const nature = PLACE2.map((item) => ({ ...item, isChecked: false }));
+    //       const activity = PLACE3.map((item) => ({ ...item, isChecked: false }));
+    //       const culture = PLACE4.map((item) => ({ ...item, isChecked: false }));
+    //       return { attractions, nature, activity, culture };};
     setTempPlace([]);
   }, []);
+
+  //첫 시작시 렌더링
+  // useEffect(() => {
+  // setAreaName(location);
+  // setRecommendedPlace(place);
+  // const place = addCheckProp();
+  // setRecommendedPlace(place.attractions);
+
+  // }, []);
 
   useEffect(() => {
     setCurrentCart(tempPlace);
@@ -257,6 +276,34 @@ function TravelPlan() {
   useEffect(() => {
     // 그래서 currentCart가 업데이트 될때 렌더링 해주도록함
   }, [currentCart]);
+
+  // 세션 스토리지에서 location id와 location 이름을 가져오는함수
+  const getSession = () => {
+    const uploadFileResponseString = sessionStorage.getItem('uploadFileResponse');
+    if (uploadFileResponseString) {
+      const uploadFileResponse = JSON.parse(uploadFileResponseString);
+
+      if (
+        uploadFileResponse.result &&
+        uploadFileResponse.result[0] &&
+        uploadFileResponse.result[0].location
+      ) {
+        const fullLocation = uploadFileResponse.result[0].location;
+        const id = uploadFileResponse.result[0].id;
+
+        // 전체 위치 문자열을 공백으로 나누고 마지막 요소(도시명)를 가져옴
+        const locationParts = fullLocation.split(' ');
+        const cityName = locationParts[locationParts.length - 1];
+
+        setAreaName(cityName);
+        setId(id);
+      } else {
+        console.error('Location data is missing in the uploadFileResponse.');
+      }
+    } else {
+      console.error('uploadFileResponse is not available in sessionStorage.');
+    }
+  };
 
   // isChecked를 추가해주는 함수
   const addCheckProp = () => {
