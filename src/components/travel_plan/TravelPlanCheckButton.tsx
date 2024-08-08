@@ -59,11 +59,11 @@
 import { RecommendedPlace } from '@/app/travelplan/page.tsx';
 import { Button, ButtonProps } from '@/components/ui/button.tsx';
 import { cn } from '@/lib/utils.ts';
-import { HTMLAttributes, ReactNode } from 'react';
+import { HTMLAttributes } from 'react';
 
 export interface TravelPlanCheckButtonProps {
   // changeSelectCount: Function;
-  changeTempPlaceList: Function;
+  changeTempPlaceList: (item: RecommendedPlace) => void;
   item: RecommendedPlace;
 }
 
@@ -74,7 +74,10 @@ const TravelPlanCheckButton = ({
 }: TravelPlanCheckButtonProps) => {
   const { isChecked } = item;
 
-  const getButtonStyles = (): { value: ReactNode } & Pick<HTMLAttributes<'button'>, 'className'> &
+  const getButtonStyles = (): { value: string | JSX.Element } & Pick<
+    HTMLAttributes<'button'>,
+    'className'
+  > &
     Pick<ButtonProps, 'variant'> => {
     return !isChecked
       ? {
