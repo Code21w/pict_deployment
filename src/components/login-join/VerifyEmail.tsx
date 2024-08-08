@@ -4,10 +4,13 @@ import React, { useState, useEffect} from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../ui/dialog';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
+const baseURL = process.env.NEXT_PUBLIC_BASE_URL;
 
+const api = axios.create({ baseURL });
 interface TokenType {
     token: string;
 }
+
 
 const VerifyEmail: React.FC<TokenType> = ({ token }) => {
     const router = useRouter();
@@ -20,7 +23,7 @@ const VerifyEmail: React.FC<TokenType> = ({ token }) => {
     useEffect(() => {
         const verifyToken = async () => {
             try {
-                const response = await axios.post(`http://localhost:3000/api/verify-email/${token}`); 
+                const response = await api.post(`/api/verify-email/${token}`); 
                 console.log(response);
                 const isRegistrationSuccessful = response.data.message === 'User verified successfully';
                 console.log()

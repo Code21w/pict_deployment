@@ -3,7 +3,6 @@ import Script from 'next/script';
 import { ReactNode } from 'react';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
-import { AuthProvider } from '../components/login-join/UserContext';
 
 export const metadata = {
   title: 'My App',
@@ -18,7 +17,6 @@ declare global {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <AuthProvider>
       <html lang='en'>
         <head>
           <meta charSet='UTF-8' />
@@ -44,7 +42,6 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           />
         </body>
       </html>
-    </ AuthProvider>
   );
 }
 

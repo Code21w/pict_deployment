@@ -15,7 +15,9 @@ import {
 } from "../ui/dialog";
 import { Button } from "../ui/button";
 import axios from 'axios';
+const baseURL = process.env.NEXT_PUBLIC_BASE_URL;
 
+const api = axios.create({ baseURL });
 function UserMenu() {
   const [modalOpen, setModalOpen] = useState(false);
   const [isEditingPassword, setIsEditingPassword] = useState(false);
@@ -43,7 +45,7 @@ function UserMenu() {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/api/user', {
+        const response = await api.get('/api/user', {
           withCredentials: true,
         });
         const userData = response.data;
@@ -69,7 +71,7 @@ function UserMenu() {
     }
 
     try {
-      const response = await axios.put('http://localhost:3000/api/user/display-name', 
+      const response = await api.put('/api/user/display-name', 
         { newDisplayName: userName }, 
         { withCredentials: true }
       );
@@ -90,7 +92,7 @@ function UserMenu() {
   
     if (userConfirmed) {
       try {
-        const response = await axios.delete('http://localhost:3000/api/user', { withCredentials: true });
+        const response = await api.delete('/api/user', { withCredentials: true });
   
         if (response.status === 200) {
           alert("성공적으로 탈퇴하였습니다.");
@@ -132,7 +134,7 @@ function UserMenu() {
     }
 
     try {
-      const response = await axios.put('http://localhost:3000/api/user/password', {
+      const response = await api.put('/api/user/password', {
         currentPassword,
         newPassword,
       }, { withCredentials: true });
@@ -161,7 +163,7 @@ function UserMenu() {
         break;
       case "logout":
         try {
-          await axios.post('http://localhost:3000/api/logout', {}, { withCredentials: true });
+          await api.post('/api/logout', {}, { withCredentials: true });
           deleteCookie("connect.sid");
 
           location.reload();
@@ -177,7 +179,7 @@ function UserMenu() {
   const onEmailSubmitCheck = async () => {
     if (!email) return;
     try {
-      const response = await axios.post('http://localhost:3000/api/verify-email', {
+      const response = await api.post('/api/verify-email', {
         email,
       });
       console.log('Verification email sent:', response.data);
