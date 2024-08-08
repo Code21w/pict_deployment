@@ -1,6 +1,7 @@
 import axios from 'axios';
+import { getErrorMessage } from './errorHandler';
 
-const baseURL = `http://localhost:3000`;
+const baseURL = process.env.NEXT_PUBLIC_BASE_URL;
 const api = axios.create({ baseURL });
 
 async function fetchLocationInfo(location: string) {
@@ -17,8 +18,8 @@ async function fetchLocationInfo(location: string) {
       console.error('Response array is empty or undefined');
       return '정보를 불러올 수 없습니다.'; // 기본값 또는 적절한 에러 메시지 제공
     }
-  } catch (error: any) {
-    console.error(error.message);
+  } catch (error: unknown) {
+    console.error(getErrorMessage(error));
     throw error;
   }
 }

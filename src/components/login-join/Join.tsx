@@ -1,11 +1,13 @@
 'use client';
 
+import React from 'react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '../ui/dialog';
+import { Input } from '../ui/input';
+
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '../ui/dialog';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form';
-import { Input } from '../ui/input';
 
 import { Button } from '@/components/ui/button';
 
@@ -47,6 +49,7 @@ function Join() {
   });
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
+    // eslint-disable-next-line no-console
     console.log(data);
   }
 

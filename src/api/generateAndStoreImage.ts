@@ -1,18 +1,12 @@
 import axios from 'axios';
+import { getErrorMessage } from './errorHandler';
 
-const baseURL = `http://localhost:3000`;
+const baseURL = process.env.NEXT_PUBLIC_BASE_URL;
 
 const api = axios.create({ baseURL });
 
-console.log('Axios instance created with config:', api.defaults);
-
 async function generateAndStoreImage(imageUrl: string, locationName: string) {
   try {
-    // const params = {
-    //   imageUrl,
-    //   locationName,
-    // };
-
     const response = await api.get<Response>('/api/generate', {
       params: {
         imageUrl: imageUrl,
@@ -21,8 +15,8 @@ async function generateAndStoreImage(imageUrl: string, locationName: string) {
     });
 
     sessionStorage.setItem('generatedImage', JSON.stringify(response.data));
-  } catch (error: any) {
-    console.error(error.message);
+  } catch (error: unknown) {
+    console.error(getErrorMessage(error));
     throw error;
   }
 }
