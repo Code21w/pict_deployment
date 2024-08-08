@@ -127,23 +127,45 @@ body {
     text-wrap: balance;
   }
 }
+/* @keyframes buttonSlideOut {
+  0% {
+    right: 6px;
+  }
+  100% {
+    right: 0px;
+  }
+}
+@keyframes buttonSlideIn {
+  0% {
+    right: 0px;
+  }
+  100% {
+    right: 6px;
+  }
+} */
 
 @keyframes slideOut {
   0% {
     width: 120px;
   }
   100% {
-    width: 300px;
+    width: 350px;
   }
 }
 @keyframes slideIn {
   0% {
-    width: 300px;
+    width: 350px;
   }
   100% {
     width: 120px;
   }
 }
+/* .buttonSlideOut {
+  animation: buttonSlideOut 0.3s linear;
+}
+.buttonSlideIn {
+  animation: buttonSlideIn 0.3s linear;
+} */
 .slideOut {
   animation: slideOut 0.3s linear;
 }

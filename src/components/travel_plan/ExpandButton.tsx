@@ -1,33 +1,31 @@
 'use client';
 
 import { Button } from '@/components/ui/button.tsx';
-import { RefObject } from 'react';
+
 export interface ExpandButtonProps {
   isExpanded: boolean;
   toggleExpand: () => void;
-  componentRef: RefObject<HTMLDivElement>;
 }
-function ExpandButton({ componentRef, isExpanded, toggleExpand }: ExpandButtonProps) {
-  const slideDiv = componentRef.current;
+
+function ExpandButton({ isExpanded, toggleExpand }: ExpandButtonProps) {
   const getButtonStyles = () => {
     return !isExpanded
-      ? (slideDiv ? (slideDiv.className = 'slideIn relative font-bold w-[120px]') : '',
-        {
+      ? {
           value: 'off',
           content: '>',
-        })
-      : (slideDiv ? (slideDiv.className = 'slideOut relative font-bold w-[300px]') : '',
-        {
+        }
+      : {
           value: 'on',
           content: '<',
-        });
+        };
   };
 
   const { value, content, ...rest } = getButtonStyles();
 
   return (
     <Button
-      className='absolute z-10 -right-11 top-[450px] hover:cursor-pointer'
+      className={`flex w-[5px] right-0 absolute z-10 bottom-[50%] hover:cursor-pointer`}
+      // ${isExpanded ? 'buttonSlideOut' : 'buttonSlideIn'}
       onClick={() => {
         toggleExpand();
       }}
@@ -38,6 +36,7 @@ function ExpandButton({ componentRef, isExpanded, toggleExpand }: ExpandButtonPr
   );
   // }
 }
+
 // }
 
 export default ExpandButton;
