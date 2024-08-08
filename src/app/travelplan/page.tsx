@@ -14,7 +14,7 @@ function TravelPlan() {
   const [checkedPlace, setCheckedPlace] = useState<Array<checkedPlaceType>>([]);
   const [tempPlace, setTempPlace] = useState<string[]>([]);
   // const [placeSelectCount, setPlaceSelectCount] = useState(0);
-  //tempPlace의 배열의 length로 카운트
+  // tempPlace의 배열의 length로 카운트
   const [parentWidth, setParentWidth] = useState<number | undefined>();
   const componentRef = useRef<HTMLDivElement>(null);
   const [isExpanded, setIsExpanded] = useState(false);
@@ -22,7 +22,7 @@ function TravelPlan() {
   // const location = window.localStorage.getItem('location');
   // const id = window.localStorage.getItem('id');
 
-  //페이지 첫 렌더링 시 ai가 생성해준 데이터를 로컬 스토리지에서 가져오기
+  // 페이지 첫 렌더링 시 ai가 생성해준 데이터를 로컬 스토리지에서 가져오기
   interface checkedPlaceType {
     name: string;
     isChecked: boolean;

@@ -11,6 +11,17 @@ import React from 'react';
 import Link from 'next/link';
 import PropTypes from 'prop-types';
 
+interface DialogDemoProps {
+  responseImage: string | null;
+  location: string | null;
+  locationInfo: string;
+  isUploadedImageVisible: boolean;
+  setIsUploadedImageVisible: (visible: boolean) => void;
+  image: string | null;
+  loading: boolean;
+  similarity: number;
+}
+
 export function DialogDemo({
   responseImage,
   location,
@@ -20,7 +31,7 @@ export function DialogDemo({
   image,
   loading,
   similarity,
-}) {
+}: DialogDemoProps) {
   const handleToggleImage = () => {
     setIsUploadedImageVisible(!isUploadedImageVisible);
   };
@@ -60,7 +71,7 @@ export function DialogDemo({
             } else if (isUploadedImageVisible) {
               return (
                 <img
-                  src={image}
+                  src={image || undefined}
                   alt='Uploaded image'
                   className='max-w-full max-h-full object-contain'
                 />
@@ -68,7 +79,7 @@ export function DialogDemo({
             } else if (responseImage) {
               return (
                 <img
-                  src={responseImage}
+                  src={responseImage || undefined}
                   alt='Response image'
                   className='max-w-full max-h-full object-contain'
                 />

@@ -1,36 +1,15 @@
 'use client';
 
-import React, { useState } from 'react'; // useState 추가
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '../ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '../ui/dialog';
 import { Input } from '../ui/input';
-import { Label } from '../ui/label';
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '../ui/form';
+
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form';
 // import { toast } from '@/components/ui/use-toast';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-import Link from 'next/link';
-
 import { Button } from '@/components/ui/button';
-
-import Join from './Join';
 
 const FormSchema = z.object({
   email: z.string().email({
@@ -52,6 +31,7 @@ function Login() {
   });
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
+    // eslint-disable-next-line no-console
     console.log(data);
   }
 

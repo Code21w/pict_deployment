@@ -20,7 +20,7 @@ function Main() {
   const [file, setFile] = useState<File | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [responseImage, setResponseImage] = useState<string | null>(null);
-  const [location, setLocation] = useState('');
+  const [location, setLocation] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [similarity, setSimilarity] = useState(0);
   const [errorMessage, setErrorMessage] = useState('');

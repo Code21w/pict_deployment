@@ -28,6 +28,7 @@
     "no-setter-return": "warn",
     "no-unsafe-finally": "warn",
     "react/jsx-filename-extension": [1, { "extensions": [".tsx", ".jsx"] }],
+    "react/prop-types": "off",
 
     // Best Practices
     "accessor-pairs": "error",
