@@ -4,7 +4,7 @@
 import { SelectDaysModal } from '@/components/selectDays/SelectDaysModal';
 import { useState } from 'react';
 export interface travelDaysSelectorProps {
-  selectDay: Function;
+  selectDay: (days: string) => void;
 }
 export function TravelDaysSelector({ selectDay }: travelDaysSelectorProps) {
   const [isModalOpen, setIsModalOpen] = useState(true);

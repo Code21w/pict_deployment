@@ -1,4 +1,4 @@
-// src/components/selectDays/selectDaysModal.tsx
+// src/components/selectDays/SelectDaysModal.tsx
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -23,20 +23,38 @@ interface SelectDaysModalProps {
   onSave: (days: string) => void;
 }
 
-export const SelectDaysModal: React.FC<SelectDaysModalProps> = ({
-  initialDays,
-  onClose,
-  onSave,
-}) => {
+export const SelectDaysModal: React.FC<SelectDaysModalProps> = ({ initialDays, onSave }) => {
   const [travelDays, setTravelDays] = useState(initialDays);
-  const [cityName, setCityName] = useState(''); // 도시 이름 상태 추가
+  const [location, setLocation] = useState('');
 
   useEffect(() => {
-    const locationInfoResponseString = sessionStorage.getItem('locationInfoResponse');
-    if (locationInfoResponseString) {
-      const locationInfoResponse = JSON.parse(locationInfoResponseString);
-      const cityName = locationInfoResponse.response[0].location.split(' ')[1];
-      setCityName(cityName);
+    const uploadFileResponseString = sessionStorage.getItem('uploadFileResponse');
+    if (uploadFileResponseString) {
+      const uploadFileResponse = JSON.parse(uploadFileResponseString);
+
+      if (
+        uploadFileResponse.result &&
+        uploadFileResponse.result[0] &&
+        uploadFileResponse.result[0].location
+      ) {
+        const fullLocation = uploadFileResponse.result[0].location;
+
+        // 전체 위치 문자열을 공백으로 나누고 마지막 요소(도시명)를 가져옴
+        const locationParts = fullLocation.split(' ');
+        const cityName = locationParts[locationParts.length - 1];
+
+        setLocation(cityName);
+
+        // 도시명만 세션에 저장
+        sessionStorage.setItem('location', cityName);
+
+        // 다음 페이지에서 location 값 이렇게 가져가세요
+        // const cityName = sessionStorage.getItem('location');
+      } else {
+        console.error('Location data is missing in the uploadFileResponse.');
+      }
+    } else {
+      console.error('uploadFileResponse is not available in sessionStorage.');
     }
   }, []);
 
@@ -44,10 +62,10 @@ export const SelectDaysModal: React.FC<SelectDaysModalProps> = ({
     <Card className='w-[460px] h-[400px] py-8'>
       <CardHeader className='p-6 text-center'>
         <CardTitle className='text-lg pb-4 text-gray-600'>
-          {cityName}으로 가는 나만의 트래블 리스트
+          {location}으로 가는 나만의 트래블 리스트
         </CardTitle>
         <CardDescription>
-          <span className='text-4xl font-bold pr-2'>{cityName}</span>
+          <span className='text-4xl font-bold pr-2'>{location}</span>
           <span className='text-2xl mt-2'>으로의 여행을 계획해볼까요?</span>
         </CardDescription>
       </CardHeader>
