@@ -3,9 +3,9 @@
 import React, { useState, useEffect, MouseEvent } from 'react';
 import axios from 'axios';
 import Link from 'next/link';
-import MainLayout from '@/components/main/MainLayout'; // MainLayout import 추가
+import MainLayout from '@/components/main/MainLayout';
 
-axios.defaults.withCredentials = true;  // 쿠키를 포함한 요청 허용
+axios.defaults.withCredentials = true; 
 
 interface TravelPlan {
   planner_id: number;
@@ -128,7 +128,7 @@ function MyPage() {
   const toggleRegionColor = (regionName: string, element: SVGElement) => {
     setSelectedRegions(prevState => {
       const newSelectedRegions = { ...prevState, [regionName]: !prevState[regionName] };
-      element.style.fill = newSelectedRegions[regionName] ? '#FF84C6' : 'gray';
+      element.style.fill = newSelectedRegions[regionName] ? '#5E92CD' : 'gray';
       return newSelectedRegions;
     });
   };
@@ -150,7 +150,7 @@ function MyPage() {
         const [parentId, elementId] = regionName.split(' ');
         const regionElement = document.querySelector(`g[id='${parentId}'] [id='${elementId}']`) as SVGElement;
         if (regionElement) {
-          regionElement.style.fill = '#FF84C6';
+          regionElement.style.fill = '#5E92CD';
           setSelectedRegions(prevState => ({ ...prevState, [regionName]: true }));
         }
       });
@@ -975,7 +975,7 @@ function MyPage() {
                     ) : (
                       <div className='flex justify-between items-center'>
                         <h2 className='text-2xl font-bold'>
-                          <Link href={`/plans/${plan.planner_id}`} className='text-foreground transition-colors hover:text-muted'>
+												<Link href={`/travelItinery/${plan.planner_id}`} className='text-foreground transition-colors hover:text-muted'>
                             {plan.title || '제목 없음'}
                           </Link>
                         </h2>
