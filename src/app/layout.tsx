@@ -38,4 +38,3 @@ export default function RootLayout({ children }: PropsWithChildren) {
     </html>
   );
 }
-

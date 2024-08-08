@@ -1,3 +1,4 @@
+/* eslint-disable import/no-extraneous-dependencies */
 'use client';
 
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '../ui/dialog';
