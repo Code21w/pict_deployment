@@ -1,12 +1,9 @@
-import axios from 'axios';
 import { getErrorMessage } from './errorHandler';
-
-const baseURL = process.env.NEXT_PUBLIC_BASE_URL;
-const api = axios.create({ baseURL });
+import instance from './instance';
 
 async function fetchLocationInfo(location: string) {
   try {
-    const response = await api.get(`/api/sigungu/${location}`);
+    const response = await instance.get(`/api/sigungu/${location}`);
     if (response.data.response && response.data.response.length > 0) {
       const explanation = response.data.response[0].explanation;
 

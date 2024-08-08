@@ -1,5 +1,5 @@
 // src/components/selectDays/SelectDaysModal.tsx
-import { useState, useEffect } from 'react';
+import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
@@ -8,7 +8,6 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
 import {
   Select,
   SelectContent,
@@ -16,6 +15,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { useEffect, useState } from 'react';
 
 interface SelectDaysModalProps {
   initialDays: string;
@@ -63,8 +63,10 @@ export const SelectDaysModal: React.FC<SelectDaysModalProps> = ({ initialDays, o
       <CardHeader className='p-6 text-center'>
         <CardTitle className='text-lg pb-4 text-gray-600'>
           {location}으로 가는 나만의 트래블 리스트
+          {location}으로 가는 나만의 트래블 리스트
         </CardTitle>
         <CardDescription>
+          <span className='text-4xl font-bold pr-2'>{location}</span>
           <span className='text-4xl font-bold pr-2'>{location}</span>
           <span className='text-2xl mt-2'>으로의 여행을 계획해볼까요?</span>
         </CardDescription>

@@ -1,30 +1,62 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, MouseEvent } from 'react';
+import axios from 'axios';
+import Link from 'next/link';
+import MainLayout from '@/components/main/MainLayout'; // MainLayout import 추가
 
-const initialTravelPlans = [
-  { id: 1, title: '서울 여행' },
-  { id: 2, title: '부산 여행' },
-  { id: 3, title: '제주도 여행' },
-];
+axios.defaults.withCredentials = true;  // 쿠키를 포함한 요청 허용
+
+interface TravelPlan {
+  planner_id: number;
+  title: string;
+}
+
+const initialTravelPlans: TravelPlan[] = [];
 
 function MyPage() {
-  const [travelPlans, setTravelPlans] = useState(initialTravelPlans);
+  const [travelPlans, setTravelPlans] = useState<TravelPlan[]>(initialTravelPlans);
   const [editId, setEditId] = useState<number | null>(null);
   const [newTitle, setNewTitle] = useState<string>('');
+  const [tooltip, setTooltip] = useState<{ visible: boolean, x: number, y: number, name: string | null }>({ visible: false, x: 0, y: 0, name: null });
+  const [selectedRegions, setSelectedRegions] = useState<{ [key: string]: boolean }>({});
+
+  useEffect(() => {
+    fetchTravelPlans();
+    addEventToRegions();
+    fetchScratchMap();
+  }, []);
+
+  const fetchTravelPlans = async () => {
+    try {
+      const response = await axios.get('http://localhost:3000/api/mypage/titles');
+      setTravelPlans(response.data);
+    } catch (error) {
+      console.error('Failed to fetch travel plans:', error);
+    }
+  };
 
   const handleEditClick = (id: number, currentTitle: string) => {
     setEditId(id);
     setNewTitle(currentTitle || '');
   };
 
-  const handleSaveClick = (id: number) => {
-    const updatedPlans = travelPlans.map(plan =>
-      plan.id === id ? { ...plan, title: newTitle || '제목 없음' } : plan
-    );
-    setTravelPlans(updatedPlans);
-    setEditId(null);
-    setNewTitle('');
+  const handleSaveClick = async (id: number) => {
+    const plan = travelPlans.find(plan => plan.planner_id === id);
+    if (!plan) return;
+
+    try {
+      await axios.put('http://localhost:3000/api/mypage/titles', {
+        oldTitle: plan.title,
+        newTitle,
+        plannerId: id
+      });
+      fetchTravelPlans();
+      setEditId(null);
+      setNewTitle('');
+    } catch (error) {
+      console.error('Failed to save title:', error);
+    }
   };
 
   const handleCancelClick = () => {
@@ -32,35 +64,138 @@ function MyPage() {
     setNewTitle('');
   };
 
-  const handleDeleteClick = (id: number) => {
-    const updatedPlans = travelPlans.filter(plan => plan.id !== id);
-    setTravelPlans(updatedPlans);
+  const handleDeleteClick = async (id: number) => {
+    const plan = travelPlans.find(plan => plan.planner_id === id);
+    if (!plan) return;
+
+    try {
+      await axios.delete('http://localhost:3000/api/mypage/titles', {
+        data: {
+          title: plan.title,
+          plannerId: id
+        }
+      });
+      fetchTravelPlans();
+    } catch (error) {
+      console.error('Failed to delete title:', error);
+    }
+  };
+
+  const handleRegionClick = async (event: MouseEvent<SVGElement>) => {
+    const target = event.currentTarget as SVGElement;
+    const parent = target.closest('g');
+    const regionId = parent ? parent.id : target.id;
+    const elementId = target.id;
+    let regionName = parent ? `${parent.id} ${elementId}` : elementId;
+
+    // 세종특별자치시의 경우 예외 처리
+    if (regionName === '세종특별자치시 세종특별자치시') {
+      regionName = '세종특별자치시';
+    }
+
+    toggleRegionColor(regionName, target); // 먼저 색상을 토글합니다
+
+    try {
+      await axios.post('http://localhost:3000/api/scratch_map', { sigungu_name: regionName });
+    } catch (error) {
+      console.error('Error sending data:', error);
+      // 실패 시 색상 복원
+      toggleRegionColor(regionName, target);
+    }
+  };
+
+  const handleMouseEnter = (event: MouseEvent<SVGElement>) => {
+    const target = event.currentTarget as SVGElement;
+    const parent = target.closest('g');
+    const regionId = parent ? parent.id : '';
+    const elementId = target.id;
+    let name = `${regionId} ${elementId}`;
+
+    // 세종특별자치시의 경우 예외 처리
+    if (name === '세종특별자치시 세종특별자치시') {
+      name = '세종특별자치시';
+    }
+
+    const { clientX: x, clientY: y } = event;
+
+    setTooltip({ visible: true, x, y, name });
+  };
+
+  const handleMouseLeave = () => {
+    setTooltip({ visible: false, x: 0, y: 0, name: null });
+  };
+
+  const toggleRegionColor = (regionName: string, element: SVGElement) => {
+    setSelectedRegions(prevState => {
+      const newSelectedRegions = { ...prevState, [regionName]: !prevState[regionName] };
+      element.style.fill = newSelectedRegions[regionName] ? '#FF84C6' : 'gray';
+      return newSelectedRegions;
+    });
+  };
+
+  const fetchScratchMap = async () => {
+    try {
+      const response = await axios.get('http://localhost:3000/api/scratch_map');
+      const regions = response.data;
+      console.log('Fetched regions:', regions); // 로그 추가
+      regions.forEach((region: { sigungu: string }) => {
+        let regionName = region.sigungu;
+
+        // 세종특별자치시의 경우 예외 처리
+        if (regionName === '세종특별자치시') {
+          regionName = '세종특별자치시 세종특별자치시';
+        }
+
+        // g 태그와 path/polygon 태그의 id 조합
+        const [parentId, elementId] = regionName.split(' ');
+        const regionElement = document.querySelector(`g[id='${parentId}'] [id='${elementId}']`) as SVGElement;
+        if (regionElement) {
+          regionElement.style.fill = '#FF84C6';
+          setSelectedRegions(prevState => ({ ...prevState, [regionName]: true }));
+        }
+      });
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
+
+  const addEventToRegions = () => {
+    const regions = document.querySelectorAll<SVGElement>('svg path, svg polygon');
+    regions.forEach(region => {
+      region.addEventListener('click', handleRegionClick as unknown as EventListener);
+      region.addEventListener('mouseenter', handleMouseEnter as unknown as EventListener);
+      region.addEventListener('mouseleave', handleMouseLeave as unknown as EventListener);
+    });
   };
 
   return (
-    <main className='bg-white h-screen grid grid-cols-2 divide-x'>
-      <div className='items-center justify-center py-4'>
-        {/* <div className='flex items-center justify-center py-4'>
-          <div className='items-center justify-center py-4 mr-44 pt-10 ' >
-            <div>Sherlock Holmes</div>
-            <div>Sherlock Holmes@gmail.com</div>
-          </div>
-          <p>회원정보 변경</p>
-        </div> */}
-        <div className='flex justify-center items-center mt-10 p-4 border '>
-          <div style={{ padding: '20px', border: '2px solid gray', borderRadius: '0.75rem' , width:"75%" }}>
-            <svg
-              viewBox='0 0 509 716.1'
-              className='size-4/5'
-              style={{ background: 'new 0 0 509 716.1' }}
-            >
-              <style type="text/css">
-                {`
-                  .st0 { fill: #B8B8B8; stroke: #FFFFFF; stroke-width: 0.5; }
-                  .st1 { fill: none; stroke: #000000; stroke-width: 0.5; }
-                `}
-              </style>
-						<g id="제주특별자치도">
+    <MainLayout> {/* MainLayout으로 MyPage를 감쌉니다 */}
+      <div className='bg-white h-screen grid grid-cols-2 divide-x'>
+        <div className='items-center justify-center py-4'>
+          <div className='flex justify-center items-center mt-10 p-4'>
+            <div style={{ padding: '20px', border: '2px solid gray', borderRadius: '0.75rem', width: '75%' }}>
+              <svg
+                viewBox='0 0 509 716.1'
+                className='size-4/5'
+                style={{ background: 'new 0 0 509 716.1' }}
+              >
+                <style type="text/css">
+                  {`
+                    .st0 { fill: gray; stroke: #FFFFFF; stroke-width: 0.5; }
+                    .st1 { fill: none; stroke: #000000; stroke-width: 0.5; }
+                    .tooltip {
+                      position: absolute;
+                      background-color: rgba(0, 0, 0, 0.7);
+                      color: white;
+                      padding: 5px;
+                      border-radius: 3px;
+                      pointer-events: none;
+                      white-space: nowrap;
+                      transform: translate(-50%, -100%);
+                    }
+                  `}
+                </style>
+                <g id="제주특별자치도">
               <path id="서귀포시" className="st0" d="M454.8,669.3l21.4-9.5l0.4,0.6l0.2,0l2.8,0.5l-0.6,3.2l1.7-3.6l1.2,3.3l-14.3,22.6l-8.1,0.8
                 l-4.3,4.4l-11.2,0.7l-7.8,5.9l-10.3-0.9l-6.5,2.3l-1.8-2.5l-11.5,1.5l-5.7-1.6l-7.5,7l-13.2-13.7l3.1-2l6.9,3.7l0-2.4l6.6-4.4
                 l6.1-4.1l8.4,0.1l4.3-0.6l0.4-1.4l5.8-0.3l5.2-0.4l7.4-1.8l0.1,0l1.6-0.4l12-5.3l3.6-1.8l0,0l3.4,0L454.8,669.3z"/>
@@ -89,7 +224,7 @@ function MyPage() {
 							L289.3,580.9z M268.3,578.4l3.7-1.4l4.6,3.3l0,0.1l-0.2,2.1l-4,6.2l2.5,5.8l3.5,4.1l5.9-3.7l5.2-0.2l2.4,0.9l1.3,1l-0.6,10.4
 							l0.1,0.1l-2.6,3.9l3.3,3l-4.6,1.4l-1.2-3.7l-7.4,2.4l-0.7-10.6l-6.3,2.4l0.3,5.3l-6.2,0l-2.7-3.5l2.9-4.1l-6.1-10.9l2-5.8l-0.1-1.6
 							l0.1-1.5l5.5,0.9l-2.1-3.6l0.7-1.7L268.3,578.4z"/>
-						<path id="고성군_00000028326800830962186490000011380967607044266940_" className="st0" d="M320.7,581.6l-0.7-3.9l-8.8,1.2l-0.3,3.9
+						<path id="고성군" className="st0" d="M320.7,581.6l-0.7-3.9l-8.8,1.2l-0.3,3.9
 							l-1.1,2.4l-4.1-2.5l-2.6,3.2l-2.3-3.2l-2.1,1.6l1.2-3.6l1,0l1.9-9.1l4.5-0.7l-1.5-4.2l3.3-6.1l3.4-3.5l-3-2.2l2.8-4.3l17.8-2.1
 							l6.6,6.7l3.5-0.5l-0.5,4.7l-7.5,1.3l0.6,5.2l9.4-7.2l1-1.4l0.2-0.1l2-0.6l0.1-0.1l1.8,1.5l-2.9,2.9l5.4,5.3l-2,2.1l-0.8,1.1
 							l-9.1-0.1l4.5,3.3l-13.4,5.9l-2.2-4.3l-2.5,7.8l-0.1,0.1l-2.5-0.5L320.7,581.6z"/>
@@ -216,11 +351,11 @@ function MyPage() {
 					<path id="경주시" className="st0" d="M430.9,402.1l3.9,4.2l8.4-7.7l4.9,2l-1.1,5.6l11,25.2l6.1,1l2.2-4.2l3.9,5.8l6.7,1.2l-6.8,29.4
 						l-12.3-4.2l-7.2,5.7l-5.3-2.6l0.1-6.3l-14.2-3.5l-8.7,5.1l0.6,7.8l-4.4-1.1l-1.3-7l-4.4,0.3l-4-6.7l5.1-17.1l1.3-9.5l4.8-5.5
 						l6.5,3.7l2.3-1.7l-3.1-12.2l4.2-0.8l-1.3-3.8L430.9,402.1z"/>
-					<path id="포항시_북구" className="st0" d="M458.6,377.6L458.6,377.6L458.6,377.6L458.6,377.6L458.6,377.6z M462.1,385.2l0,4.6
-						l5.5,2.6l-7.6,8.2l-3.6,7.3l-8.4-7.4l0,0l-4.9-2l-8.4,7.7l-3.9-4.2l-7.4-6.4l0.5-4l-3.5,1.3l-3.5-6.5l-7-1.8l11.5-10.6l-3.6-3.8
-						l0.6-1.5l0.2-0.3l9.3,1.3l4.9,5.7l10-15.3l5.8-0.5l1,8.7l9.1-0.2l-0.2,9.4l0,0l0,0l1.6,3.5l0.5,0.1l1.2,3.6L462.1,385.2z"/>
-					<path id="포항시_남구" className="st0" d="M477.7,402.2l0.7-1.4l4.1-5.4l3.4,11.5l-8,14.1l0.2,7.9l0,0l2.1,1.1l-3.2,5.1l-6.7-1.2
-						l-3.9-5.8l-2.2,4.2l-6.1-1l-11-25.2l1.1-5.6l8.4,7.4l2.6-5.5l1.8,3.2l5.8-0.4l-3.8,1.5l5.6,4.7l2.7-2.7L477.7,402.2z"/>
+					<path id="포항시" className="st0" d="M458.6,377.6L458.6,377.6L458.6,377.6L458.6,377.6L458.6,377.6z M462.1,385.2l0,4.6
+  					l5.5,2.6l-7.6,8.2l-3.6,7.3l-8.4-7.4l0,0l-4.9-2l-8.4,7.7l-3.9-4.2l-7.4-6.4l0.5-4l-3.5,1.3l-3.5-6.5l-7-1.8l11.5-10.6l-3.6-3.8
+  					l0.6-1.5l0.2-0.3l9.3,1.3l4.9,5.7l10-15.3l5.8-0.5l1,8.7l9.1-0.2l-0.2,9.4l0,0l0,0l1.6,3.5l0.5,0.1l1.2,3.6L462.1,385.2z
+  					M477.7,402.2l0.7-1.4l4.1-5.4l3.4,11.5l-8,14.1l0.2,7.9l0,0l2.1,1.1l-3.2,5.1l-6.7-1.2l-3.9-5.8l-2.2,4.2l-6.1-1l-11-25.2
+  					l1.1-5.6l8.4,7.4l2.6-5.5l1.8,3.2l5.8-0.4l-3.8,1.5l5.6,4.7l2.7-2.7L477.7,402.2z"/>
 					<path id="울릉군" className="st0" d="M492.5,352.7l0.3,8.7l-5.4,5.2l-8.1-3l-2.4-7.5l13.9-4.7l1.1,1.1L492.5,352.7z M506.2,367.1
 						l0.3,0.3l-0.9,0.6l-0.1,0.1l-0.7-0.4l1-0.8l0.1,0.3L506.2,367.1z M504.4,366.6l-0.7,0.9l-1-1.3l1.1-0.7L504.4,366.6L504.4,366.6z
 						 M504.1,366L504.1,366L504.1,366L504.1,366L504.1,366z"/>
@@ -628,11 +763,11 @@ function MyPage() {
 						210.6,242.2 199.5,237.3 197.1,239.5 191.6,231.6 190,236.8 181.8,242.9 	"/>
 					<polygon id="구리시" className="st0" points="172.8,155.5 177.2,155.2 180.2,165.1 179.9,165.4 173.3,168.9 171.5,166.2 
 						172.1,158.9 	"/>
-					<polygon id="안산시_단원구_00000145048440221413544630000011872595071915344797_" className="st0" points="124.8,206 
+					<polygon id="안산시_단원구" className="st0" points="124.8,206 
 						133.6,209.3 135.8,209.1 136.8,208.2 139,207.8 139,199 139.1,198.3 133.2,200.2 131.8,203.1 128.8,202.5 	"/>
 				</g>
 				<g id="세종특별자치시">
-					<polygon id="세종특별자치시_00000020366141440786130000000003127030897387599272_" className="st0" points="193.7,347.6 
+					<polygon id="세종특별자치시" className="st0" points="193.7,347.6 
 						189.7,348.8 183.2,343.6 179.5,332.8 184.3,322 177.1,315.5 178.6,304.4 174.3,301.5 177.4,298.4 183.1,298.5 189.2,303.6 
 						194.2,304.4 197,305.8 192.9,312.4 196,320.8 200.8,324.5 205.7,323.6 209.7,329.7 208.1,335.6 203.6,335.7 203.5,339.6 
 						203.5,339.6 203.1,341.4 203,342 203,342 202.7,342.4 202.7,342.4 201.8,342.7 201.1,345 201.1,345 200.8,345.3 200.8,345.3 
@@ -642,13 +777,13 @@ function MyPage() {
 					<path id="울주군" className="st0" d="M457.9,493.5l-0.5,0.4l0.2,1.3l1.5,4.4l0,0l-2,7.9l2.6,2.8l-7.3,4.7l-5.1-8.8l-8.2,0l2.2-3.2
 						l-2.8-4.6l-7-1.2L420.1,484l-7.8,0.8l0.3-2.6l-3.3-2.3l6.1-3.8l-2.2-5.6l5.6-4.8l4.4,1.1l-0.6-7.8l8.7-5.1l14.2,3.5l-0.1,6.3
 						l5.3,2.6l-0.6,7.9l0.6,2.7l-5.4-2.1l1.7,5.2l-3.7,3.3L457.9,493.5z"/>
-					<path id="북구_00000009551120665523072970000015517345454175827332_" className="st0" d="M450.5,466.1l7.2-5.7l12.3,4.2l0.5,12.4
+					<path id="북구" className="st0" d="M450.5,466.1l7.2-5.7l12.3,4.2l0.5,12.4
 						l-4.9,2.1l-2.1,5.4l-1.6-0.9l-4.7-2.8l-0.1-7.1l-7.4,0.4L450.5,466.1z"/>
-					<path id="동구_00000153670336490173914480000007280234862974620039_" className="st0" d="M470.6,477l-0.7,12.5l-4.8,3.1l-0.3-1.1
+					<path id="동구" className="st0" d="M470.6,477l-0.7,12.5l-4.8,3.1l-0.3-1.1
 						l0-1.2l0.1-0.3l-1.1-2.6l-0.5-2.2l0.3-0.9l2.1-5.4L470.6,477z"/>
-					<path id="남구_00000116235787361681521350000007395983019771300517_" className="st0" d="M446.8,479.7l10.6,1l3.9,3.2l-2.6,0l3.5,1.9
+					<path id="남구" className="st0" d="M446.8,479.7l10.6,1l3.9,3.2l-2.6,0l3.5,1.9
 						l0.5,1.8l-4.3-0.4l4.4,3l-4.1,4.4l-0.7-1.1L443.1,483L446.8,479.7z"/>
-					<polygon id="중구_00000032630116403187728130000008423414302185526412_" className="st0" points="449.9,474 457.2,473.6 457.4,480.7 
+					<polygon id="중구" className="st0" points="449.9,474 457.2,473.6 457.4,480.7 
 						446.8,479.7 445.1,474.5 450.5,476.6 	"/>
 				</g>
 				<g id="대전광역시">
@@ -658,24 +793,24 @@ function MyPage() {
 						194.3,347.4 198.1,346.6 200.2,345.7 200.7,345.5 200.8,345.3 201.1,345.1 201.8,342.7 201.8,342.7 202.7,342.4 202.9,342 
 						203,341.4 203.1,341.4 203.5,339.6 203.6,335.7 208.1,335.6 209.1,337.6 209.1,337.8 208.8,338.9 208.7,339.8 208.8,341.1 
 						207.2,343.4 211.1,347.9 207.7,354.4 	"/>
-					<polygon id="서구_00000070079308241807456810000009906952303145040783_" className="st0" points="204.8,367.2 204.8,367.2 205,369.9 
+					<polygon id="서구" className="st0" points="204.8,367.2 204.8,367.2 205,369.9 
 						204,378.2 199.9,383.7 193.5,374 194.8,371.1 194.8,371.1 202.3,357.2 207.7,354.4 207.7,354.4 209,357.8 	"/>
-					<polygon id="중구_00000094613238931185809090000008225692606241301176_" className="st0" points="210.4,359.1 216,366.7 212.1,366.8 
+					<polygon id="중구" className="st0" points="210.4,359.1 216,366.7 212.1,366.8 
 						214,375.1 211.4,379.9 207,372.7 205,369.9 204.8,367.2 209,357.8 	"/>
-					<polygon id="동구_00000077295828839796765370000017862375135753146537_" className="st0" points="220.2,343.7 221.4,348.5 223,346.4 
+					<polygon id="동구" className="st0" points="220.2,343.7 221.4,348.5 223,346.4 
 						228.1,350.7 224.4,351.9 221.3,359.4 220.3,375.2 214.7,381.7 211.4,379.9 214,375.1 212.1,366.8 216,366.7 210.4,359.1 
 						212.4,356.3 212.4,356.3 216.7,357.6 215.6,349.9 	"/>
 				</g>
 				<g id="광주광역시">
 					<polygon id="광산구" className="st0" points="112.7,550.4 111.4,545.4 114.9,541.4 112.5,538.3 120.5,535.3 126.3,528 125.7,531.9 
 						135.9,532.8 139.1,539.5 136.3,540.6 131.6,553.9 127.5,557.5 122.6,550.8 	"/>
-					<polygon id="북구_00000166644947004510416370000000521895385418006683_" className="st0" points="141.6,529.2 146.1,528.2 153,540.4 
+					<polygon id="북구" className="st0" points="141.6,529.2 146.1,528.2 153,540.4 
 						159.8,541.6 158.1,547.7 157.5,549.7 149.1,543.3 145.1,544.9 136.3,540.6 139.1,539.5 135.9,532.8 	"/>
-					<polygon id="남구_00000057829278394348245060000007176446015815177360_" className="st0" points="131.6,553.9 142.6,550.3 
+					<polygon id="남구" className="st0" points="131.6,553.9 142.6,550.3 
 						142.3,545.7 145.4,545.3 146.6,554.3 143.1,556.4 133.5,560.3 125.6,559.4 127.5,557.5 	"/>
-					<polygon id="서구_00000160873284323135002220000003850002728341375910_" className="st0" points="136.3,540.6 145.1,544.9 
+					<polygon id="서구" className="st0" points="136.3,540.6 145.1,544.9 
 						145.4,545.3 142.3,545.7 142.6,550.3 131.6,553.9 	"/>
-					<polygon id="동구_00000183228372764615208210000009311056761204497822_" className="st0" points="145.1,544.9 149.1,543.3 
+					<polygon id="동구" className="st0" points="145.1,544.9 149.1,543.3 
 						157.5,549.7 150.7,557.2 146.6,554.3 145.4,545.3 	"/>
 				</g>
 				<g id="대구광역시">
@@ -689,11 +824,11 @@ function MyPage() {
 					<polygon id="북구" className="st0" points="361.4,413.5 365.2,424 362.5,431.2 358.6,430.6 351.7,429.3 349,428.8 351.2,424.8 
 						352.1,423.7 352.2,423.1 352.6,422.3 351.9,414.8 355.9,415.9 356,415.9 	"/>
 					<polygon id="남구" className="st0" points="358,433.6 362.3,434.3 360.2,441.5 359.7,441.8 355.6,437.6 	"/>
-					<polygon id="서구_00000095322446012922971850000014221499316402633894_" className="st0" points="351.7,429.3 358.6,430.6 
+					<polygon id="서구" className="st0" points="351.7,429.3 358.6,430.6 
 						357.9,433.2 350.9,432.2 	"/>
-					<polygon id="동구_00000147187987661311838080000001073673105068167085_" className="st0" points="373.1,409 378.1,412.5 377.7,413.7 
+					<polygon id="동구" className="st0" points="373.1,409 378.1,412.5 377.7,413.7 
 						381.9,428.9 380.4,433.7 377.2,433.7 363.1,432.3 362.5,431.2 365.2,424 361.4,413.5 366.1,410 370.3,409.5 	"/>
-					<polygon id="중구_00000163049878399489232690000013879300824881561003_" className="st0" points="358.6,430.6 362.5,431.2 
+					<polygon id="중구" className="st0" points="358.6,430.6 362.5,431.2 
 						363.1,432.3 362.3,434.3 358,433.6 357.9,433.2 	"/>
 				</g>
 				<g id="인천광역시">
@@ -712,7 +847,7 @@ function MyPage() {
 						121.7,186.9 119.7,181.9 120,182 129.9,181.9 131.2,181.9 127.9,191 127.9,191.1 127.8,191.4 127.8,191.4 	"/>
 					<polygon id="연수구" className="st0" points="111.6,202.1 106.7,201.2 115.7,199.9 110.1,195 109.5,189 109.9,188.8 111.9,188.8 
 						113.3,188.2 121.7,186.9 117.3,194.3 117.2,194.3 119.4,195.2 119.8,197 117,200.5 116.7,200.8 113.9,202.1 	"/>
-					<path id="중구_00000090283923639619113360000014432887308064126373_" className="st0" d="M85.4,191.1l3.4,5.5l-0.5,0.6l-1.2,0.6
+					<path id="중구" className="st0" d="M85.4,191.1l3.4,5.5l-0.5,0.6l-1.2,0.6
 						l-3.7-3.8l1.5-3.1L85.4,191.1z M110,179.4l-0.4,1l1.1-0.4l3.5,2.3l-1.6,4.2l-0.9,1.8l-1.1,0l-0.5,0l-0.1-0.1l0.1-3.8l-2.1,2.4
 						l-0.4-3.6l1.1-0.6l0-0.1l-0.3-1.5L110,179.4z M96.5,172.4l7.4,2.3l0.7,0l2.2,4.2l-17.7,10.6l-1.7-0.3l-1.6,1l-0.3-0.1l-2.1-4.7
 						l-3.9,0.7l-0.5-4.8l6.7-3.1l3.4-0.7l2.2-0.1l1.9-0.1l2.8-2.7l0.2-1.4L96.5,172.4z M109,182.6L109,182.6L109,182.6L109,182.6
@@ -733,7 +868,7 @@ function MyPage() {
 					<polygon id="사상구" className="st0" points="412.1,535.9 416.4,538 415.4,545.8 413.9,548.1 408.7,549 408.7,546.1 	"/>
 					<polygon id="수영구" className="st0" points="428.6,538 430.1,541.2 430,541.3 430.7,542.1 429,545.2 426.1,541.9 428.5,538.4 	"/>
 					<polygon id="연제구" className="st0" points="419.9,536.8 428.5,538.4 426.1,541.9 424.4,542.5 	"/>
-					<path id="강서구_00000005965601791535691050000009006076288229410219_" className="st0" d="M391.9,553.6l0.9,1.2l2,6.3l-2.7,8.3
+					<path id="강서구" className="st0" d="M391.9,553.6l0.9,1.2l2,6.3l-2.7,8.3
 						l-4.1-10.1l3.6-2.5l-1.9-1.2L391.9,553.6z M404.9,552.6l0.2,0.1l0,0.3l-2.4,2.2l-9.5-0.5l-1-1.1l1.7-3.6l-6.4-6.8l8.9-1.8l1.6,2.7
 						l1.1-9.9l14.2-3.7l-1.1,5.4l0,0l-3.5,10.2l0,0l-3.4,4.7L404.9,552.6z"/>
 					<polygon id="금정구" className="st0" points="432.1,527.8 427.8,534.3 421.6,531.9 419.3,531.2 419.6,524.4 427.4,519.5 	"/>
@@ -741,19 +876,19 @@ function MyPage() {
 						l-2-3.3L407.7,554.9z"/>
 					<path id="해운대구" className="st0" d="M427.8,534.3l4.3-6.5l2.1,6.9l6.3,3.7l-1.8,3.3l-6.6,1.1l-0.9-1l-1.1-0.6l-1.5-3.2
 						L427.8,534.3z"/>
-					<polygon id="북구_00000147926145647962615330000006782993992366670232_" className="st0" points="412.1,535.9 413.2,530.5 
+					<polygon id="북구" className="st0" points="412.1,535.9 413.2,530.5 
 						415.3,524.5 419.6,524.4 419.3,531.2 421.6,531.9 419.4,536.1 416.4,538 	"/>
-					<path id="남구_00000052072439607353513050000004236392404629863311_" className="st0" d="M426.3,552.5l-0.4-2.4l-3.4-0.3l-0.1-2.6
+					<path id="남구" className="st0" d="M426.3,552.5l-0.4-2.4l-3.4-0.3l-0.1-2.6
 						l-0.3-2.1l2.3-2.7l1.6-0.5l3.4,4l0.4,5.6L426.3,552.5z"/>
 					<polygon id="동래구" className="st0" points="421.6,531.9 427.8,534.3 428.6,538 428.5,538.4 419.9,536.8 419.4,536.1 	"/>
 					<polygon id="부산진구" className="st0" points="416.4,538 419.4,536.1 419.9,536.8 424.4,542.5 422.1,545.1 417.2,546.1 
 						415.4,545.8 	"/>
 					<path id="영도구" className="st0" d="M424,553.6l1.9,5.5l-7.7-5.1l-0.2-1.2l0.2-0.3l0.9-0.2l0.1,0l0.5-0.2L424,553.6L424,553.6z"/>
-					<polygon id="동구_00000168118645732070697520000016326732679638779068_" className="st0" points="417.2,546.1 422.1,545.1 
+					<polygon id="동구" className="st0" points="417.2,546.1 422.1,545.1 
 						422.2,547.2 422.2,547.3 420.3,549.6 417.4,549.2 	"/>
-					<path id="서구_00000120547725597948363590000012183695143128138397_" className="st0" d="M417,555.5l-0.2,2.3l-1.7,1.7l-1.3-11.3
+					<path id="서구" className="st0" d="M417,555.5l-0.2,2.3l-1.7,1.7l-1.3-11.3
 						l1.6-2.2l1.7,0.2l0.3,3.2l0,3.9l0.5,0.7L417,555.5z"/>
-					<polygon id="중구_00000099627018138385645060000002418025641920964788_" className="st0" points="417.4,552.5 418.6,552.2 
+					<polygon id="중구" className="st0" points="417.4,552.5 418.6,552.2 
 						420.3,549.6 417.4,549.2 	"/>
 				</g>
 				<g id="서울특별시">
@@ -800,66 +935,76 @@ function MyPage() {
 						152.8,160.4 153.8,157.4 	"/>
 					<polygon id="성동구" className="st0" points="161.9,166.5 168,168.4 165.9,173.3 161.1,172.4 160,170.8 	"/>
 				</g>
-          </svg>
+              </svg>
+              {tooltip.visible && (
+                <div className="tooltip" style={{ top: tooltip.y, left: tooltip.x }}>
+                  {tooltip.name}
+                </div>
+              )}
+            </div>
+          </div>
         </div>
-      </div>
-			</div>
-      <div className={`font-['Cafe24Moyamoya-Face-v1.0'] text-center text-5xl`}>
-        <div className='pt-10 pb-10'>나의 여행 플레이리스트</div>
-        <div className='w-full px-4'>
-          <div className='p-4 rounded-lg border'>
-            {travelPlans.length > 0 ? (
-              travelPlans.map(plan => (
-                <div key={plan.id} className='mb-4 p-4 border rounded shadow'>
-                  {editId === plan.id ? (
-                    <div>
-                      <input
-                        type='text'
-                        value={newTitle}
-                        onChange={(e) => setNewTitle(e.target.value)}
-                        className='border p-2 rounded w-full'
-                      />
-                      <button
-                        onClick={() => handleSaveClick(plan.id)}
-                        className='mt-2 px-2 py-1 bg-blue-500 text-white rounded text-sm'
-                      >
-                        저장
-                      </button>
-                      <button
-                        onClick={handleCancelClick}
-                        className='mt-2 ml-2 px-2 py-1 bg-gray-500 text-white rounded text-sm'
-                      >
-                        취소
-                      </button>
-                    </div>
-                  ) : (
-                    <div className='flex justify-between items-center'>
-                      <h2 className='text-2xl font-bold'>{plan.title || '제목 없음'}</h2>
-                      <div className='flex'>
+        <div className={`font-['Cafe24Moyamoya-Face-v1.0'] text-center text-5xl`}>
+          <div className='pt-10 pb-10 mt-10'>나의 여행 플레이리스트</div>
+          <div className='w-full px-4'>
+            <div className='p-4 rounded-lg border'>
+              {travelPlans.length > 0 ? (
+                travelPlans.map(plan => (
+                  <div key={plan.planner_id} className='mb-4 p-4 border rounded shadow'>
+                    {editId === plan.planner_id ? (
+                      <div>
+                        <input
+                          type='text'
+                          value={newTitle}
+                          onChange={(e) => setNewTitle(e.target.value)}
+                          className='border p-2 rounded w-full'
+                        />
                         <button
-                          onClick={() => handleEditClick(plan.id, plan.title)}
-                          className='ml-2 px-2 py-1 bg-yellow-500 text-white rounded text-sm'
+                          onClick={() => handleSaveClick(plan.planner_id)}
+                          className='mt-2 px-2 py-1 bg-blue-500 text-white rounded text-sm'
                         >
-                          수정
+                          저장
                         </button>
                         <button
-                          onClick={() => handleDeleteClick(plan.id)}
-                          className='ml-2 px-2 py-1 bg-red-500 text-white rounded text-sm'
+                          onClick={handleCancelClick}
+                          className='mt-2 ml-2 px-2 py-1 bg-gray-500 text-white rounded text-sm'
                         >
-                          삭제
+                          취소
                         </button>
                       </div>
-                    </div>
-                  )}
-                </div>
-              ))
-            ) : (
-              <p>여행 계획이 없습니다.</p>
-            )}
+                    ) : (
+                      <div className='flex justify-between items-center'>
+                        <h2 className='text-2xl font-bold'>
+                          <Link href={`/plans/${plan.planner_id}`} className='text-foreground transition-colors hover:text-muted'>
+                            {plan.title || '제목 없음'}
+                          </Link>
+                        </h2>
+                        <div className='flex'>
+                          <button
+                            onClick={() => handleEditClick(plan.planner_id, plan.title)}
+                            className='ml-2 px-2 py-1 bg-yellow-500 text-white rounded text-sm'
+                          >
+                            수정
+                          </button>
+                          <button
+                            onClick={() => handleDeleteClick(plan.planner_id)}
+                            className='ml-2 px-2 py-1 bg-red-500 text-white rounded text-sm'
+                          >
+                            삭제
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                ))
+              ) : (
+                <p>여행 계획이 없습니다.</p>
+              )}
+            </div>
           </div>
         </div>
       </div>
-    </main>
+    </MainLayout>
   );
 }
 
