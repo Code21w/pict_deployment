@@ -13,6 +13,12 @@ declare global {
   }
 }
 
+declare global {
+  interface Window {
+    kakao: any;
+  }
+}
+
 export default function RootLayout({ children }: PropsWithChildren) {
   return (
     <html lang='en'>
@@ -32,3 +38,4 @@ export default function RootLayout({ children }: PropsWithChildren) {
     </html>
   );
 }
+

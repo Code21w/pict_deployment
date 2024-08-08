@@ -78,9 +78,9 @@ const config = {
         'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
       },
     },
-    fontFamily: {
-      'S-CoreDream-3Light': ['S-CoreDream-3Light'],
-    },
+    // fontFamily: {
+    //   SCoreDream: ['S-CoreDream'],
+    // },
   },
   plugins: [require('tailwindcss-animate')],
 } satisfies Config;
