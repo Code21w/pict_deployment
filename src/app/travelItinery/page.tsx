@@ -5,6 +5,7 @@ import SplitPane from 'react-split-pane-next';
 import React from 'react';
 import Map from '@/components/shared/kakaoMap';
 import TravelHeader from '@/components/shared/TravelHeader';
+import Dashboard from '@/components/travelItinerary/dnd/Dashboard';
 
 const travelItinerary: React.FC = () => {
   return (
@@ -18,6 +19,7 @@ const travelItinerary: React.FC = () => {
           </div>
           <div className='flex-1 bg-cyan-500 flex flex-col p-4'>
             <h2 className='text-xl font-bold mb-4'>장소</h2>
+            <Dashboard />
           </div>
         </div>
         <div className='bg-white h-full'>

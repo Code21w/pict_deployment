@@ -28,7 +28,7 @@ function UserMenu() {
   const [error, setError] = useState('');
   const [local, setLocal] = useState('local');
   const [verified, setVerified] = useState(false);
-  const [userNameLimit, setUserNameLimit] = useState(20);
+  const [userNameLimit, setUserNameLimit] = useState(20); // eslint-disable-line no-unused-vars
   const [emailSent, setEmailSent] = useState(false);
 
   function deleteCookie(name: string) {

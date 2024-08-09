@@ -9,18 +9,5 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
-  return (
-    <html lang='en'>
-      <head>
-        <meta charSet='UTF-8' />
-        <meta name='viewport' content='width=device-width, initial-scale=1.0' />
-        <title>{metadata.title}</title>
-        <meta name='description' content={metadata.description} />
-      </head>
-      <body className='overflow-hidden h-full min-w-[720px]'>
-        {/* <Header /> */}
-        <main className='h-full'>{children}</main>
-      </body>
-    </html>
-  );
+  return <div>{children}</div>;
 }
