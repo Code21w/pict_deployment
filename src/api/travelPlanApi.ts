@@ -27,8 +27,8 @@
 
 import instance from './instance';
 
-export const fetchPlace = (id: number, category: string) => {
-  const result = instance.get(`/api/planner_market?sigungu_id=${id}&category=${category}`);
+export const fetchPlace = async (id: string, category: string) => {
+  const result = await instance.get(`/api/planner_market?sigungu_id=${id}&category=${category}`);
   // id는 세션에서 받아오는 문구 함수 만들어서 넣기
   // 카테고리는 4개 다 받기
   return result;

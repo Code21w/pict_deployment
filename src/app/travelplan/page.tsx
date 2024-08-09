@@ -33,286 +33,23 @@ function TravelPlan() {
   const [isExpanded, setIsExpanded] = useState(false);
   const setCurrentCart = useCartStore((state) => state.setCurrentCart);
   const currentCart = useCartStore((state) => state.currentCart);
-  const [id, setId] = useState(10);
+  const [id, setId] = useState('');
   const [attractions, setAttractions] = useState<RecommendedPlace[]>([]);
   const [nature, setNature] = useState<RecommendedPlace[]>([]);
   const [activity, setActivity] = useState<RecommendedPlace[]>([]);
   const [culture, setCulture] = useState<RecommendedPlace[]>([]);
-  // const location = sessionStorage.getItem('location');
-  // const id = sessionStorage.getItem('id');
 
-  // 페이지 첫 렌더링 시 ai가 생성해준 데이터를 로컬 스토리지에서 가져오기
-  // 페이지 첫 렌더링 시 ai가 생성해준 데이터를 로컬 스토리지에서 가져오기
-
-  // const place = fetch()~~~ id로 데이터 place 변수값에 담아오기
-
-  const PLACE_1 = [
-    {
-      id: 192,
-      sigungu_id: 1,
-      title: '간성향교',
-      addr1: '강원특별자치도 고성군 간성읍 진부령로 2659',
-      firstimage: 'NaN',
-      map_x: 128.4389748268,
-      map_y: 38.3778814721,
-      category: '인문명소',
-    },
-    {
-      id: 715,
-      sigungu_id: 1,
-      title: '거진등대해맞이공원',
-      addr1: '강원특별자치도 고성군 거진읍 거탄진로209번길 19',
-      firstimage: 'NaN',
-      map_x: 128.4644147196,
-      map_y: 38.4489653345,
-      category: '인문명소',
-    },
-    {
-      id: 717,
-      sigungu_id: 1,
-      title: '거진어촌체험휴양마을',
-      addr1: '강원특별자치도 고성군 거진읍 거진리',
-      firstimage: 'NaN',
-      map_x: 128.4628176843,
-      map_y: 38.4476432361,
-      category: '인문명소',
-    },
-    {
-      id: 761,
-      sigungu_id: 1,
-      title: '건봉사',
-      addr1: '강원특별자치도 고성군 거진읍 건봉사로 723',
-      firstimage: 'http://tong.visitkorea.or.kr/cms/resource/49/2659849_image2_1.jpg',
-      map_x: 128.3781573424,
-      map_y: 38.4037217209,
-      category: '인문명소',
-    },
-    {
-      id: 12041,
-      sigungu_id: 1,
-      title: '오호어촌체험마을',
-      addr1: '강원특별자치도 고성군 심층수길 40-20',
-      firstimage: 'http://tong.visitkorea.or.kr/cms/resource/18/863118_image2_1.jpg',
-      map_x: 128.5290848757,
-      map_y: 38.3270974802,
-      category: '인문명소',
-    },
-    {
-      id: 12856,
-      sigungu_id: 1,
-      title: '울산바위촬영휴게소',
-      addr1: '강원특별자치도 고성군 토성면 미시령로 2653',
-      firstimage: 'NaN',
-      map_x: 128.496627685,
-      map_y: 38.2072219286,
-      category: '인문명소',
-    },
-    {
-      id: 13294,
-      sigungu_id: 1,
-      title: '육송정 홍교',
-      addr1: '강원특별자치도 고성군 해상리 1041',
-      firstimage: 'NaN',
-      map_x: 128.4088384086,
-      map_y: 38.3867298548,
-      category: '인문명소',
-    },
-    {
-      id: 13513,
-      sigungu_id: 1,
-      title: '이기붕별장',
-      addr1: '강원특별자치도 고성군 거진읍 화진포길 280',
-      firstimage: 'http://tong.visitkorea.or.kr/cms/resource/41/3007941_image2_1.jpg',
-      map_x: 128.4430325955,
-      map_y: 38.4725343883,
-      category: '인문명소',
-    },
-    {
-      id: 13518,
-      sigungu_id: 1,
-      title: '이덕균가옥',
-      addr1: '강원특별자치도 고성군 죽왕면 송지호로 198-12',
-      firstimage: 'NaN',
-      map_x: 128.5035454892,
-      map_y: 38.3285440368,
-      category: '인문명소',
-    },
-    {
-      id: 13566,
-      sigungu_id: 1,
-      title: '이승만별장(고성)',
-      addr1: '강원특별자치도 고성군 이승만별장길 33 이승만별장',
-      firstimage: 'http://tong.visitkorea.or.kr/cms/resource/01/2600601_image2_1.jpg',
-      map_x: 128.4363027064,
-      map_y: 38.4708816727,
-      category: '인문명소',
-    },
-  ];
-  const PLACE_2 = [
-    {
-      id: 124,
-      sigungu_id: 1,
-      title: '가진항',
-      addr1: '강원특별자치도 고성군 죽왕면 가진해변길 121-12',
-      firstimage: 'NaN',
-      map_x: 128.5133183548,
-      map_y: 38.3682229327,
-      category: '자연명소',
-    },
-    {
-      id: 125,
-      sigungu_id: 1,
-      title: '가진해변',
-      addr1: '강원특별자치도 고성군 죽왕면 가진리 495-6',
-      firstimage: 'NaN',
-      map_x: 128.4546324706,
-      map_y: 38.4428575247,
-      category: '자연명소',
-    },
-    {
-      id: 712,
-      sigungu_id: 1,
-      title: '거진 등대',
-      addr1: '강원특별자치도 고성군 거진읍 등대길 17-2',
-      firstimage: 'http://tong.visitkorea.or.kr/cms/resource/14/2714114_image2_1.jpg',
-      map_x: 128.462573187,
-      map_y: 38.4500568379,
-      category: '자연명소',
-    },
-    {
-      id: 713,
-      sigungu_id: 1,
-      title: '거진11리해변',
-      addr1: '강원특별자치도 고성군 거진읍 거진리',
-      firstimage: 'NaN',
-      map_x: 128.4536129346,
-      map_y: 38.4487262643,
-      category: '자연명소',
-    },
-    {
-      id: 714,
-      sigungu_id: 1,
-      title: '거진1리해변',
-      addr1: '강원특별자치도 고성군 거진읍 거진1리',
-      firstimage: 'http://tong.visitkorea.or.kr/cms/resource/47/176147_image2_1.jpg',
-      map_x: 128.4547464127,
-      map_y: 38.4408494282,
-      category: '자연명소',
-    },
-    {
-      id: 718,
-      sigungu_id: 1,
-      title: '거진항',
-      addr1: '강원특별자치도 고성군 거진읍 거진항1길 62-3',
-      firstimage: 'NaN',
-      map_x: 128.4598152167,
-      map_y: 38.4465127542,
-      category: '자연명소',
-    },
-  ];
-  const PLACE_3 = [
-    {
-      id: 404,
-      sigungu_id: 1,
-      title: '강원도 세계잼버리 수련장',
-      addr1: '강원특별자치도 고성군 토성면 잼버리로 244',
-      firstimage: 'NaN',
-      map_x: 128.4976743306,
-      map_y: 38.2226840374,
-      category: '액티비티',
-    },
-    {
-      id: 420,
-      sigungu_id: 1,
-      title: '강원평화누리길 16코스 고성 울산바위비경길',
-      addr1: '강원특별자치도 고성군 간성읍 고성중앙길 9',
-      firstimage: 'http://tong.visitkorea.or.kr/cms/resource/78/2747978_image2_1.jpg',
-      map_x: 128.4678859929,
-      map_y: 38.3806733748,
-      category: '액티비티',
-    },
-  ];
-  const PLACE_4 = [
-    {
-      id: 1218,
-      sigungu_id: 1,
-      title: '고성 DMZ박물관',
-      addr1: '강원특별자치도 고성군 현내면 통일전망대로 369',
-      firstimage: 'http://tong.visitkorea.or.kr/cms/resource/51/2921751_image2_1.jpg',
-      map_x: 128.3826570629,
-      map_y: 38.5763238583,
-      category: '문화시설',
-    },
-  ];
-  // {id: 352, sigungu_id: 0, title: '강릉시 오죽헌/시립박물관', addr1: '강원특별자치도 강릉시 율곡로3139번길 24', firstimage: 'NaN', …}
-  // 첫 시작시 렌더링
   useEffect(() => {
     getSession();
-    setDataList();
-    setRecommendedPlace(attractions);
-    //attractionsList를 뽑아올 방법생각
-    // const addCheckProp = () => {
+    //getSession에서 setId(location_id)를 해줌
     setTempPlace([]);
   }, []);
+
   useEffect(() => {
-    // const PLACE1 = fetchPlace(id, '인문명소');
-    // const PLACE2 = fetchPlace(id, '자연명소');
-    // const PLACE3 = fetchPlace(id, '액티비티');
-    // const PLACE4 = fetchPlace(id, '문화시설');
-    // console.log(PLACE1);
-    // const addCheckProp = () => {
-    //       const attractions = PLACE1.map((item) => ({ ...item, isChecked: false }));
-    //       const nature = PLACE2.map((item) => ({ ...item, isChecked: false }));
-    //       const activity = PLACE3.map((item) => ({ ...item, isChecked: false }));
-    //       const culture = PLACE4.map((item) => ({ ...item, isChecked: false }));
-    //       return { attractions, nature, activity, culture };};
-  }, [attractions]);
-
-  const setData = async (category: string) => {
-    try {
-      const result = await fetchPlace(id, category);
-      if (result.data && result.data.length > 0) {
-        const placeData: Place[] | [] = result.data;
-        console.log(result.data);
-        if (category === 'attractions')
-          setAttractions(placeData?.map((item) => ({ ...item, isChecked: false })));
-        else if (category === 'nature')
-          setNature(placeData?.map((item) => ({ ...item, isChecked: false })));
-        else if (category === 'activity')
-          setActivity(placeData?.map((item) => ({ ...item, isChecked: false })));
-        else if (category === 'culture')
-          setCulture(placeData?.map((item) => ({ ...item, isChecked: false })));
-      } else {
-        console.error('Response array is empty or undefined');
-        return '정보를 불러올 수 없습니다.'; // 기본값 또는 적절한 에러 메시지 제공
-      }
-    } catch (error: unknown) {
-      console.error(getErrorMessage(error));
-      throw error;
+    if (id) {
+      setDataList(); //id 가 바뀌면 각각의 카테고리의 받아온 배열에 isChecked: false 속성을 추가, 각각의 state를 속성을 추가한 배열로 저장
     }
-  };
-
-  const setDataList = () => {
-    setData('attractions');
-    setData('nature');
-    setData('activity');
-    setData('culture');
-  };
-
-  // const getData = () => {
-  //   promisePLACE1.then((res) => {
-  //     console.log(res);
-  //   });
-  // };
-
-  //첫 시작시 렌더링
-  // useEffect(() => {
-  // setAreaName(location);
-  // setRecommendedPlace(place);
-  // const place = addCheckProp();
-  // setRecommendedPlace(place.attractions);
-
-  // }, []);
+  }, [id]);
 
   useEffect(() => {
     setCurrentCart(tempPlace);
@@ -323,6 +60,44 @@ function TravelPlan() {
   useEffect(() => {
     // 그래서 currentCart가 업데이트 될때 렌더링 해주도록함
   }, [currentCart]);
+
+  const setData = async (category: string) => {
+    try {
+      if (id !== '') {
+        const result = await fetchPlace(id, category);
+
+        const placeData: Place[] | [] = result.data;
+
+        if (category === '인문명소') {
+          const newAttraction = placeData.map((item) => ({ ...item, isChecked: false }));
+          setAttractions(newAttraction);
+          return newAttraction;
+        } else if (category === '자연명소') {
+          const newNature = placeData.map((item) => ({ ...item, isChecked: false }));
+          setNature(newNature);
+        } else if (category === '액티비티') {
+          const newActivity = placeData.map((item) => ({ ...item, isChecked: false }));
+          setActivity(newActivity);
+        } else if (category === '문화시설') {
+          const newCulture = placeData.map((item) => ({ ...item, isChecked: false }));
+          setCulture(newCulture);
+        }
+      } else {
+        console.error('Response array is empty or undefined');
+        return '정보를 불러올 수 없습니다.'; // 기본값 또는 적절한 에러 메시지 제공
+      }
+    } catch (error: unknown) {
+      console.error(getErrorMessage(error));
+      throw error;
+    }
+  };
+  const setDataList = async () => {
+    const a = await setData('인문명소');
+    setRecommendedPlace(a as RecommendedPlace[]);
+    setData('자연명소');
+    setData('액티비티');
+    setData('문화시설');
+  };
 
   // 세션 스토리지에서 location id와 location 이름을 가져오는함수
   const getSession = () => {
@@ -336,13 +111,13 @@ function TravelPlan() {
         uploadFileResponse.result[0].location
       ) {
         const fullLocation = uploadFileResponse.result[0].location;
-        const id = uploadFileResponse.result[0].location_id;
+        const location_id = uploadFileResponse.result[0].location_id;
         // 전체 위치 문자열을 공백으로 나누고 마지막 요소(도시명)를 가져옴
         const locationParts = fullLocation.split(' ');
         const cityName = locationParts[locationParts.length - 1];
 
         setAreaName(cityName);
-        setId(id);
+        setId(location_id);
       } else {
         console.error('Location data is missing in the uploadFileResponse.');
       }
@@ -404,19 +179,9 @@ function TravelPlan() {
     tempPlace.map((item) => deleteTempPlaceList(item));
   };
 
-  // isChecked를 추가해주는 함수
-  // const addCheckProp = () => {
-  //   const attractionsList = attractions.map((item) => ({ ...item, isChecked: false }));
-  //   const natureList = nature.map((item) => ({ ...item, isChecked: false }));
-  //   const activityList = activity.map((item) => ({ ...item, isChecked: false }));
-  //   const cultureList = culture.map((item) => ({ ...item, isChecked: false }));
-  //   return { attractionsList, natureList, activityList, cultureList };
-  // };
-
   // 카테고리에 따라 recommendedPlaceList를 갱신
   const changeCategory = (Key: string) => {
     const key = Key;
-    // const place = addCheckProp();
     if (key === 'attractions') setRecommendedPlace(attractions);
     else if (key === 'nature') setRecommendedPlace(nature);
     else if (key === 'culture') setRecommendedPlace(culture);
@@ -470,11 +235,7 @@ function TravelPlan() {
             {recommendedPlace.map((item, idx) => (
               <PlaceListBlock key={idx} item={item}>
                 <div className='mr-3'>
-                  <TravelPlanCheckButton
-                    // changeSelectCount={changeSelectCount}
-                    changeTempPlaceList={changeTempPlaceList}
-                    item={item}
-                  />
+                  <TravelPlanCheckButton changeTempPlaceList={changeTempPlaceList} item={item} />
                 </div>
               </PlaceListBlock>
             ))}
