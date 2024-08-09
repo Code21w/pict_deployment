@@ -11,7 +11,15 @@ import PlaceListBlock from '@/components/travel_plan/PlaceListBlock';
 import TravelPlanCheckButton from '@/components/travel_plan/TravelPlanCheckButton';
 import { useCartStore } from '@/store/store';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+interface CustomError {
+  response: {
+    data: any;
+    status: number;
+    headers: string;
+  };
+}
 interface Place {
   id: number;
   sigungu_id: number;
@@ -30,17 +38,17 @@ function TravelPlan() {
   const [period, setPeriod] = useState<string | null>('?');
   const [areaName, setAreaName] = useState('중구');
   const [recommendedPlace, setRecommendedPlace] = useState<RecommendedPlace[]>([]);
-  // const [tempPlace, setTempPlace] = useState<RecommendedPlace[]>([]);
-  const setCurrentCart = useCartStore((state) => state.setCurrentCart);
-  const currentCart = useCartStore((state) => state.currentCart);
+  const { currentCart, setCurrentCart } = useCartStore();
   const [isExpanded, setIsExpanded] = useState(false);
-
   const [id, setId] = useState('');
   const [attractions, setAttractions] = useState<RecommendedPlace[]>([]);
   const [nature, setNature] = useState<RecommendedPlace[]>([]);
   const [activity, setActivity] = useState<RecommendedPlace[]>([]);
   const [culture, setCulture] = useState<RecommendedPlace[]>([]);
+  const Router = useRouter();
 
+  // 코치님 피드백에 따라 state수 줄이고 useEffect 4개에서 2개로 줄임
+  // fetch하는 함수를 useEffect 내부에 선언하도록 함
   useEffect(() => {
     getSession();
     // getSession에서 setId(location_id)를 해줌
@@ -73,7 +81,13 @@ function TravelPlan() {
             console.error('Response array is empty or undefined');
             return '정보를 불러올 수 없습니다.'; // 기본값 또는 적절한 에러 메시지 제공
           }
-        } catch (error: unknown) {
+        } catch (error) {
+          const CustomError = error as CustomError;
+          if (CustomError.response.status === 401) {
+            alert('로그인해주세요');
+
+            Router.push('/');
+          }
           console.error(getErrorMessage(error));
           throw error;
         }
@@ -88,12 +102,6 @@ function TravelPlan() {
       setDataList(); // id 가 바뀌면 각각의 카테고리의 받아온 배열에 isChecked: false 속성을 추가, 각각의 state를 속성을 추가한 배열로 저장
     }
   }, [id]);
-
-  // useEffect(() => {
-  //   setCurrentCart(tempPlace);
-  //   // useCartStore.setState(() => ({ currentCart: tempPlace }));와 동일
-  //   // 이건 currentCart에 바로 newCart 넣어버리니 업데이트가 한박자 느림
-  // }, [tempPlace]);
 
   // 세션 스토리지에서 location id와 location 이름을 가져오는함수
   const getSession = () => {
@@ -122,32 +130,7 @@ function TravelPlan() {
     }
   };
 
-  // TravelCheckButton 누를때 recommendedPlace의 isChecked를 반전시키고 TempPlace를 갱신
-  // const changeTempPlaceList = (item: RecommendedPlace) => {
-  //   setRecommendedPlace((prevPlace) => {
-  //     const newRecommendedPlace = prevPlace.map((place) => {
-  //       if (place.id === item.id) {
-  //         // id를 비교하여 같을 때 isChecked만 반전
-  //         return { ...place, isChecked: !place.isChecked };
-  //       }
-
-  //       return place;
-  //     });
-  //     return newRecommendedPlace;
-  //   });
-  //   setTempPlace((prevTempPlace) => {
-  //     let newTempPlace;
-  //     // isChecked가 off 되어있었다면 배열에 장소를 추가(isChecked는 버튼 누르면 반전되지만 아직 업데이트가 되기 전이므로 off로 검사)
-  //     if (!item.isChecked) {
-  //       newTempPlace = [...(prevTempPlace ?? []), item];
-  //     } else {
-  //       // 반대의 경우 id가 같지 않은 장소들만 뽑아냄
-  //       newTempPlace = prevTempPlace.filter((place) => place.id !== item.id);
-  //     }
-  //     return newTempPlace;
-  //   });
-  // };
-  // };
+  // TravelCheckButton 누를때 recommendedPlace의 isChecked를 반전시키고 currentCart를 갱신
   const changeCurrentCartList = (item: RecommendedPlace) => {
     setRecommendedPlace((prevPlace) => {
       const newRecommendedPlace = prevPlace.map((place) => {
@@ -175,26 +158,7 @@ function TravelPlan() {
     setCurrentCart(updateCurrentCart());
   };
 
-  // delete 버튼은 chageTempPlaceList 함수의 ischecked == true 일때와 비슷하게 동작
-  // const deleteTempPlaceList = (item: RecommendedPlace) => {
-  //   setTempPlace((prevTempPlace) => {
-  //     const newTempPlace = prevTempPlace.filter((place) => place.id !== item.id);
-  //     // tempPlace를 item을 제외한 배열로 바꾼다.
-  //     // recommendedplace에서 일치하는 place의 ischecked를 바꾼다.
-  //     return newTempPlace;
-  //   });
-
-  //   setRecommendedPlace((prevPlace) => {
-  //     const newRecommendedPlace = prevPlace.map((place) => {
-  //       if (place.id === item.id) {
-  //         // id를 비교하여 같을 때 isChecked만 반전
-  //         return { ...place, isChecked: !place.isChecked };
-  //       }
-  //       return place;
-  //     });
-  //     return newRecommendedPlace;
-  //   });
-  // };
+  // delete 버튼은 chageCurrentCart 함수의 ischecked == true 일때와 비슷하게 동작
 
   const deleteCurrentCartList = (item: RecommendedPlace) => {
     const deleteCurrentCart = () => {
@@ -218,9 +182,6 @@ function TravelPlan() {
   };
 
   // reset 버튼은 delete 버튼을 한번에 다 누른 효과
-  // const resetTempPlaceList = () => {
-  //   tempPlace.map((item) => deleteTempPlaceList(item));
-  // };
   const resetCurrentCartList = () => {
     currentCart.map((item) =>
       setRecommendedPlace((prevPlace) => {
@@ -235,9 +196,8 @@ function TravelPlan() {
       })
     );
     setCurrentCart([]);
-
-    // deleteCurrentCartList(item));
   };
+
   // 카테고리에 따라 recommendedPlaceList를 갱신
   const changeCategory = (Key: string) => {
     const key = Key;

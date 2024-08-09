@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { useCallback, useState, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { ErrorCode, FileRejection, useDropzone } from 'react-dropzone';
 
 import UploadFile from '@/api/SendingImage';
