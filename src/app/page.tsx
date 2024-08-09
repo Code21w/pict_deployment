@@ -95,7 +95,7 @@ function Main() {
     }
   }, []);
 
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+  const { getRootProps, getInputProps } = useDropzone({
     onDrop,
     accept: {
       'image/*': ['.jpeg', '.jpg', '.png'],
@@ -189,20 +189,12 @@ function Main() {
                 margin: '10px 0',
               }}
             >
-              <input
-                {...getInputProps()}
-                className='w-[300px] h-[300px] bg-transparent pl-[10px]'
-              />
+              <input {...getInputProps()} className='w-full h-full bg-transparent' />
               {!image && <Image src={imageIcon} alt='UploadImageIcon.png' />}
               {image && (
-                <img
-                  src={image}
-                  alt='Uploaded Preview'
-                  className='w-[300px] h-[300px] object-cover'
-                />
+                <img src={image} alt='Uploaded Preview' className='w-full h-full object-contain' />
               )}
             </div>
-
             <div>
               <button
                 onClick={handleButtonClick}

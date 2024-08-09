@@ -94,7 +94,7 @@ function SubPage() {
         {loading ? (
           <ImageSkeleton />
         ) : (
-          <div className='w-[1000px] h-[400px] bg-gray-300 flex items-center justify-center mt-8 mb-2'>
+          <div className='w-[1000px] h-[400px] flex items-center justify-center mt-8 mb-2'>
             {isImage ? (
               <img src={insertImage} alt='location' className='max-w-full max-h-full' />
             ) : (
