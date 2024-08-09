@@ -1,5 +1,5 @@
 import { getErrorMessage } from './errorHandler';
-import instance from './instance';
+import { instance } from './instance';
 async function UploadFile(formData: FormData) {
   try {
     const { data } = await instance.post<{

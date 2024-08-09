@@ -1,18 +1,15 @@
 'use client';
 
-import React, { useState } from 'react';
+import { instance } from '@/api/instance';
 import { zodResolver } from '@hookform/resolvers/zod';
+import axios from 'axios';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '../ui/dialog';
-import { Input } from '../ui/input';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form';
 import { Button } from '../ui/button';
-import axios from 'axios';
-const baseURL = process.env.NEXT_PUBLIC_BASE_URL;
-
-const api = axios.create({ baseURL });
-
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '../ui/dialog';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form';
+import { Input } from '../ui/input';
 const FormSchema = z
   .object({
     display_name: z.string().min(2, {
@@ -44,7 +41,6 @@ const FormSchema = z
   });
 
 function Join() {
-  const [isRegistered, setIsRegistered] = useState(false);
   const [isFirstDialogOpen, setIsFirstDialogOpen] = useState(false);
   const [isSecondDialogOpen, setIsSecondDialogOpen] = useState(false);
   const [email, setEmail] = useState('');
@@ -64,7 +60,7 @@ function Join() {
 
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
     try {
-      const response = await api.post('/api/register', {
+      const response = await instance.post('/api/register', {
         email: data.email,
         password: data.password,
         display_name: data.display_name,
@@ -72,7 +68,6 @@ function Join() {
       });
       setEmail(data.email);
       console.log('Register successful:', response.data);
-      setIsRegistered(true);
       setErrorMessage(null);
       setIsFirstDialogOpen(false); // 첫 번째 다이얼로그 닫기
       setIsSecondDialogOpen(true); // 두 번째 다이얼로그 열기
@@ -89,7 +84,7 @@ function Join() {
 
   const onEmailSubmit = async (data: z.infer<typeof FormSchema>) => {
     try {
-      const response = await api.post('/api/verify-email', {
+      const response = await instance.post('/api/verify-email', {
         email: data.email,
       });
       console.log('Verification email sent:', response.data);
@@ -101,7 +96,7 @@ function Join() {
   const onEmailSubmitCheck = async () => {
     if (!email) return;
     try {
-      const response = await api.post('/api/verify-email', {
+      const response = await instance.post('/api/verify-email', {
         email,
       });
       console.log('Verification email sent:', response.data);

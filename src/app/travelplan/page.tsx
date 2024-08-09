@@ -9,7 +9,7 @@ import ExpandButton from '@/components/travel_plan/ExpandButton';
 import PlaceCategory from '@/components/travel_plan/PlaceCategory';
 import PlaceListBlock from '@/components/travel_plan/PlaceListBlock';
 import TravelPlanCheckButton from '@/components/travel_plan/TravelPlanCheckButton';
-import useCartStore from '@/store/store';
+import { useCartStore } from '@/store/store';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 interface Place {
@@ -43,13 +43,13 @@ function TravelPlan() {
 
   useEffect(() => {
     getSession();
-    //getSession에서 setId(location_id)를 해줌
+    // getSession에서 setId(location_id)를 해줌
     setTempPlace([]);
   }, []);
 
   useEffect(() => {
     if (id) {
-      setDataList(); //id 가 바뀌면 각각의 카테고리의 받아온 배열에 isChecked: false 속성을 추가, 각각의 state를 속성을 추가한 배열로 저장
+      setDataList(); // id 가 바뀌면 각각의 카테고리의 받아온 배열에 isChecked: false 속성을 추가, 각각의 state를 속성을 추가한 배열로 저장
     }
   }, [id]);
 

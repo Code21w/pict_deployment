@@ -1,18 +1,16 @@
 'use client';
-import React, { useState, useEffect, FormEvent } from 'react';
+import { instance } from '@/api/instance';
+import { useRouter } from 'next/navigation';
+import { FormEvent, useEffect, useState } from 'react';
+import { Button } from '../ui/button';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../ui/dialog';
 import {
   DropdownMenu,
-  DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuTrigger,
 } from '../ui/drop-down-menu';
-import { useRouter } from 'next/navigation';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../ui/dialog';
-import { Button } from '../ui/button';
-import axios from 'axios';
-const baseURL = process.env.NEXT_PUBLIC_BASE_URL;
 
-const api = axios.create({ baseURL });
 function UserMenu() {
   const [modalOpen, setModalOpen] = useState(false);
   const [isEditingPassword, setIsEditingPassword] = useState(false);
@@ -28,7 +26,7 @@ function UserMenu() {
   const [error, setError] = useState('');
   const [local, setLocal] = useState('local');
   const [verified, setVerified] = useState(false);
-  const [userNameLimit, setUserNameLimit] = useState(20); // eslint-disable-line no-unused-vars
+  const userNameLimit = 20;
   const [emailSent, setEmailSent] = useState(false);
 
   function deleteCookie(name: string) {
@@ -39,7 +37,7 @@ function UserMenu() {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await api.get('/api/user', {
+        const response = await instance.get('/api/user', {
           withCredentials: true,
         });
         const userData = response.data;
@@ -65,7 +63,7 @@ function UserMenu() {
     }
 
     try {
-      const response = await api.put(
+      const response = await instance.put(
         '/api/user/display-name',
         { newDisplayName: userName },
         { withCredentials: true }
@@ -87,7 +85,7 @@ function UserMenu() {
 
     if (userConfirmed) {
       try {
-        const response = await api.delete('/api/user', { withCredentials: true });
+        const response = await instance.delete('/api/user', { withCredentials: true });
 
         if (response.status === 200) {
           alert('성공적으로 탈퇴하였습니다.');
@@ -129,7 +127,7 @@ function UserMenu() {
     }
 
     try {
-      const response = await api.put(
+      const response = await instance.put(
         '/api/user/password',
         {
           currentPassword,
@@ -162,7 +160,7 @@ function UserMenu() {
         break;
       case 'logout':
         try {
-          await api.post('/api/logout', {}, { withCredentials: true });
+          await instance.post('/api/logout', {}, { withCredentials: true });
           deleteCookie('connect.sid');
 
           location.reload();
@@ -178,7 +176,7 @@ function UserMenu() {
   const onEmailSubmitCheck = async () => {
     if (!email) return;
     try {
-      const response = await api.post('/api/verify-email', {
+      const response = await instance.post('/api/verify-email', {
         email,
       });
       console.log('Verification email sent:', response.data);

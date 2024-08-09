@@ -24,6 +24,11 @@ function SubPage() {
       : null;
     const parsedGeneratedImage = generatedImage ? JSON.parse(generatedImage) : null;
 
+    if (parsedLocationInfoResponse) {
+      parsedLocationInfoResponse.response[0].explanation =
+        parsedLocationInfoResponse.response[0].explanation.replace(/\\n/g, '\n');
+    }
+
     if (parsedUploadFileResponse && parsedLocationInfoResponse) {
       const result = parsedUploadFileResponse.result[0];
       setImageUrl(result.image_url);
@@ -41,7 +46,7 @@ function SubPage() {
   return (
     <main className='bg-white h-screen flex flex-col items-center overflow-y-scroll py-8'>
       <div className='w-full flex justify-center'>
-        <div className='w-[1000px] h-[400px] bg-gray-300 flex items-center justify-center mt-8 mb-2'>
+        <div className='w-[1000px] h-[400px] flex items-center justify-center mt-8 mb-2'>
           {isImage ? (
             <img src={insertImage} alt='location' className='max-w-full max-h-full' />
           ) : (

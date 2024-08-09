@@ -2,19 +2,15 @@
 
 'use client';
 
-import React from 'react';
+import { instance } from '@/api/instance';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useRouter } from 'next/navigation';
+import React from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { Input } from '../ui/input';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form';
-import axios from 'axios';
 import { Button } from '../ui/button';
-import { useRouter } from 'next/navigation';
-
-const baseURL = process.env.NEXT_PUBLIC_BASE_URL;
-
-const api = axios.create({ baseURL });
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form';
+import { Input } from '../ui/input';
 
 interface changePasswordType {
   password: string;
@@ -62,7 +58,7 @@ const ChangePassword: React.FC<TokenType> = ({ token }) => {
   async function onSubmit(data: changePasswordType) {
     try {
       if (typeof token === 'string') {
-        const response = await api.post(
+        const response = await instance.post(
           `/api/reset-password/${token}`,
           { newPassword: data.password },
           {

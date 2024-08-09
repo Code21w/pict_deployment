@@ -1,15 +1,11 @@
 'use client';
+import { instance } from '@/api/instance';
 import Link from 'next/link';
-
+import { useEffect, useState } from 'react';
 import Join from './login-join/Join';
 import Login from './login-join/Login';
-import { useEffect, useState } from 'react';
 import UserMenu from './user-menu/UserMenu';
-import axios from 'axios';
 /** image */
-const baseURL = process.env.NEXT_PUBLIC_BASE_URL;
-
-const api = axios.create({ baseURL });
 
 function Header() {
   const [user, setUser] = useState(null);
@@ -17,7 +13,7 @@ function Header() {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const response = await api.get('/api/user', {
+        const response = await instance.get('/api/user', {
           withCredentials: true,
         });
         setUser(response.data);

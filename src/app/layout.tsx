@@ -1,7 +1,6 @@
 import Script from 'next/script';
 import { PropsWithChildren } from 'react';
 import './globals.css';
-
 export const metadata = {
   title: 'My App',
   description: 'This is my app',
