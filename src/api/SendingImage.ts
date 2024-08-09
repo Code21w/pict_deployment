@@ -8,11 +8,11 @@ async function UploadFile(formData: FormData) {
         image_url: string;
         location: string;
         similarity: number;
-        mapx: number;  // Ensure this is included in the API response
-        mapy: number;  // Ensure this is included in the API response
-    }>;
-    image_url: string; // This can be used if you need the image URL separately
-}>('/api/combined-densenet', formData, {
+        mapx: number; // Ensure this is included in the API response
+        mapy: number; // Ensure this is included in the API response
+      }>;
+      image_url: string; // This can be used if you need the image URL separately
+    }>('/api/combined-densenet', formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
@@ -20,7 +20,6 @@ async function UploadFile(formData: FormData) {
     });
 
     const externalImageUrl = data.image_url;
-    console.log(data);
     sessionStorage.setItem('uploadFileResponse', JSON.stringify(data));
     return { result: data.result, externalImageUrl };
   } catch (error: unknown) {

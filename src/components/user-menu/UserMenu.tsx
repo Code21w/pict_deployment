@@ -343,13 +343,13 @@ function UserMenu() {
             </p>
             {!emailSent ? (
               <Button
-              type='button'
-              className='w-full'
-              onClick={onEmailSubmitCheck}
-              disabled={!email || isButtonDisabled}
-            >
-              이메일 다시 보내기
-            </Button>
+                type='button'
+                className='w-full'
+                onClick={onEmailSubmitCheck}
+                disabled={!email || isButtonDisabled}
+              >
+                이메일 다시 보내기
+              </Button>
             ) : (
               <p style={{ fontSize: '12px', fontWeight: 'bold' }}>
                 이메일이 보내졌습니다. 메일함을 확인해 주세요.

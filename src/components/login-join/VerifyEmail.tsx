@@ -1,9 +1,12 @@
 'use client';
 
-import { instance } from '@/api/instance';
-import { useRouter } from 'next/navigation';
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../ui/dialog';
+import axios from 'axios';
+import { useRouter } from 'next/navigation';
+const baseURL = process.env.NEXT_PUBLIC_BASE_URL;
+
+const api = axios.create({ baseURL });
 interface TokenType {
   token: string;
 }
@@ -18,10 +21,8 @@ const VerifyEmail: React.FC<TokenType> = ({ token }) => {
   useEffect(() => {
     const verifyToken = async () => {
       try {
-        const response = await instance.post(`/api/verify-email/${token}`);
-
+        const response = await api.post(`/api/verify-email/${token}`);
         const isRegistrationSuccessful = response.data.message === 'User verified successfully';
-
         setIsValid(isRegistrationSuccessful);
         setIsModalOpen(true);
 
@@ -54,7 +55,7 @@ const VerifyEmail: React.FC<TokenType> = ({ token }) => {
       <DialogContent className='sm:max-w-[425px]'>
         <DialogHeader>
           <DialogTitle className={`font-['Cafe24Moyamoya-Face-v1.0'] text-center text-3xl`}>
-            {isValid === null ? 'Loading...' : isValid ? 'Welcome!' : 'Invalid Token'}
+            {isValid ? 'Welcome!' : 'Invalid Token'}
           </DialogTitle>
         </DialogHeader>
         <div>

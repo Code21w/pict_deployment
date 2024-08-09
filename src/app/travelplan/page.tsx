@@ -340,4 +340,10 @@ function TravelPlan() {
   );
 }
 
+const TravelPlanWrapper = () => (
+  <Suspense fallback={<div>Loading...</div>}>
+    <TravelPlan />
+  </Suspense>
+);
+
 export default TravelPlan;

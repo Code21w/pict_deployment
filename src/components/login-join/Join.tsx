@@ -82,31 +82,18 @@ function Join() {
     }
   };
 
-  const onEmailSubmit = async (data: z.infer<typeof FormSchema>) => {
+  const onEmailSubmitCheck = async () => {
+    if (!email || isButtonDisabled) return;
+    setIsButtonDisabled(true);
     try {
       await instance.post('/api/verify-email', {
-        email: data.email,
+        email,
       });
+      setEmailSent(true);
     } catch (error) {
-      console.error('Email resend failed:', error);
+      setIsButtonDisabled(false);
     }
   };
-
-  const onEmailSubmitCheck = async () => {
-  if (!email || isButtonDisabled) return;
-  setIsButtonDisabled(true);
-  try {
-    const response = await instance.post('/api/verify-email', {
-      email,
-    });
-    console.log('Verification email sent:', response.data);
-    setEmailSent(true);
-  } catch (error) {
-    console.error('Email resend failed:', error);
-    setIsButtonDisabled(false); // Re-enable the button to allow retry if there was an error
-  }
-};
-
 
   return (
     <>
@@ -203,13 +190,13 @@ function Join() {
           </p>
           {!emailSent ? (
             <Button
-            type='button'
-            className='w-full'
-            onClick={onEmailSubmitCheck}
-            disabled={!email || isButtonDisabled}
-          >
-            이메일 보내기
-          </Button>
+              type='button'
+              className='w-full'
+              onClick={onEmailSubmitCheck}
+              disabled={!email || isButtonDisabled}
+            >
+              이메일 보내기
+            </Button>
           ) : (
             <p style={{ fontSize: '12px', fontWeight: 'bold' }}>
               이메일이 보내졌습니다. 메일함을 확인해 주세요.

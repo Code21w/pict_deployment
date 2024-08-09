@@ -114,7 +114,7 @@ function Main() {
     setLoading(true);
 
     try {
-      const { result, externalImageUrl } = await UploadFile(formData);
+      const { result } = await UploadFile(formData);
       setResult(result); // Update results state with fetched results
       setLoading(false);
     } catch (error) {

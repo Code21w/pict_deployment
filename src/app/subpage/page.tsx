@@ -1,5 +1,4 @@
 'use client';
-
 import fetchLocationInfo from '@/api/fetchLocationInfo';
 import KakaoMapByCoordinates from '@/components/subpage/kakaoMapInSubpage';
 import { Button } from '@/components/ui/button';
@@ -149,5 +148,11 @@ function SubPage() {
     </Suspense>
   );
 }
+
+const SubPageWrapper = () => (
+  <Suspense fallback={<div>Loading...</div>}>
+    <SubPage />
+  </Suspense>
+);
 
 export default SubPage;
