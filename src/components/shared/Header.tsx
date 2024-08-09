@@ -1,15 +1,12 @@
 'use client';
 import Link from 'next/link';
 
+import { useEffect, useState } from 'react';
 import Join from '../login-join/Join';
 import Login from '../login-join/Login';
-import { useEffect, useState } from 'react';
 import UserMenu from '../user-menu/UserMenu';
-import axios from 'axios';
 /** image */
-const baseURL = process.env.NEXT_PUBLIC_BASE_URL;
-
-const api = axios.create({ baseURL });
+import { instance } from '@/api/instance';
 
 function Header() {
   const [user, setUser] = useState(null);
@@ -17,7 +14,7 @@ function Header() {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const response = await api.get('/api/user', {
+        const response = await instance.get('/api/user', {
           withCredentials: true,
         });
         setUser(response.data);
@@ -36,12 +33,12 @@ function Header() {
           <span className='sr-only'>PicT</span>
         </Link>
 
-        <Link href='/1' className='text-foreground transition-colors hover:text-muted'>
+        {/* <Link href='/1' className='text-foreground transition-colors hover:text-muted'>
           메인1
         </Link>
         <Link href='/' className='text-foreground transition-colors hover:text-muted'>
           메인2
-        </Link>
+        </Link> */}
 
         {user ? (
           <UserMenu />

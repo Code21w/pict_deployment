@@ -1,21 +1,18 @@
 'use client';
 
-import React from 'react';
-import Image from 'next/image';
-import { useState } from 'react';
-import { Button } from '../ui/button';
-import Link from 'next/link';
-import { useForm, SubmitHandler } from 'react-hook-form';
+import { baseURL, instance } from '@/api/instance';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
 import axios from 'axios';
-import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle } from '../ui/dialog';
-import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '../ui/form';
-import { Input } from '../ui/input'; // Adjust the import according to your setup
+import Image from 'next/image';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-const baseURL = process.env.NEXT_PUBLIC_BASE_URL;
-
-const api = axios.create({ baseURL });
+import React, { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+import { Button } from '../ui/button';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '../ui/dialog';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form';
+import { Input } from '../ui/input'; // Adjust the import according to your setup
 const FormSchema = z.object({
   email: z.string().email({
     message: '올바른 이메일 형식이 아닙니다.',
@@ -58,7 +55,7 @@ function Login() {
 
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
     try {
-      const response = await api.post('/api/login', data, {
+      const response = await instance.post('/api/login', data, {
         withCredentials: true,
       });
       console.log('Login successful:', response.data);
@@ -85,7 +82,7 @@ function Login() {
   const onEmailSubmit = async (data: { email: React.SetStateAction<string> }) => {
     try {
       setEmail(data.email);
-      const response = await api.post('/api/reset-password', data);
+      const response = await instance.post('/api/reset-password', data);
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
         const message = error.response.data.message;
