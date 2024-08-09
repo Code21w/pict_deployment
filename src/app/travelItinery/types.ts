@@ -7,15 +7,18 @@ export type Task = {
   firstimage: string;
   map_x: number;
   map_y: number;
+  isChecked: boolean;
 
   // Optional fields
+  addr1?: string;
+  category?: string;
   place_id?: number;
   days?: number;
   planner_id?: string | null;
   sequence?: number;
 };
 
-export const initialPlan: Task = {
+export const initialTask: Task = {
   id: 0,
   place_id: undefined,
   title: '',
@@ -26,6 +29,9 @@ export const initialPlan: Task = {
   map_x: 0,
   map_y: 0,
   sigungu_id: 0,
+  isChecked: false,
+  addr1: '', // 옵션
+  category: '', // 옵션
 };
 
 export type TaskMap = {
