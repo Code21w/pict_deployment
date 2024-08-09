@@ -46,6 +46,7 @@ function Join() {
   const [email, setEmail] = useState('');
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [emailSent, setEmailSent] = useState(false);
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
   const form = useForm({
     resolver: zodResolver(FormSchema),
@@ -71,7 +72,6 @@ function Join() {
       setErrorMessage(null);
       setIsFirstDialogOpen(false); // 첫 번째 다이얼로그 닫기
       setIsSecondDialogOpen(true); // 두 번째 다이얼로그 열기
-      await onEmailSubmit(data);
     } catch (error) {
       console.error('Register failed:', error);
       if (axios.isAxiosError(error) && error.response) {
@@ -93,17 +93,20 @@ function Join() {
   };
 
   const onEmailSubmitCheck = async () => {
-    if (!email) return;
-    try {
-      await instance.post('/api/verify-email', {
-        email,
-      });
+  if (!email || isButtonDisabled) return;
+  setIsButtonDisabled(true);
+  try {
+    const response = await instance.post('/api/verify-email', {
+      email,
+    });
+    console.log('Verification email sent:', response.data);
+    setEmailSent(true);
+  } catch (error) {
+    console.error('Email resend failed:', error);
+    setIsButtonDisabled(false); // Re-enable the button to allow retry if there was an error
+  }
+};
 
-      setEmailSent(true);
-    } catch (error) {
-      console.error('Email resend failed:', error);
-    }
-  };
 
   return (
     <>
@@ -193,16 +196,20 @@ function Join() {
           <p style={{ fontSize: '15px' }}>
             거의 다 왔습니다!
             <br />
-            {email}으로 이메일 확인 링크를 전송했습니다. 이메일을 확인하고 “내 이메일 주소 확인”을
-            클릭하세요.
+            {email}으로 인증 메일을 전송하시려면, 아래 버튼을 클릭해주세요.
             <br />
             <br />
-            이메일을 받지 못하셨나요? 아래를 클릭하여 다시 보내주세요:
+            인증 이메일 보내기:
           </p>
           {!emailSent ? (
-            <Button type='button' className='w-full' onClick={onEmailSubmitCheck} disabled={!email}>
-              이메일 다시 보내기
-            </Button>
+            <Button
+            type='button'
+            className='w-full'
+            onClick={onEmailSubmitCheck}
+            disabled={!email || isButtonDisabled}
+          >
+            이메일 보내기
+          </Button>
           ) : (
             <p style={{ fontSize: '12px', fontWeight: 'bold' }}>
               이메일이 보내졌습니다. 메일함을 확인해 주세요.

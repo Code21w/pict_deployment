@@ -18,7 +18,7 @@ function UserMenu() {
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [Password, setPasswordError] = useState('');
-
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   const [isEditingUserName, setIsEditingUserName] = useState(false);
   const [originalUserName, setOriginalUserName] = useState('');
   const [userName, setUserName] = useState('');
@@ -169,7 +169,8 @@ function UserMenu() {
   };
 
   const onEmailSubmitCheck = async () => {
-    if (!email) return;
+    if (!email || isButtonDisabled) return;
+    setIsButtonDisabled(true);
     try {
       await instance.post('/api/verify-email', {
         email,
@@ -178,6 +179,7 @@ function UserMenu() {
       setEmailSent(true);
     } catch (error) {
       console.error('Email resend failed:', error);
+      setIsButtonDisabled(false); // Re-enable the button to allow retry if there was an error
     }
   };
 
@@ -341,13 +343,13 @@ function UserMenu() {
             </p>
             {!emailSent ? (
               <Button
-                type='button'
-                className='w-full'
-                onClick={onEmailSubmitCheck}
-                disabled={!email}
-              >
-                이메일 보내기
-              </Button>
+              type='button'
+              className='w-full'
+              onClick={onEmailSubmitCheck}
+              disabled={!email || isButtonDisabled}
+            >
+              이메일 다시 보내기
+            </Button>
             ) : (
               <p style={{ fontSize: '12px', fontWeight: 'bold' }}>
                 이메일이 보내졌습니다. 메일함을 확인해 주세요.
