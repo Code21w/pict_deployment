@@ -1,12 +1,11 @@
 'use client';
 
+import {useState} from 'react';
 import { baseURL, instance } from '@/api/instance';
 import { zodResolver } from '@hookform/resolvers/zod';
 import axios from 'axios';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { Button } from '../ui/button';
@@ -34,7 +33,6 @@ function Login() {
   const [isThirdDialogOpen, setIsThirdDialogOpen] = useState(false);
   const [email, setEmail] = useState('');
 
-  const router = useRouter();
   type FormData = z.infer<typeof FormSchema>;
   type EmailData = z.infer<typeof EmailSchema>;
 
@@ -66,7 +64,6 @@ function Login() {
       location.reload();
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
-        const message = error.response.data.message;
 
         form.setError('root', { type: 'manual', message: '비밀번호 또는 이메일이 틀렸습니다.' });
       }

@@ -26,6 +26,7 @@
     "no-dupe-else-if": "warn",
     "no-irregular-whitespace": "warn",
     "no-setter-return": "warn",
+    "no-unused-vars": "warn",
     "no-unsafe-finally": "warn",
     "react/jsx-filename-extension": [1, { "extensions": [".tsx", ".jsx"] }],
     "react/prop-types": "off",

@@ -41,7 +41,6 @@ const FormSchema = z
   });
 
 function Join() {
-  const [isRegistered, setIsRegistered] = useState(false);
   const [isFirstDialogOpen, setIsFirstDialogOpen] = useState(false);
   const [isSecondDialogOpen, setIsSecondDialogOpen] = useState(false);
   const [email, setEmail] = useState('');
@@ -69,7 +68,6 @@ function Join() {
       });
       setEmail(data.email);
       console.log('Register successful:', response.data);
-      setIsRegistered(true);
       setErrorMessage(null);
       setIsFirstDialogOpen(false); // 첫 번째 다이얼로그 닫기
       setIsSecondDialogOpen(true); // 두 번째 다이얼로그 열기
