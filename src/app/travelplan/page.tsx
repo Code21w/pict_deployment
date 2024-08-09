@@ -1,6 +1,7 @@
 'use client';
 import { getErrorMessage } from '@/api/errorHandler';
 import { fetchPlace } from '@/api/travelPlanApi';
+import SadCat from '@/assets/images/sadcat.webp';
 import { TravelDaysSelector } from '@/components/selectDays/TravelDaysSelector';
 import Map from '@/components/shared/kakaoMap';
 import ControlDisplayBlock from '@/components/travel_plan/ControlDisplayBlock';
@@ -9,6 +10,7 @@ import PlaceCategory from '@/components/travel_plan/PlaceCategory';
 import PlaceListBlock from '@/components/travel_plan/PlaceListBlock';
 import TravelPlanCheckButton from '@/components/travel_plan/TravelPlanCheckButton';
 import useCartStore from '@/store/store';
+import Image from 'next/image';
 import { useEffect, useState } from 'react';
 interface Place {
   id: number;
@@ -232,13 +234,20 @@ function TravelPlan() {
           </div>
 
           <div className='list_container h-[calc(100vh_-_200px)] flex flex-col overflow-y-auto overflow-x-hidden mb-1'>
-            {recommendedPlace.map((item, idx) => (
-              <PlaceListBlock key={idx} item={item}>
-                <div className='mr-3'>
-                  <TravelPlanCheckButton changeTempPlaceList={changeTempPlaceList} item={item} />
-                </div>
-              </PlaceListBlock>
-            ))}
+            {recommendedPlace.length > 0 ? (
+              recommendedPlace.map((item, idx) => (
+                <PlaceListBlock key={idx} item={item}>
+                  <div className='mr-3'>
+                    <TravelPlanCheckButton changeTempPlaceList={changeTempPlaceList} item={item} />
+                  </div>
+                </PlaceListBlock>
+              ))
+            ) : (
+              <div className='h-full flex flex-col justify-center items-center text-gray-500'>
+                <Image src={SadCat} width={128} height={128} alt='sadCat.png' />
+                추천해줄 장소가 아직 없습니다 ㅜㅜ
+              </div>
+            )}
           </div>
         </div>
 
