@@ -43,7 +43,7 @@ function TravelPlan() {
   const [period, setPeriod] = useState<string | null>('?');
   const [areaName, setAreaName] = useState('중구');
   const [recommendedPlace, setRecommendedPlace] = useState<RecommendedPlace[]>([]);
-  const { currentCart, setCurrentCart } = useCartStore();
+  const { currentCart, setCurrentCart, setCurrentIndex } = useCartStore();
   const [isExpanded, setIsExpanded] = useState(false);
   const [id, setId] = useState('');
   const [attractions, setAttractions] = useState<RecommendedPlace[]>([]);
@@ -57,6 +57,7 @@ function TravelPlan() {
   // fetch하는 함수를 useEffect 내부에 선언하도록 함
   useEffect(() => {
     const index = Number(searchParams.get('index'));
+    setCurrentIndex(String(index));
     console.log(index);
     getSession(index);
     // getSession에서 setId(location_id)를 해줌

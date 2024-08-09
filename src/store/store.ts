@@ -6,8 +6,8 @@ export const useCartStore = create(
     (set) => ({
       currentCart: [],
       setCurrentCart: (newState) => set({ currentCart: newState }),
-      // currentIndex: '',
-      // setCurrentIndex: (newState) => set({currentIndex: newState})
+      currentIndex: '',
+      setCurrentIndex: (newState) => set({ currentIndex: newState }),
     }),
     {
       name: 'cart-storage',

@@ -39,11 +39,12 @@ function Main() {
   const [isUploadedImageVisible, setIsUploadedImageVisible] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [activeResultIndex, setActiveResultIndex] = useState(0); // Track the active result index
-  const { setCurrentCart } = useCartStore();
+  const { setCurrentCart, setCurrentIndex } = useCartStore();
   const windowHeight = useWindowHeightSize();
 
   useEffect(() => {
     setCurrentCart([]);
+    setCurrentIndex('');
     const checkLoginStatus = async () => {
       try {
         const response = await instance.get('/api/user', {
@@ -244,5 +245,3 @@ function Main() {
     </MainLayout>
   );
 }
-
-export default Main;
