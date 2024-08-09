@@ -2,12 +2,18 @@
 import React, { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
+import KakaoMapByCoordinates from '@/components/subpage/kakaoMapInSubpage';
 
 function SubPage() {
   const [imageUrl, setImageUrl] = useState('');
   const [insertImage, setInsertImage] = useState('');
   const [isImage, setIsImage] = useState(false);
-  const [location, setLocation] = useState('');
+  const [location, setLocation] = useState<{ latitude: number; longitude: number; name: string }>({
+    latitude: 0,
+    longitude: 0,
+    name: '위치 정보가 없습니다.',
+  });
+  const [result, setResult] = useState('');
   const [explanation, setExplanation] = useState('');
   const [similarity, setSimilarity] = useState('');
   const [similarityReason, setSimilarityReason] = useState('');
@@ -29,11 +35,20 @@ function SubPage() {
         parsedLocationInfoResponse.response[0].explanation.replace(/\\n/g, '\n');
     }
 
+    if (parsedGeneratedImage) {
+      parsedGeneratedImage.response = parsedGeneratedImage.response.replace(/\*/g, '');
+    }
+
     if (parsedUploadFileResponse && parsedLocationInfoResponse) {
       const result = parsedUploadFileResponse.result[0];
       setImageUrl(result.image_url);
+      setResult(result.location);
       setInsertImage(uploadedImage || `data:image/png;base64,${result.base64_image}`);
-      setLocation(result.location);
+      setLocation({
+        longitude: result.mapx * 0.0000001,
+        latitude: result.mapy * 0.0000001,
+        name: result.location,
+      });
       setExplanation(parsedLocationInfoResponse.response[0].explanation);
       setSimilarity(Math.round(result.similarity).toString());
       setSimilarityReason(parsedGeneratedImage ? parsedGeneratedImage.response : null);
@@ -55,8 +70,10 @@ function SubPage() {
         </div>
       </div>
       <div className="font-['Cafe24Moyamoya-Face-v1.0'] text-center text-5xl mt-7 mb-10">
-        비슷한 장소로 {location} 어때요?
+        <span className='text-4xl'>비슷한 장소로</span>{' '}
+        <span className='text-blue-500'>{result}</span> <span className='text-4xl'>어때요?</span>
       </div>
+
       <div className='w-[1000px] flex justify-center items-center py-4 relative mb-10'>
         <div style={{ position: 'absolute', left: 'calc(50% - 500px)' }}>
           <Button variant='link' onClick={handleToggleImage}>
@@ -68,6 +85,12 @@ function SubPage() {
       <div className='flex flex-col items-center justify-center w-[1000px] mb-8'>
         <p className='text-left w-full mb-10'>{explanation}</p>
         <p className='text-left w-full mb-8'>{similarityReason}</p>
+        {/* Pass the location to the KakaoMap component */}
+        <KakaoMapByCoordinates
+          latitude={location.latitude}
+          longitude={location.longitude}
+          name={location.name}
+        />
         <div className='w-full flex justify-end' style={{ maxWidth: 'calc(50% + 500px)' }}>
           <Link href='/travelplan'>
             <Button variant='link' className='mt-4 mb-8'>
@@ -76,7 +99,6 @@ function SubPage() {
           </Link>
         </div>
       </div>
-      <div className='flex flex-col items-center justify-center w-screen'></div>
     </main>
   );
 }
