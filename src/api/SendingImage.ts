@@ -1,14 +1,8 @@
 import { getErrorMessage } from './errorHandler';
-import axios from 'axios';
-
-const baseURL = process.env.NEXT_PUBLIC_BASE_URL;
-
-const api = axios.create({ baseURL });
-
+import instance from './instance';
 async function UploadFile(formData: FormData) {
   try {
-    // Make the POST request
-    const { data } = await api.post<{
+    const { data } = await instance.post<{
       result: Array<{
         gal_title: string;
         image_url: string;
@@ -20,6 +14,7 @@ async function UploadFile(formData: FormData) {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
+      withCredentials: true,
     });
 
     const imageInfo = data.result[0];

@@ -12,13 +12,6 @@ declare global {
     kakao: any;
   }
 }
-
-declare global {
-  interface Window {
-    kakao: any;
-  }
-}
-
 export default function RootLayout({ children }: PropsWithChildren) {
   return (
     <html lang='en'>

@@ -1,4 +1,5 @@
 'use client';
+import { getErrorMessage } from '@/api/errorHandler';
 import { fetchPlace } from '@/api/travelPlanApi';
 import { TravelDaysSelector } from '@/components/selectDays/TravelDaysSelector';
 import Map from '@/components/shared/kakaoMap';
@@ -25,15 +26,18 @@ export interface RecommendedPlace extends Place {
 
 function TravelPlan() {
   const [period, setPeriod] = useState<string | null>('?');
-  const [areaName, setAreaName] = useState('광명');
+  const [areaName, setAreaName] = useState('중구');
   const [recommendedPlace, setRecommendedPlace] = useState<RecommendedPlace[]>([]);
   const [tempPlace, setTempPlace] = useState<RecommendedPlace[]>([]);
 
   const [isExpanded, setIsExpanded] = useState(false);
   const setCurrentCart = useCartStore((state) => state.setCurrentCart);
   const currentCart = useCartStore((state) => state.currentCart);
-  const [id, setId] = useState(0);
-
+  const [id, setId] = useState(10);
+  const [attractions, setAttractions] = useState<RecommendedPlace[]>([]);
+  const [nature, setNature] = useState<RecommendedPlace[]>([]);
+  const [activity, setActivity] = useState<RecommendedPlace[]>([]);
+  const [culture, setCulture] = useState<RecommendedPlace[]>([]);
   // const location = sessionStorage.getItem('location');
   // const id = sessionStorage.getItem('id');
 
@@ -240,23 +244,66 @@ function TravelPlan() {
       category: '문화시설',
     },
   ];
-
+  // {id: 352, sigungu_id: 0, title: '강릉시 오죽헌/시립박물관', addr1: '강원특별자치도 강릉시 율곡로3139번길 24', firstimage: 'NaN', …}
   // 첫 시작시 렌더링
   useEffect(() => {
     getSession();
-    const PLACE1 = fetchPlace(id, '인문명소');
-    const PLACE2 = fetchPlace(id, '자연명소');
-    const PLACE3 = fetchPlace(id, '액티비티');
-    const PLACE4 = fetchPlace(id, '문화시설');
-    console.log(PLACE1);
+    setDataList();
+    setRecommendedPlace(attractions);
+    //attractionsList를 뽑아올 방법생각
+    // const addCheckProp = () => {
+    setTempPlace([]);
+  }, []);
+  useEffect(() => {
+    // const PLACE1 = fetchPlace(id, '인문명소');
+    // const PLACE2 = fetchPlace(id, '자연명소');
+    // const PLACE3 = fetchPlace(id, '액티비티');
+    // const PLACE4 = fetchPlace(id, '문화시설');
+    // console.log(PLACE1);
     // const addCheckProp = () => {
     //       const attractions = PLACE1.map((item) => ({ ...item, isChecked: false }));
     //       const nature = PLACE2.map((item) => ({ ...item, isChecked: false }));
     //       const activity = PLACE3.map((item) => ({ ...item, isChecked: false }));
     //       const culture = PLACE4.map((item) => ({ ...item, isChecked: false }));
     //       return { attractions, nature, activity, culture };};
-    setTempPlace([]);
-  }, []);
+  }, [attractions]);
+
+  const setData = async (category: string) => {
+    try {
+      const result = await fetchPlace(id, category);
+      if (result.data && result.data.length > 0) {
+        const placeData: Place[] | [] = result.data;
+        console.log(result.data);
+        if (category === 'attractions')
+          setAttractions(placeData?.map((item) => ({ ...item, isChecked: false })));
+        else if (category === 'nature')
+          setNature(placeData?.map((item) => ({ ...item, isChecked: false })));
+        else if (category === 'activity')
+          setActivity(placeData?.map((item) => ({ ...item, isChecked: false })));
+        else if (category === 'culture')
+          setCulture(placeData?.map((item) => ({ ...item, isChecked: false })));
+      } else {
+        console.error('Response array is empty or undefined');
+        return '정보를 불러올 수 없습니다.'; // 기본값 또는 적절한 에러 메시지 제공
+      }
+    } catch (error: unknown) {
+      console.error(getErrorMessage(error));
+      throw error;
+    }
+  };
+
+  const setDataList = () => {
+    setData('attractions');
+    setData('nature');
+    setData('activity');
+    setData('culture');
+  };
+
+  // const getData = () => {
+  //   promisePLACE1.then((res) => {
+  //     console.log(res);
+  //   });
+  // };
 
   //첫 시작시 렌더링
   // useEffect(() => {
@@ -289,8 +336,7 @@ function TravelPlan() {
         uploadFileResponse.result[0].location
       ) {
         const fullLocation = uploadFileResponse.result[0].location;
-        const id = uploadFileResponse.result[0].id;
-
+        const id = uploadFileResponse.result[0].location_id;
         // 전체 위치 문자열을 공백으로 나누고 마지막 요소(도시명)를 가져옴
         const locationParts = fullLocation.split(' ');
         const cityName = locationParts[locationParts.length - 1];
@@ -303,15 +349,6 @@ function TravelPlan() {
     } else {
       console.error('uploadFileResponse is not available in sessionStorage.');
     }
-  };
-
-  // isChecked를 추가해주는 함수
-  const addCheckProp = () => {
-    const attractions = PLACE_1.map((item) => ({ ...item, isChecked: false }));
-    const nature = PLACE_2.map((item) => ({ ...item, isChecked: false }));
-    const activity = PLACE_3.map((item) => ({ ...item, isChecked: false }));
-    const culture = PLACE_4.map((item) => ({ ...item, isChecked: false }));
-    return { attractions, nature, activity, culture };
   };
 
   // TravelCheckButton 누를때 recommendedPlace의 isChecked를 반전시키고 TempPlace를 갱신
@@ -367,14 +404,23 @@ function TravelPlan() {
     tempPlace.map((item) => deleteTempPlaceList(item));
   };
 
+  // isChecked를 추가해주는 함수
+  // const addCheckProp = () => {
+  //   const attractionsList = attractions.map((item) => ({ ...item, isChecked: false }));
+  //   const natureList = nature.map((item) => ({ ...item, isChecked: false }));
+  //   const activityList = activity.map((item) => ({ ...item, isChecked: false }));
+  //   const cultureList = culture.map((item) => ({ ...item, isChecked: false }));
+  //   return { attractionsList, natureList, activityList, cultureList };
+  // };
+
   // 카테고리에 따라 recommendedPlaceList를 갱신
   const changeCategory = (Key: string) => {
     const key = Key;
-    const place = addCheckProp();
-    if (key === 'attractions') setRecommendedPlace(place.attractions);
-    else if (key === 'nature') setRecommendedPlace(place.nature);
-    else if (key === 'culture') setRecommendedPlace(place.culture);
-    else setRecommendedPlace(place.activity);
+    // const place = addCheckProp();
+    if (key === 'attractions') setRecommendedPlace(attractions);
+    else if (key === 'nature') setRecommendedPlace(nature);
+    else if (key === 'culture') setRecommendedPlace(culture);
+    else if (key === 'activity') setRecommendedPlace(activity);
   };
 
   // 카테고리가 바뀔 때 isChecked가 false로 돌아가므로 다시 true로 만들어줌
