@@ -1,14 +1,13 @@
 'use client';
 
 import { RecommendedPlace } from '@/app/travelplan/page';
-import ImageIcon from '@/assets/images/image_icon.png';
 import Image from 'next/image';
 import { LegacyRef } from 'react';
 export interface PlaceListBlockProps {
   children?: React.ReactNode;
   variant?: string;
   Ref?: LegacyRef<HTMLDivElement>;
-  item?: RecommendedPlace;
+  item: RecommendedPlace;
 }
 const PlaceListBlock = ({ children, variant, item }: PlaceListBlockProps) => {
   return (
@@ -21,7 +20,9 @@ const PlaceListBlock = ({ children, variant, item }: PlaceListBlockProps) => {
             className={`image_component rounded-md mx-[15px] ${variant === 'small' ? 'w-[44px] h-[44px]' : 'w-[64px] h-[64px]'} `}
           >
             <Image
-              src={ImageIcon}
+              src={item.firstimage}
+              width={64}
+              height={64}
               alt='recommended_place'
               className={`object-scale-down ${variant === 'small' ? 'min-w-[44px] min-h-[44px]' : 'w-[64px] h-[64px]'}`}
             />

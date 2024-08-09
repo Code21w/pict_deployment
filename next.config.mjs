@@ -1,5 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  images: {
+    domains: ['tong.visitkorea.or.kr', 'ifh.cc'],
+  },
+
   webpack(config) {
     config.module.rules.push({
       test: /\.svg$/i,
@@ -20,5 +24,4 @@ const nextConfig = {
     },
   },
 };
-
 export default nextConfig;

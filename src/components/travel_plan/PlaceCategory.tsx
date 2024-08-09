@@ -28,7 +28,7 @@ function PlaceCategory(props: {
   changeCategory: (categoryKey: string) => void;
   checkTempPlaceWithCategory: () => void;
 }) {
-  const [currentCategory, setCurrentCategory] = useState('');
+  const [currentCategory, setCurrentCategory] = useState('attractions');
 
   const onClickBadge = (categoryKey: string) => {
     setCurrentCategory(categoryKey);
