@@ -20,7 +20,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { Suspense, useEffect, useState } from 'react';
 interface CustomError {
   response: {
-    data: any;
+    data: object | [];
     status: number;
     headers: string;
   };
@@ -58,7 +58,7 @@ function TravelPlan() {
   useEffect(() => {
     const index = Number(searchParams.get('index'));
     setCurrentIndex(String(index));
-    console.log(index);
+
     getSession(index);
     // getSession에서 setId(location_id)를 해줌
   }, []);

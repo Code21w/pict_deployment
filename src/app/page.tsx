@@ -245,3 +245,5 @@ function Main() {
     </MainLayout>
   );
 }
+
+export default Main;
