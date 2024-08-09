@@ -1,7 +1,7 @@
 // BoardContext/BoardContext.tsx
 'use client';
 import * as React from 'react';
-import useCartStore from '@/store/store';
+import { useCartStore } from '@/store/store';
 
 import { Board, BoardAction } from '@/app/travelItinery/types';
 
