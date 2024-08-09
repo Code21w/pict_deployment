@@ -74,11 +74,11 @@ const TravelPlanCheckButton = ({
 }: TravelPlanCheckButtonProps) => {
   const { isChecked } = item;
 
-  const getButtonStyles = (): { value: string | JSX.Element } & Pick<
+  function getButtonStyles(): { value: string | JSX.Element } & Pick<
     HTMLAttributes<'button'>,
     'className'
   > &
-    Pick<ButtonProps, 'variant'> => {
+    Pick<ButtonProps, 'variant'> {
     return !isChecked
       ? {
           value: '+',
@@ -90,7 +90,7 @@ const TravelPlanCheckButton = ({
           variant: 'check',
           className: 'text-xl text-white',
         };
-  };
+  }
 
   const { value, className, variant, ...rest } = getButtonStyles();
 

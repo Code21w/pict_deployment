@@ -1,7 +1,7 @@
 // BoardContext/BoardContext.tsx
 'use client';
-import * as React from 'react';
 import { useCartStore } from '@/store/store';
+import * as React from 'react';
 
 import { Board, BoardAction } from '@/app/travelItinery/types';
 
@@ -48,6 +48,7 @@ export const BoardProvider = ({ children }: React.PropsWithChildren) => {
     }
     setLoading(false);
   }
+  return <div>{children}</div>;
 };
 
 export function useBoard() {

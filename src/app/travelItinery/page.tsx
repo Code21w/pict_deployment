@@ -1,11 +1,11 @@
 // app/travelItinery/page.tsx
 'use client';
 
-import SplitPane from 'react-split-pane-next';
-import React from 'react';
-import Map from '@/components/shared/kakaoMap';
 import TravelHeader from '@/components/shared/TravelHeader';
+import Map from '@/components/shared/kakaoMap';
 import Dashboard from '@/components/travelItinerary/dnd/Dashboard';
+import React from 'react';
+import SplitPane from 'react-split-pane-next';
 
 const travelItinerary: React.FC = () => {
   return (

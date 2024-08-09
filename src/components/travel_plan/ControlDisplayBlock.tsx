@@ -7,7 +7,7 @@ import Image from 'next/image';
 export interface ControlDisplayBlockProps {
   isExpanded: boolean;
   tempPlace: RecommendedPlace[];
-  deleteTempPlaceList: Function;
+  deleteTempPlaceList: (item: RecommendedPlace) => void;
 }
 
 const ControlDisplayBlock = ({
