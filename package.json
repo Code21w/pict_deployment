@@ -10,6 +10,8 @@
     "format": "prettier -–write 'src/**/*.{ts,tsx,css}'",
     "lint": "next lint"
   },
+  "proxy": "https://kdt-ai-10-team03.elicecoding.com",
+
   "dependencies": {
     "@emotion/server": "^11.11.0",
     "@emotion/styled": "^11.13.0",

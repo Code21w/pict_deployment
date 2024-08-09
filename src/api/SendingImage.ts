@@ -1,9 +1,7 @@
 import { getErrorMessage } from './errorHandler';
-import instance from './instance';
-
+import { instance } from './instance';
 async function UploadFile(formData: FormData) {
   try {
-    // Make the POST request
     const { data } = await instance.post<{
       result: Array<{
         gal_title: string;

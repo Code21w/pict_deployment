@@ -1,7 +1,6 @@
 import Script from 'next/script';
 import { PropsWithChildren } from 'react';
 import './globals.css';
-
 export const metadata = {
   title: 'My App',
   description: 'This is my app',
@@ -12,13 +11,6 @@ declare global {
     kakao: any;
   }
 }
-
-declare global {
-  interface Window {
-    kakao: any;
-  }
-}
-
 export default function RootLayout({ children }: PropsWithChildren) {
   return (
     <html lang='en'>
