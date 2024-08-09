@@ -69,6 +69,7 @@ function TaskItem({ isDragging, provided, task }: TaskItemProps) {
                   variant='ghost'
                   className='w-full justify-between hover:text-red-500 hover:bg-red-50'
                   onClick={() => {
+                    console.log('Delete button clicked'); // 로그 추가
                     dispatch({ type: 'REMOVE_TASK', payload: { id: task.id } });
                   }}
                 >
