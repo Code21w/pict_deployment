@@ -17,7 +17,7 @@ import { useCartStore } from '@/store/store';
 import Image from 'next/image';
 import { useRouter, useSearchParams } from 'next/navigation';
 
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 interface CustomError {
   response: {
     data: any;
@@ -257,84 +257,86 @@ function TravelPlan() {
   };
 
   return (
-    <div className='border-solid border-2 h-screen flex overflow-hidden'>
-      <div className='relative flex max-h-full'>
-        <div className='relative max-w-[300px]'>
-          <div className='my-5 flex flex-col overflow-hidden'>
-            <div className='text-xl'>{areaName}</div>
-            <div className='text-base text-gray-500/75'>{`설정하신 여행기간은 ${period}일 입니다`}</div>
-          </div>
+    <Suspense fallback={<div>Loading...</div>}>
+      <div className='border-solid border-2 h-screen flex overflow-hidden'>
+        <div className='relative flex max-h-full'>
+          <div className='relative max-w-[300px]'>
+            <div className='my-5 flex flex-col overflow-hidden'>
+              <div className='text-xl'>{areaName}</div>
+              <div className='text-base text-gray-500/75'>{`설정하신 여행기간은 ${period}일 입니다`}</div>
+            </div>
 
-          <div className='flex my-6 gap-2 w-[300px]'>
-            <PlaceCategory
-              changeCategory={changeCategory}
-              checkTempPlaceWithCategory={checkCurrentCartWithCategory}
-              // checkTempPlaceWithCategory
-            />
-          </div>
+            <div className='flex my-6 gap-2 w-[300px]'>
+              <PlaceCategory
+                changeCategory={changeCategory}
+                checkTempPlaceWithCategory={checkCurrentCartWithCategory}
+                // checkTempPlaceWithCategory
+              />
+            </div>
 
-          <div className='list_container h-[calc(100vh_-_200px)] flex flex-col overflow-y-auto overflow-x-hidden mb-1'>
-            {recommendedPlace.length > 0 ? (
-              recommendedPlace.map((item, idx) => (
-                <PlaceListBlock key={idx} item={item}>
-                  <div className='mr-3'>
-                    <TravelPlanCheckButton
-                      changeTempPlaceList={changeCurrentCartList}
-                      item={item}
-                      // changeTempPlaceList
-                    />
-                  </div>
-                </PlaceListBlock>
-              ))
-            ) : (
-              <div className='h-full flex flex-col justify-center items-center text-gray-500'>
-                <Image src={SadCat} width={128} height={128} alt='sadCat.png' />
-                추천해줄 장소가 아직 없습니다 ㅜㅜ
-              </div>
-            )}
-          </div>
-        </div>
-
-        <div
-          className={`relative h-[calc(100vh_-_100px)] overflow-x-visible overflow-y-auto ${!isExpanded ? 'w-[120px] slideIn' : 'w-[350px] slideOut'} `}
-        >
-          <div
-            className={`${!isExpanded ? 'flex flex-col items-center mt-5 gap-5' : 'flex flex-col items-center mt-5 gap-5 overflow-hidden'}`}
-          >
-            <div className='w-full flex items-center justify-around'>
-              <div className='text-2xl'>{currentCart.length}</div>
-              {/* tempPlace.length */}
-              {isExpanded && (
-                <div
-                  className='text-xs text-red-500 hover:cursor-pointer'
-                  onClick={resetCurrentCartList}
-                  // resetTempPlaceList
-                >
-                  장소 설정 초기화
+            <div className='list_container h-[calc(100vh_-_200px)] flex flex-col overflow-y-auto overflow-x-hidden mb-1'>
+              {recommendedPlace.length > 0 ? (
+                recommendedPlace.map((item, idx) => (
+                  <PlaceListBlock key={idx} item={item}>
+                    <div className='mr-3'>
+                      <TravelPlanCheckButton
+                        changeTempPlaceList={changeCurrentCartList}
+                        item={item}
+                        // changeTempPlaceList
+                      />
+                    </div>
+                  </PlaceListBlock>
+                ))
+              ) : (
+                <div className='h-full flex flex-col justify-center items-center text-gray-500'>
+                  <Image src={SadCat} width={128} height={128} alt='sadCat.png' />
+                  추천해줄 장소가 아직 없습니다 ㅜㅜ
                 </div>
               )}
             </div>
+          </div>
 
-            <ControlDisplayBlock
-              // placeSelectCount={placeSelectCount}
-              isExpanded={isExpanded}
-              tempPlace={currentCart}
-              // tempPlace
-              deleteTempPlaceList={deleteCurrentCartList}
-              // deleteTempPlaceList
-            />
+          <div
+            className={`relative h-[calc(100vh_-_100px)] overflow-x-visible overflow-y-auto ${!isExpanded ? 'w-[120px] slideIn' : 'w-[350px] slideOut'} `}
+          >
+            <div
+              className={`${!isExpanded ? 'flex flex-col items-center mt-5 gap-5' : 'flex flex-col items-center mt-5 gap-5 overflow-hidden'}`}
+            >
+              <div className='w-full flex items-center justify-around'>
+                <div className='text-2xl'>{currentCart.length}</div>
+                {/* tempPlace.length */}
+                {isExpanded && (
+                  <div
+                    className='text-xs text-red-500 hover:cursor-pointer'
+                    onClick={resetCurrentCartList}
+                    // resetTempPlaceList
+                  >
+                    장소 설정 초기화
+                  </div>
+                )}
+              </div>
 
-            <ExpandButton isExpanded={isExpanded} toggleExpand={toggleExpand} />
-            {/* width: 120px ~ 300px */}
+              <ControlDisplayBlock
+                // placeSelectCount={placeSelectCount}
+                isExpanded={isExpanded}
+                tempPlace={currentCart}
+                // tempPlace
+                deleteTempPlaceList={deleteCurrentCartList}
+                // deleteTempPlaceList
+              />
+
+              <ExpandButton isExpanded={isExpanded} toggleExpand={toggleExpand} />
+              {/* width: 120px ~ 300px */}
+            </div>
+          </div>
+
+          <div className='w-screen h-screen rounded-md'>
+            <Map />
           </div>
         </div>
-
-        <div className='w-screen h-screen rounded-md'>
-          <Map />
-        </div>
+        <TravelDaysSelector selectDay={selectDay} />
       </div>
-      <TravelDaysSelector selectDay={selectDay} />
-    </div>
+    </Suspense>
   );
 }
 

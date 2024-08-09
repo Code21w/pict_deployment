@@ -14,10 +14,9 @@ import AirplaneAnimation from '@/components/main/Airplane';
 import Globe from '@/components/main/Globe';
 import MainLayout from '@/components/main/MainLayout';
 import useWindowHeightSize from '@/hooks/useWindowHeightSize';
-import { useLoginModalStore } from '@/store/store.ts';
+import { useCartStore, useLoginModalStore } from '@/store/store.ts';
 
 import { instance } from '@/api/instance';
-import { Button } from '@/components/ui/button';
 import { ClipLoader } from 'react-spinners';
 
 function Main() {
@@ -40,10 +39,11 @@ function Main() {
   const [isUploadedImageVisible, setIsUploadedImageVisible] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [activeResultIndex, setActiveResultIndex] = useState(0); // Track the active result index
-
+  const { setCurrentCart } = useCartStore();
   const windowHeight = useWindowHeightSize();
 
   useEffect(() => {
+    setCurrentCart([]);
     const checkLoginStatus = async () => {
       try {
         const response = await instance.get('/api/user', {
@@ -117,7 +117,6 @@ function Main() {
       const { result, externalImageUrl } = await UploadFile(formData);
       setResult(result); // Update results state with fetched results
       setLoading(false);
-
     } catch (error) {
       console.error('Error uploading file:', error);
       setLoading(false);
@@ -216,26 +215,27 @@ function Main() {
               {errorMessage && <div className='text-red-500 mt-2'>{errorMessage}</div>}
 
               {loading && (
-            <div className='flex justify-center mt-4'>
-              <ClipLoader size={50} color={'#36D7B7'} loading={loading} />
-            </div>
-          )}
+                <div className='flex justify-center mt-4'>
+                  <ClipLoader size={50} color={'#36D7B7'} loading={loading} />
+                </div>
+              )}
 
-              <Dialog open={dialogOpen && result.length > 0}  onOpenChange={setDialogOpen}>
-              {result.length > 0 && (
-                <DialogDemo
-                  responseImage={result[activeResultIndex].image_url} // Pass the active image URL
-                  location={result[activeResultIndex].location} 
-                  locationInfo={result[activeResultIndex].gal_title} 
-                  similarity={result[activeResultIndex].similarity}
-                  isUploadedImageVisible={isUploadedImageVisible}
-                  setIsUploadedImageVisible={setIsUploadedImageVisible}
-                  image={image}
-                  loading={loading}
-                  totalResults={result.length} // Pass total results
-                  activeResultIndex={activeResultIndex} // Pass current index
-                  onNavigate={handleNavigate} 
-                /> )}
+              <Dialog open={dialogOpen && result.length > 0} onOpenChange={setDialogOpen}>
+                {result.length > 0 && (
+                  <DialogDemo
+                    responseImage={result[activeResultIndex].image_url} // Pass the active image URL
+                    location={result[activeResultIndex].location}
+                    locationInfo={result[activeResultIndex].gal_title}
+                    similarity={result[activeResultIndex].similarity}
+                    isUploadedImageVisible={isUploadedImageVisible}
+                    setIsUploadedImageVisible={setIsUploadedImageVisible}
+                    image={image}
+                    loading={loading}
+                    totalResults={result.length} // Pass total results
+                    activeResultIndex={activeResultIndex} // Pass current index
+                    onNavigate={handleNavigate}
+                  />
+                )}
               </Dialog>
             </div>
           </div>
@@ -246,4 +246,3 @@ function Main() {
 }
 
 export default Main;
-

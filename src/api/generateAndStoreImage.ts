@@ -2,9 +2,9 @@ import { getErrorMessage } from './errorHandler';
 import { instance } from './instance';
 
 interface ResponseData {
-  data:
-  {response: string;
-}}
+  response: string;
+  data: { response: string };
+}
 
 async function generateAndStoreImage(imageUrl: string, locationName: string) {
   try {
@@ -16,7 +16,7 @@ async function generateAndStoreImage(imageUrl: string, locationName: string) {
     });
 
     sessionStorage.setItem('generatedImage', JSON.stringify(response.data));
-    return response
+    return response;
   } catch (error: unknown) {
     console.error(getErrorMessage(error));
     throw error;
