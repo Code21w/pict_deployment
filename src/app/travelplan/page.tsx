@@ -258,7 +258,7 @@ function TravelPlan() {
     setTempPlace([]);
   }, []);
 
-  //첫 시작시 렌더링
+  // 첫 시작시 렌더링
   // useEffect(() => {
   // setAreaName(location);
   // setRecommendedPlace(place);

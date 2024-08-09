@@ -1,18 +1,19 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
-import { useState } from 'react';
 import { Button } from '../ui/button';
 import Link from 'next/link';
-import { useForm, SubmitHandler } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import axios from 'axios';
-import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle } from '../ui/dialog';
-import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '../ui/form';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '../ui/dialog';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form';
 import { Input } from '../ui/input'; // Adjust the import according to your setup
 import { useRouter } from 'next/navigation';
+import { useLoginModalStore } from '@/store/store.ts';
+
 const baseURL = process.env.NEXT_PUBLIC_BASE_URL;
 
 const api = axios.create({ baseURL });
@@ -30,7 +31,7 @@ const EmailSchema = z.object({
 });
 
 function Login() {
-  const [isFirstDialogOpen, setIsFirstDialogOpen] = useState(false);
+  const { isOpenLoginModal, setIsOpenLoginModal } = useLoginModalStore();
   const [isSecondDialogOpen, setIsSecondDialogOpen] = useState(false);
   const [isThirdDialogOpen, setIsThirdDialogOpen] = useState(false);
   const [email, setEmail] = useState('');
@@ -61,8 +62,8 @@ function Login() {
       const response = await api.post('/api/login', data, {
         withCredentials: true,
       });
-      console.log('Login successful:', response.data);
-      setIsFirstDialogOpen(false);
+
+      setIsOpenLoginModal(false);
 
       location.reload();
     } catch (error) {
@@ -98,7 +99,7 @@ function Login() {
 
   return (
     <>
-      <Dialog open={isFirstDialogOpen} onOpenChange={setIsFirstDialogOpen}>
+      <Dialog open={isOpenLoginModal} onOpenChange={setIsOpenLoginModal}>
         <DialogTrigger asChild>
           <button className='text-foreground transition-colors hover:text-muted'>로그인</button>
         </DialogTrigger>
@@ -171,7 +172,7 @@ function Login() {
           <Link
             href='#'
             onClick={() => {
-              setIsFirstDialogOpen(false);
+              setIsOpenLoginModal(false);
               setIsSecondDialogOpen(true);
             }}
             className='link'

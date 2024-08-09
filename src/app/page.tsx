@@ -16,7 +16,12 @@ import AirplaneAnimation from '@/components/main/Airplane';
 import Globe from '@/components/main/Globe';
 import MainLayout from '@/components/main/MainLayout';
 import useWindowHeightSize from '@/hooks/useWindowHeightSize';
+import { useLoginModalStore } from '@/store/store.ts';
+
+import instance from '@/api/instance';
+
 function Main() {
+  const { setIsOpenLoginModal } = useLoginModalStore();
   const [image, setImage] = useState<string | null>(null);
   const [file, setFile] = useState<File | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -27,8 +32,30 @@ function Main() {
   const [errorMessage, setErrorMessage] = useState('');
   const [isUploadedImageVisible, setIsUploadedImageVisible] = useState(false);
   const [locationInfo, setLocationInfo] = useState('');
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const windowHeight = useWindowHeightSize();
+
+  useEffect(() => {
+    const checkLoginStatus = async () => {
+      try {
+        const response = await instance.get('/api/user', {
+          withCredentials: true,
+        });
+
+        if (response.data) {
+          setIsLoggedIn(true);
+        } else {
+          setIsLoggedIn(false);
+        }
+      } catch (error) {
+        console.error('Error checking login status:', error);
+        setIsLoggedIn(false);
+      }
+    };
+
+    checkLoginStatus();
+  }, []);
   const onDrop = useCallback((acceptedFiles: File[], fileRejections: FileRejection[]) => {
     // useCallback을 써야하는가 생각해보기
     // const foundTooManyFiles = fileRejections.find(
@@ -73,7 +100,7 @@ function Main() {
     multiple: false, // 여러 파일 선택 옵션
   });
 
-  const handleButtonClick = async () => {
+  const onUploadImage = async () => {
     if (!file) {
       console.error('No file to upload');
       return;
@@ -102,6 +129,16 @@ function Main() {
       console.error('Error uploading file:', error);
       setLoading(false); // 에러가 발생해도 로딩 상태 해제 추후 출력 페이지 작성
     }
+  };
+
+  const handleButtonClick = async () => {
+    if (!isLoggedIn) {
+      setIsOpenLoginModal(true);
+
+      return;
+    }
+
+    await onUploadImage();
   };
 
   useEffect(() => {
@@ -198,19 +235,20 @@ function Main() {
                 {file ? '여기랑 비슷한 곳 찾아주세요!' : '이미지를 업로드 해주세요!'}
               </button>
               {errorMessage && <div className='text-red-500 mt-2'>{errorMessage}</div>}
+
+              <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+                <DialogDemo
+                  responseImage={responseImage}
+                  location={location}
+                  locationInfo={locationInfo}
+                  similarity={similarity}
+                  isUploadedImageVisible={isUploadedImageVisible}
+                  setIsUploadedImageVisible={setIsUploadedImageVisible}
+                  image={image}
+                  loading={loading}
+                />
+              </Dialog>
             </div>
-            <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-              <DialogDemo
-                responseImage={responseImage}
-                location={location}
-                locationInfo={locationInfo}
-                similarity={similarity}
-                isUploadedImageVisible={isUploadedImageVisible}
-                setIsUploadedImageVisible={setIsUploadedImageVisible}
-                image={image}
-                loading={loading}
-              />
-            </Dialog>
           </div>
         </div>
       </main>

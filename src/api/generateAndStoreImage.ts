@@ -1,12 +1,9 @@
 import { getErrorMessage } from './errorHandler';
-import axios from 'axios';
+import instance from './instance';
 
-const baseURL = process.env.NEXT_PUBLIC_BASE_URL;
-
-const api = axios.create({ baseURL });
 async function generateAndStoreImage(imageUrl: string, locationName: string) {
   try {
-    const response = await api.get<Response>('/api/generate', {
+    const response = await instance.get<Response>('/api/generate', {
       params: {
         imageUrl: imageUrl,
         locationName: locationName,

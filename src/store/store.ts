@@ -15,4 +15,16 @@ const useCartStore = create<CartStoreType>((set) => ({
   //   removeAllBears: () => set({ bears: 0 }),
 }));
 
-export default useCartStore;
+export { useCartStore };
+
+interface UseLoginModalStoreState {
+  isOpenLoginModal: boolean;
+  setIsOpenLoginModal: (isOpenLoginModal: boolean) => void;
+}
+
+export const useLoginModalStore = create<UseLoginModalStoreState>((set) => ({
+  isOpenLoginModal: false,
+  setIsOpenLoginModal: (isOpenLoginModal) => {
+    set({ isOpenLoginModal: isOpenLoginModal });
+  },
+}));
