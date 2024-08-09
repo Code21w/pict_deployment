@@ -191,7 +191,7 @@ function Main() {
           </div>
 
           <div
-            className='relative z-4 -mt-[300px] mb-[150px] ml-[40%] flex flex-col w-[500px] h-[100px] big-screen-size small-screen-size'
+            className='relative z-4 -mt-[470px] mb-[370px] ml-[40%] flex flex-col w-[500px] h-[350px] max-[1500px]:h-[285px] max-[1200px]:-mt-[400px] max-150 big-screen-size small-screen-size'
             style={
               {
                 '--inner-height': `${windowHeight.height}px`,
@@ -206,20 +206,23 @@ function Main() {
 
             <div
               {...getRootProps()}
-              className={`flex items-center bg-gray-100 rounded-3xl shadow-md justify-center mt-[10px] ${
-                isDragActive ? 'bg-gray-200' : 'bg-gray-100'
-              }`}
+              className={`flex items-center bg-gray-100 rounded-3xl shadow-md justify-center mt-[10px] `}
+              style={{
+                width: '100%',
+                height: 'calc(100% - 100px)',
+                margin: '10px 0',
+              }}
             >
               <input
                 {...getInputProps()}
-                className='w-[300px] h-[100px] bg-transparent pl-[10px]'
+                className='w-[300px] h-[300px] bg-transparent pl-[10px]'
               />
               {!image && <Image src={imageIcon} alt='UploadImageIcon.png' />}
               {image && (
                 <img
                   src={image}
                   alt='Uploaded Preview'
-                  className='w-[300px] h-[100px] object-cover'
+                  className='w-[300px] h-[300px] object-cover'
                 />
               )}
             </div>

@@ -3,6 +3,8 @@ import React, { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import KakaoMapByCoordinates from '@/components/subpage/kakaoMapInSubpage';
+import Footer from '@/components/shared/Footer';
+import { ChevronRightIcon } from '@radix-ui/react-icons';
 
 function SubPage() {
   const [imageUrl, setImageUrl] = useState('');
@@ -47,7 +49,7 @@ function SubPage() {
       setLocation({
         longitude: result.mapx * 0.0000001,
         latitude: result.mapy * 0.0000001,
-        name: result.location,
+        name: result.gal_title,
       });
       setExplanation(parsedLocationInfoResponse.response[0].explanation);
       setSimilarity(Math.round(result.similarity).toString());
@@ -59,7 +61,10 @@ function SubPage() {
   };
 
   return (
-    <main className='bg-white h-screen flex flex-col items-center overflow-y-scroll py-8'>
+    <main
+      className='bg-white h-screen flex flex-col items-center overflow-y-scroll py-8'
+      style={{ paddingBottom: '30px' }}
+    >
       <div className='w-full flex justify-center'>
         <div className='w-[1000px] h-[400px] flex items-center justify-center mt-8 mb-2'>
           {isImage ? (
@@ -85,19 +90,22 @@ function SubPage() {
       <div className='flex flex-col items-center justify-center w-[1000px] mb-8'>
         <p className='text-left w-full mb-10'>{explanation}</p>
         <p className='text-left w-full mb-8'>{similarityReason}</p>
-        {/* Pass the location to the KakaoMap component */}
+        <div className='w-full flex justify-end' style={{ maxWidth: 'calc(50% + 500px)' }}>
+          <Link href='/travelplan'>
+            <Button variant='link' className='mt-4 mb-8'>
+              여행 계획 만들러가기
+              <ChevronRightIcon className='h-4 w-4' />
+            </Button>
+          </Link>
+        </div>
         <KakaoMapByCoordinates
           latitude={location.latitude}
           longitude={location.longitude}
           name={location.name}
         />
-        <div className='w-full flex justify-end' style={{ maxWidth: 'calc(50% + 500px)' }}>
-          <Link href='/travelplan'>
-            <Button variant='link' className='mt-4 mb-8'>
-              여행 계획 만들러가기
-            </Button>
-          </Link>
-        </div>
+      </div>
+      <div style={{ paddingTop: '100px' }}>
+        <Footer />
       </div>
     </main>
   );

@@ -1,6 +1,6 @@
 'use client';
 
-import {useState} from 'react';
+import { useState } from 'react';
 import { baseURL, instance } from '@/api/instance';
 import { zodResolver } from '@hookform/resolvers/zod';
 import axios from 'axios';
@@ -55,7 +55,7 @@ function Login() {
 
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
     try {
-      const response = await instance.post('/api/login', data, {
+      await instance.post('/api/login', data, {
         withCredentials: true,
       });
 
@@ -64,7 +64,6 @@ function Login() {
       location.reload();
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
-
         form.setError('root', { type: 'manual', message: '비밀번호 또는 이메일이 틀렸습니다.' });
       }
     }
@@ -81,7 +80,7 @@ function Login() {
   const onEmailSubmit = async (data: { email: React.SetStateAction<string> }) => {
     try {
       setEmail(data.email);
-      const response = await instance.post('/api/reset-password', data);
+      await instance.post('/api/reset-password', data);
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
         const message = error.response.data.message;

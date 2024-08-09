@@ -58,7 +58,7 @@ const ChangePassword: React.FC<TokenType> = ({ token }) => {
   async function onSubmit(data: changePasswordType) {
     try {
       if (typeof token === 'string') {
-        const response = await instance.post(
+        await instance.post(
           `/api/reset-password/${token}`,
           { newPassword: data.password },
           {

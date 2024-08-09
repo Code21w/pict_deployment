@@ -19,9 +19,9 @@ const VerifyEmail: React.FC<TokenType> = ({ token }) => {
     const verifyToken = async () => {
       try {
         const response = await instance.post(`/api/verify-email/${token}`);
-        console.log(response);
+
         const isRegistrationSuccessful = response.data.message === 'User verified successfully';
-        console.log();
+
         setIsValid(isRegistrationSuccessful);
         setIsModalOpen(true);
 

@@ -60,14 +60,14 @@ function Join() {
 
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
     try {
-      const response = await instance.post('/api/register', {
+      await instance.post('/api/register', {
         email: data.email,
         password: data.password,
         display_name: data.display_name,
         verified_email: false,
       });
       setEmail(data.email);
-      console.log('Register successful:', response.data);
+
       setErrorMessage(null);
       setIsFirstDialogOpen(false); // 첫 번째 다이얼로그 닫기
       setIsSecondDialogOpen(true); // 두 번째 다이얼로그 열기
@@ -84,10 +84,9 @@ function Join() {
 
   const onEmailSubmit = async (data: z.infer<typeof FormSchema>) => {
     try {
-      const response = await instance.post('/api/verify-email', {
+      await instance.post('/api/verify-email', {
         email: data.email,
       });
-      console.log('Verification email sent:', response.data);
     } catch (error) {
       console.error('Email resend failed:', error);
     }
@@ -96,10 +95,10 @@ function Join() {
   const onEmailSubmitCheck = async () => {
     if (!email) return;
     try {
-      const response = await instance.post('/api/verify-email', {
+      await instance.post('/api/verify-email', {
         email,
       });
-      console.log('Verification email sent:', response.data);
+
       setEmailSent(true);
     } catch (error) {
       console.error('Email resend failed:', error);
