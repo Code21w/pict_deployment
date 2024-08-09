@@ -1,7 +1,8 @@
 'use client';
-import * as React from 'react';
-import { Board, BoardAction } from '@/app/travelItinery/types';
 import { useCartStore } from '@/store/store';
+import * as React from 'react';
+
+import { Board, BoardAction } from '@/app/travelItinery/types';
 
 const boardInitialState: Board = {
   columns: {
@@ -43,10 +44,7 @@ export const BoardProvider = ({ children }: React.PropsWithChildren) => {
     }
     setLoading(false);
   }
-
-  if (loading) return <div>Loading...</div>;
-
-  return <BoardContext.Provider value={{ boardState, dispatch }}>{children}</BoardContext.Provider>;
+  return <div>{children}</div>;
 };
 
 /**

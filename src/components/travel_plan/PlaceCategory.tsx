@@ -21,9 +21,6 @@ const CATEGORY = [
     label: '문화시설',
   },
 ];
-// export interface PlaceCategoryProps {
-//   storeCategory: Function;
-// }
 function PlaceCategory(props: {
   changeCategory: (categoryKey: string) => void;
   checkTempPlaceWithCategory: () => void;

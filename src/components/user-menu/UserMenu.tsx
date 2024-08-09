@@ -18,7 +18,7 @@ function UserMenu() {
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [Password, setPasswordError] = useState('');
-
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   const [isEditingUserName, setIsEditingUserName] = useState(false);
   const [originalUserName, setOriginalUserName] = useState('');
   const [userName, setUserName] = useState('');
@@ -42,7 +42,6 @@ function UserMenu() {
         });
         const userData = response.data;
 
-        console.log(userData.verified_email);
         setOriginalUserName(userData.display_name);
         setVerified(userData.verified_email);
         setLocal(userData.platform_type);
@@ -72,7 +71,6 @@ function UserMenu() {
       if (response.status === 200) {
         setIsEditingUserName(false);
         setError('');
-        console.log('Username updated successfully:', response.data);
       }
     } catch (err) {
       setError('닉네임 업데이트 실패. 다시 시도해주세요.');
@@ -91,13 +89,11 @@ function UserMenu() {
           alert('성공적으로 탈퇴하였습니다.');
           deleteCookie('connect.sid');
           location.reload();
-          console.log('User deleted successfully:', response.data);
         }
       } catch (err) {
         console.error('Error deleting user:', err);
       }
     } else {
-      console.log('User canceled the delete action.');
     }
   };
 
@@ -137,7 +133,6 @@ function UserMenu() {
       );
 
       if (response.status === 200) {
-        console.log('Password changed successfully.');
         setIsEditingPassword(false);
         setCurrentPassword('');
         setNewPassword('');
@@ -174,15 +169,17 @@ function UserMenu() {
   };
 
   const onEmailSubmitCheck = async () => {
-    if (!email) return;
+    if (!email || isButtonDisabled) return;
+    setIsButtonDisabled(true);
     try {
-      const response = await instance.post('/api/verify-email', {
+      await instance.post('/api/verify-email', {
         email,
       });
-      console.log('Verification email sent:', response.data);
+
       setEmailSent(true);
     } catch (error) {
       console.error('Email resend failed:', error);
+      setIsButtonDisabled(false); // Re-enable the button to allow retry if there was an error
     }
   };
 
@@ -349,9 +346,9 @@ function UserMenu() {
                 type='button'
                 className='w-full'
                 onClick={onEmailSubmitCheck}
-                disabled={!email}
+                disabled={!email || isButtonDisabled}
               >
-                이메일 보내기
+                이메일 다시 보내기
               </Button>
             ) : (
               <p style={{ fontSize: '12px', fontWeight: 'bold' }}>
