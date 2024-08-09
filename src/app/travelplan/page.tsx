@@ -1,7 +1,11 @@
 'use client';
+// api
 import { getErrorMessage } from '@/api/errorHandler';
 import { fetchPlace } from '@/api/travelPlanApi';
+
+// assets
 import SadCat from '@/assets/images/sadcat.webp';
+// components
 import { TravelDaysSelector } from '@/components/selectDays/TravelDaysSelector';
 import Map from '@/components/shared/kakaoMap';
 import ControlDisplayBlock from '@/components/travel_plan/ControlDisplayBlock';
@@ -11,7 +15,8 @@ import PlaceListBlock from '@/components/travel_plan/PlaceListBlock';
 import TravelPlanCheckButton from '@/components/travel_plan/TravelPlanCheckButton';
 import { useCartStore } from '@/store/store';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
+
 import { useEffect, useState } from 'react';
 interface CustomError {
   response: {
@@ -46,11 +51,14 @@ function TravelPlan() {
   const [activity, setActivity] = useState<RecommendedPlace[]>([]);
   const [culture, setCulture] = useState<RecommendedPlace[]>([]);
   const Router = useRouter();
+  const searchParams = useSearchParams();
 
   // 코치님 피드백에 따라 state수 줄이고 useEffect 4개에서 2개로 줄임
   // fetch하는 함수를 useEffect 내부에 선언하도록 함
   useEffect(() => {
-    getSession();
+    const index = Number(searchParams.get('index'));
+    console.log(index);
+    getSession(index);
     // getSession에서 setId(location_id)를 해줌
   }, []);
 
@@ -104,18 +112,18 @@ function TravelPlan() {
   }, [id]);
 
   // 세션 스토리지에서 location id와 location 이름을 가져오는함수
-  const getSession = () => {
+  const getSession = (index: number) => {
     const uploadFileResponseString = sessionStorage.getItem('uploadFileResponse');
     if (uploadFileResponseString) {
       const uploadFileResponse = JSON.parse(uploadFileResponseString);
 
       if (
         uploadFileResponse.result &&
-        uploadFileResponse.result[0] &&
-        uploadFileResponse.result[0].location
+        uploadFileResponse.result[index] &&
+        uploadFileResponse.result[index].location
       ) {
-        const fullLocation = uploadFileResponse.result[0].location;
-        const location_id = uploadFileResponse.result[0].location_id;
+        const fullLocation = uploadFileResponse.result[index].location;
+        const location_id = uploadFileResponse.result[index].location_id;
         // 전체 위치 문자열을 공백으로 나누고 마지막 요소(도시명)를 가져옴
         const locationParts = fullLocation.split(' ');
         const cityName = locationParts[locationParts.length - 1];

@@ -1,19 +1,18 @@
 import { CartStoreType } from '@/store/types';
 import { create } from 'zustand';
-export const useCartStore = create<CartStoreType>((set) => ({
-  currentCart: [],
-  setCurrentCart: (newState) => {
-    set({ currentCart: newState });
-  },
-  // setCurrentPlaceImage: (newState) => {
-  //   set(() => ({ place_image: newState }));
-  // },
-  // setCurrentPlaceId: (newState) => {
-  //   set(() => ({ place_id: newState }));
-  // },
-  //   increasePopulation: () => set((state) => ({ bears: state.bears + 1 })),
-  //   removeAllBears: () => set({ bears: 0 }),
-}));
+import { createJSONStorage, persist } from 'zustand/middleware';
+export const useCartStore = create(
+  persist<CartStoreType>(
+    (set) => ({
+      currentCart: [],
+      setCurrentCart: (newState) => set({ currentCart: newState }),
+    }),
+    {
+      name: 'cart-storage',
+      storage: createJSONStorage(() => sessionStorage),
+    }
+  )
+);
 
 interface UseLoginModalStoreState {
   isOpenLoginModal: boolean;
