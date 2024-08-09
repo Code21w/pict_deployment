@@ -5,9 +5,13 @@ async function fetchLocationInfo(location: string) {
   try {
     const response = await instance.get(`/api/sigungu/${location}`);
     if (response.data.response && response.data.response.length > 0) {
-      const explanation = response.data.response[0].explanation;
+      let explanation = response.data.response[0].explanation;
+
+      // 줄바꿈 기호 제거
+      explanation = explanation.replace(/\\n/g, '');
 
       // Save the response to session storage
+
       sessionStorage.setItem('locationInfoResponse', JSON.stringify(response.data));
 
       return explanation;
