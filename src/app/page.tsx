@@ -18,7 +18,7 @@ import MainLayout from '@/components/main/MainLayout';
 import useWindowHeightSize from '@/hooks/useWindowHeightSize';
 import { useLoginModalStore } from '@/store/store.ts';
 
-import instance from '@/api/instance';
+import { instance } from '@/api/instance';
 
 function Main() {
   const { setIsOpenLoginModal } = useLoginModalStore();

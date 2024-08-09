@@ -13,6 +13,8 @@ import { Button } from '../ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '../ui/dialog';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form';
 import { Input } from '../ui/input'; // Adjust the import according to your setup
+import { useLoginModalStore } from '@/store/store.ts';
+
 const FormSchema = z.object({
   email: z.string().email({
     message: '올바른 이메일 형식이 아닙니다.',
