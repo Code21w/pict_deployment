@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, MouseEvent } from 'react';
+import React, { useState, useEffect, MouseEvent, useRef } from 'react';
 import axios from 'axios';
 import Link from 'next/link';
 import MainLayout from '@/components/main/MainLayout';
@@ -17,17 +17,85 @@ interface TravelPlan {
 const initialTravelPlans: TravelPlan[] = [];
 
 function MyPage() {
-  const [travelPlans, setTravelPlans] = useState<TravelPlan[]>(initialTravelPlans);
-  const [editId, setEditId] = useState<number | null>(null);
-  const [newTitle, setNewTitle] = useState<string>('');
-  const [tooltip, setTooltip] = useState<{ visible: boolean, x: number, y: number, name: string | null }>({ visible: false, x: 0, y: 0, name: null });
-  const [selectedRegions, setSelectedRegions] = useState<{ [key: string]: boolean }>({});
-
-  useEffect(() => {
-    fetchTravelPlans();
-    addEventToRegions();
-    fetchScratchMap();
-  }, []);
+	const [travelPlans, setTravelPlans] = useState<TravelPlan[]>(initialTravelPlans);
+	const [editId, setEditId] = useState<number | null>(null);
+	const [newTitle, setNewTitle] = useState<string>('');
+	const [tooltip, setTooltip] = useState<{ visible: boolean, x: number, y: number, name: string | null }>({ visible: false, x: 0, y: 0, name: null });
+	const [selectedRegions, setSelectedRegions] = useState<{ [key: string]: boolean }>({});
+	const mapRef = useRef<SVGSVGElement | null>(null);
+	const [dragging, setDragging] = useState(false);
+	const [startPoint, setStartPoint] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
+	const [viewBox, setViewBox] = useState<number[]>([0, 0, 509, 716.1]); // [x, y, width, height]
+  
+	useEffect(() => {
+	  const svg = mapRef.current; 
+  
+	  if (svg) {
+		fetchScratchMap(); 
+		addEventToRegions(svg); 
+		
+		const handleWheel = (event: WheelEvent) => {
+		  event.preventDefault();
+		  
+		  if (!svg) return; 
+		  let scale = event.deltaY / 1000;
+		  scale = Math.abs(scale) < 0.1 ? 0.1 * event.deltaY / Math.abs(event.deltaY) : scale;
+  
+		  let pt = new DOMPoint(event.clientX, event.clientY);
+  
+		  const [x, y, width, height] = viewBox;
+		  let [width2, height2] = [width + width * scale, height + height * scale];
+		  let x2 = pt.x - (pt.x - x) / width * width2;
+		  let y2 = pt.y - (pt.y - y) / height * height2;
+  
+		  setViewBox([x2, y2, width2, height2]);
+		  svg.setAttribute('viewBox', `${x2} ${y2} ${width2} ${height2}`);
+		};
+  
+		const handleMouseDown = (event: MouseEvent) => {
+		  if (event.button === 1) { 
+			setDragging(true);
+			setStartPoint({ x: event.clientX, y: event.clientY });
+		  }
+		};
+  
+		const handleMouseMove = (event: MouseEvent) => {
+		  if (dragging) {
+			const dx = event.clientX - startPoint.x;
+			const dy = event.clientY - startPoint.y;
+  
+			setViewBox(prev => {
+			  const [x, y, width, height] = prev;
+			  const newX = x - dx;
+			  const newY = y - dy;
+  
+			  svg.setAttribute('viewBox', `${newX} ${newY} ${width} ${height}`);
+			  return [newX, newY, width, height];
+			});
+  
+			setStartPoint({ x: event.clientX, y: event.clientY }); 
+		  }
+		};
+  
+		const handleMouseUp = () => {
+		  setDragging(false);
+		};
+  
+		svg.addEventListener('wheel', handleWheel as EventListener);
+		svg.addEventListener('mousedown', handleMouseDown as unknown as EventListener);
+		svg.addEventListener('mousemove', handleMouseMove as unknown as EventListener);
+		svg.addEventListener('mouseup', handleMouseUp as EventListener);
+		svg.addEventListener('mouseleave', handleMouseUp as EventListener); // 마우스가 SVG를 벗어났을 때 드래그 종료
+  
+		return () => {
+		  svg.removeEventListener('wheel', handleWheel as EventListener);
+		  svg.removeEventListener('mousedown', handleMouseDown as unknown as EventListener);
+		  svg.removeEventListener('mousemove', handleMouseMove as unknown as EventListener);
+		  svg.removeEventListener('mouseup', handleMouseUp as EventListener);
+		  svg.removeEventListener('mouseleave', handleMouseUp as EventListener);
+		};
+	  }
+	}, [dragging, startPoint, viewBox]);
 
   const fetchTravelPlans = async () => {
     try {
@@ -161,7 +229,7 @@ function MyPage() {
         const [parentId, elementId] = regionName.split(' ');
         const regionElement = document.querySelector(`g[id='${parentId}'] [id='${elementId}']`) as SVGElement;
         if (regionElement) {
-          regionElement.style.fill = '#5E92CD';
+          regionElement.style.fill = '#ACCDFF';
           setSelectedRegions(prevState => ({ ...prevState, [regionName]: true }));
         }
       });
@@ -170,7 +238,8 @@ function MyPage() {
     }
   };
 
-  const addEventToRegions = () => {
+
+  const addEventToRegions = (svg: SVGSVGElement) => {
     const regions = document.querySelectorAll<SVGElement>('svg path, svg polygon');
     regions.forEach(region => {
       region.addEventListener('click', handleRegionClick as unknown as EventListener);
@@ -178,6 +247,7 @@ function MyPage() {
       region.addEventListener('mouseleave', handleMouseLeave as unknown as EventListener);
     });
   };
+  
 
   return (
     <MainLayout> {/* MainLayout으로 MyPage를 감쌉니다 */}
@@ -185,11 +255,15 @@ function MyPage() {
         <div className='items-center justify-center py-4'>
           <div className='flex justify-center items-center mt-10 p-4'>
             <div style={{ padding: '20px', border: '2px solid gray', borderRadius: '0.75rem', width: '75%' }}>
-              <svg
-                viewBox='0 0 509 716.1'
-                className='size-4/5'
-                style={{ background: 'new 0 0 509 716.1' }}
-              >
+			<div>
+      </div>
+	  <svg
+              ref={mapRef}
+              viewBox='0 0 509 716.1'
+              className='size-4/5'
+              style={{ background: 'new 0 0 509 716.1' }}
+            >
+			
                 <style type="text/css">
                   {`
                     .st0 { fill: gray; stroke: #FFFFFF; stroke-width: 0.5; }
@@ -206,6 +280,7 @@ function MyPage() {
                     }
                   `}
                 </style>
+				
                 <g id="제주특별자치도">
               <path id="서귀포시" className="st0" d="M454.8,669.3l21.4-9.5l0.4,0.6l0.2,0l2.8,0.5l-0.6,3.2l1.7-3.6l1.2,3.3l-14.3,22.6l-8.1,0.8
                 l-4.3,4.4l-11.2,0.7l-7.8,5.9l-10.3-0.9l-6.5,2.3l-1.8-2.5l-11.5,1.5l-5.7-1.6l-7.5,7l-13.2-13.7l3.1-2l6.9,3.7l0-2.4l6.6-4.4
