@@ -3,7 +3,7 @@
 import React, { useState, useEffect, MouseEvent } from 'react';
 import axios from 'axios';
 import Link from 'next/link';
-import MainLayout from '@/components/main/MainLayout'; // MainLayout import 추가
+import MainLayout from '@/components/main/MainLayout';
 
 axios.defaults.withCredentials = true; // 쿠키를 포함한 요청 허용
 
@@ -133,7 +133,7 @@ function MyPage() {
   const toggleRegionColor = (regionName: string, element: SVGElement) => {
     setSelectedRegions((prevState) => {
       const newSelectedRegions = { ...prevState, [regionName]: !prevState[regionName] };
-      element.style.fill = newSelectedRegions[regionName] ? '#FF84C6' : 'gray';
+      element.style.fill = newSelectedRegions[regionName] ? '#5E92CD' : 'gray';
       return newSelectedRegions;
     });
   };
