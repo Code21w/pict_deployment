@@ -9,7 +9,7 @@ import ExpandButton from '@/components/travel_plan/ExpandButton';
 import PlaceCategory from '@/components/travel_plan/PlaceCategory';
 import PlaceListBlock from '@/components/travel_plan/PlaceListBlock';
 import TravelPlanCheckButton from '@/components/travel_plan/TravelPlanCheckButton';
-import useCartStore from '@/store/store';
+import { useCartStore } from '@/store/store';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 interface Place {

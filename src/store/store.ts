@@ -1,6 +1,6 @@
 import { CartStoreType } from '@/store/types';
 import { create } from 'zustand';
-const useCartStore = create<CartStoreType>((set) => ({
+export const useCartStore = create<CartStoreType>((set) => ({
   currentCart: [],
   setCurrentCart: (newState) => {
     set({ currentCart: newState });
@@ -14,8 +14,6 @@ const useCartStore = create<CartStoreType>((set) => ({
   //   increasePopulation: () => set((state) => ({ bears: state.bears + 1 })),
   //   removeAllBears: () => set({ bears: 0 }),
 }));
-
-export { useCartStore };
 
 interface UseLoginModalStoreState {
   isOpenLoginModal: boolean;
