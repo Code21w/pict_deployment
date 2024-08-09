@@ -22,6 +22,9 @@ interface DialogDemoProps {
   image: string | null;
   loading: boolean;
   similarity: number;
+  totalResults: number; // Number of total results
+  activeResultIndex: number; // Current index of the result being displayed
+  onNavigate: (index: number) => void; // Function to handle navigation
 }
 
 export function DialogDemo({
@@ -33,6 +36,9 @@ export function DialogDemo({
   image,
   loading,
   similarity,
+  totalResults,
+  activeResultIndex,
+  onNavigate,
 }: DialogDemoProps) {
   const handleToggleImage = () => {
     setIsUploadedImageVisible(!isUploadedImageVisible);
@@ -49,97 +55,104 @@ export function DialogDemo({
     locationInfo.length > 554 ? truncateText(locationInfo, 550) : locationInfo;
 
   return (
-    <DialogContent className='sm:max-w-[1200px] h-[800px]'>
-      <DialogHeader>
-        <DialogTitle>
-          <Button
-            variant='link'
-            onClick={handleToggleImage}
-            className='text-gray-500'
-            style={{ marginBottom: '1px' }}
-          >
-            {isUploadedImageVisible ? '서버에서 받은 사진 보기' : '내가 넣은 사진 보기'}
-          </Button>
-        </DialogTitle>
-      </DialogHeader>
-      <div
-        className='w-full h-[430px] flex items-center justify-center'
-        style={{ marginTop: '1px', position: 'relative', top: '-25px' }}
+    <DialogContent className='sm:max-w-[1100px] h-[800px]'>
+  <DialogHeader>
+    <DialogTitle>
+      <Button
+        variant='link'
+        onClick={handleToggleImage}
+        className='text-gray-500'
+        style={{ marginBottom: '1px' }}
       >
-        <div className='flex items-center justify-center w-full h-full'>
-          {(() => {
-            if (loading) {
-              return <Skeleton className='w-full h-full' />;
-            } else if (isUploadedImageVisible) {
-              return (
-                <img
-                  src={image || undefined}
-                  alt='Uploaded image'
-                  className='max-w-full max-h-full object-contain'
-                />
-              );
-            } else if (responseImage) {
-              return (
-                <img
-                  src={responseImage || undefined}
-                  alt='Response image'
-                  className='max-w-full max-h-full object-contain'
-                />
-              );
-            } else {
-              return <Skeleton className='w-full h-full' />;
-            }
-          })()}
-        </div>
-      </div>
+        {isUploadedImageVisible ? '서버에서 받은 사진 보기' : '내가 넣은 사진 보기'}
+      </Button>
+    </DialogTitle>
+  </DialogHeader>
+  
+  <div className='w-full h-[430px] flex flex-col items-center justify-center'>
+  <div className='flex items-center justify-center w-full h-full'>
+    {loading ? (
+      <Skeleton className='w-full h-full' />
+    ) : isUploadedImageVisible ? (
+      <img src={image || ''} alt='Uploaded image' className='max-w-full max-h-full object-contain rounded-lg shadow-md' />
+    ) : responseImage ? (
+      <img src={responseImage || ''} alt='Response image' className='max-w-full max-h-full object-contain rounded-lg shadow-md' />
+    ) : (
+      <Skeleton className='w-full h-full' />
+    )}
+  </div>
 
-      <div className='relative grid gap-1 place-items-center' style={{ top: '-40px' }}>
-        <div className='flex flex-col text-center'>
-          <DialogDescription
-            className='h-20 text-4xl text-black inline-flex items-center justify-center font-["Cafe24Moyamoya-Face-v1.0"]'
-            style={{ marginBottom: '1px', position: 'relative' }}
-          >
-            비슷한 장소로 {loading ? <Skeleton className='h-10 w-[50px] px-2' /> : <>{location}</>}{' '}
-            어때요?
-          </DialogDescription>
-          <DialogDescription
-            className='text-xl h-10 text-black inline-flex items-center justify-center'
-            style={{ marginBottom: '1px', position: 'relative', top: '-15px' }}
-          >
-            유사도 {loading ? <Skeleton className='h-4 w-[25px]' /> : <>{similarity}</>} %
-          </DialogDescription>
-          <DialogDescription
-            className='text-base text-black inline-flex items-center justify-center p-2'
-            style={{
-              position: 'relative',
-              top: '-15px',
-              height: 'auto',
-              maxHeight: '400px',
-              wordWrap: 'break-word',
-              wordBreak: 'break-all',
-            }}
-          >
-            {loading ? (
-              <>
-                <div style={{ height: '138px', width: '1100px' }}>
-                  <Skeleton style={{ height: '100%', width: '100%' }} />
-                </div>
-              </>
-            ) : (
-              <>{truncatedLocationInfo}</>
-            )}
-          </DialogDescription>
-        </div>
-      </div>
-      <DialogFooter className='absolute bottom-5 right-5'>
-        <Link href='/subpage'>
-          <Button variant='link'>더 많은 정보 보러가기</Button>
-        </Link>
-      </DialogFooter>
-    </DialogContent>
+  <div className='mt-2 text-center'>
+    {truncatedLocationInfo}
+  </div>
+</div>
+
+
+
+  <div className='relative grid gap-1 place-items-center pt-6' style={{ top: '-40px' }}>
+    <div className='flex flex-col text-center'>
+      <DialogDescription className='h-20 text-4xl text-black inline-flex items-center justify-center font-["Cafe24Moyamoya-Face-v1.0"]'>
+      <span>비슷한 장소로 {location} 어때요?</span>
+      </DialogDescription>
+      <DialogDescription className='text-xl h-10 text-black inline-flex items-center justify-center'>
+        유사도 {similarity.toFixed(2)} %
+      </DialogDescription>
+    </div>
+  </div>
+
+
+  <div className='flex flex-col justify-center items-center'>
+  <div className='flex justify-center relative z-10 mb-1'>
+    <Link href={`/subpage?index=${activeResultIndex}`}>
+      <Button 
+        variant='blue'
+        className='flex items-center justify-center py-2 px-4 text-white rounded-lg' 
+      >
+        <span className='mr-2'>🗺️</span> {/* Map emoji */}
+        더 많은 정보 보러가기
+      </Button>
+    </Link>
+  </div>
+
+  <div className="flex justify-between w-full px-5 relative z-20 mt-1">
+    <Button
+      variant='outline'
+      className='text-black border-black hover:bg-black hover:text-white'
+      disabled={activeResultIndex === 0}
+      onClick={() => onNavigate(activeResultIndex - 1)}
+    >
+      이전
+    </Button>
+    <Button
+      variant='outline'
+      className='text-black border-black hover:bg-black hover:text-white'
+      disabled={activeResultIndex >= totalResults - 1}
+      onClick={() => onNavigate(activeResultIndex + 1)}
+    >
+      다음
+    </Button>
+  </div>
+</div>
+
+
+
+</DialogContent>
+
   );
 }
 
 DialogDemo.propTypes = {
+  responseImage: PropTypes.string,
+  location: PropTypes.string,
   locationInfo: PropTypes.string.isRequired,
+  isUploadedImageVisible: PropTypes.bool.isRequired,
+  setIsUploadedImageVisible: PropTypes.func.isRequired,
+  image: PropTypes.string,
+  loading: PropTypes.bool.isRequired,
+  similarity: PropTypes.number.isRequired,
+  totalResults: PropTypes.number.isRequired, // New prop for total results
+  activeResultIndex: PropTypes.number.isRequired, // New prop for the current index
+  onNavigate: PropTypes.func.isRequired, // New prop for navigation function
 };
+
+

@@ -1,20 +1,21 @@
 'use client';
+
 import React, { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import KakaoMapByCoordinates from '@/components/subpage/kakaoMapInSubpage';
-import Footer from '@/components/shared/Footer';
-import { ChevronRightIcon } from '@radix-ui/react-icons';
+import generateAndStoreImage from '../../api/generateAndStoreImage';
+import KakaoMapByCoordinates from '@/components/subpage/kakaoMapInSubpage'; // Update the import path accordingly
+import { useSearchParams } from 'next/navigation';
+import fetchLocationInfo from '@/api/fetchLocationInfo';
 
 function SubPage() {
+  const searchParams = useSearchParams();
+  const index = searchParams.get('index');
+
   const [imageUrl, setImageUrl] = useState('');
   const [insertImage, setInsertImage] = useState('');
   const [isImage, setIsImage] = useState(false);
-  const [location, setLocation] = useState<{ latitude: number; longitude: number; name: string }>({
-    latitude: 0,
-    longitude: 0,
-    name: '위치 정보가 없습니다.',
-  });
+  const [location, setLocation] = useState<{ latitude: number; longitude: number; name: string }>({ latitude: 0, longitude: 0, name: '위치 정보가 없습니다.' });
   const [result, setResult] = useState('');
   const [explanation, setExplanation] = useState('');
   const [similarity, setSimilarity] = useState('');
@@ -22,43 +23,38 @@ function SubPage() {
 
   useEffect(() => {
     const uploadFileResponse = sessionStorage.getItem('uploadFileResponse');
-    const locationInfoResponse = sessionStorage.getItem('locationInfoResponse');
     const uploadedImage = sessionStorage.getItem('uploadedImage');
     const generatedImage = sessionStorage.getItem('generatedImage');
 
     const parsedUploadFileResponse = uploadFileResponse ? JSON.parse(uploadFileResponse) : null;
-    const parsedLocationInfoResponse = locationInfoResponse
-      ? JSON.parse(locationInfoResponse)
-      : null;
     const parsedGeneratedImage = generatedImage ? JSON.parse(generatedImage) : null;
 
-    if (parsedLocationInfoResponse) {
-      parsedLocationInfoResponse.response[0].explanation =
-        parsedLocationInfoResponse.response[0].explanation.replace(/\\n/g, '\n');
-    }
+    if (parsedUploadFileResponse && index !== null) {
+      const resultArray = parsedUploadFileResponse.result; 
+      const idx = parseInt(index, 10);
 
-    if (parsedGeneratedImage) {
-      parsedGeneratedImage.response = parsedGeneratedImage.response.replace(/\*/g, '');
-    }
+      if (resultArray[idx]) { 
+        const selectedResult = resultArray[idx];
 
-    if (parsedUploadFileResponse && parsedLocationInfoResponse) {
-      const result = parsedUploadFileResponse.result[0];
-      setImageUrl(result.image_url);
-      setResult(result.location);
-      setInsertImage(uploadedImage || `data:image/png;base64,${result.base64_image}`);
-      setLocation({
-        longitude: result.mapx * 0.0000001,
-        latitude: result.mapy * 0.0000001,
-        name: result.gal_title,
-      });
-      setExplanation(parsedLocationInfoResponse.response[0].explanation);
-      setSimilarity(Math.round(result.similarity).toString());
-      setSimilarityReason(parsedGeneratedImage ? parsedGeneratedImage.response : null);
+        const fetchInfo = async () => {
+          const locationInfo = await fetchLocationInfo(selectedResult.location);
+          setImageUrl(selectedResult.image_url);
+          setResult(selectedResult.location);
+          setInsertImage(uploadedImage || `data:image/png;base64,${selectedResult.base64_image}`);
+          setLocation({ longitude: selectedResult.mapx * 0.0000001, latitude: selectedResult.mapy * 0.0000001, name: selectedResult.gal_title });
+          setExplanation(locationInfo || '설명이 없습니다.');
+          setSimilarity(selectedResult.similarity.toFixed(2));
+          setSimilarityReason(parsedGeneratedImage ? parsedGeneratedImage.response : null);
+          console.log(selectedResult.location);
+          await generateAndStoreImage(parsedUploadFileResponse.image_url, selectedResult.location);
+        };
+
+        fetchInfo().catch((error) => {
+          console.error('Error fetching location info:', error);
+        });
+      }
     }
-  }, []);
-  const handleToggleImage = () => {
-    setIsImage((prev) => !prev);
-  };
+  }, [index]); 
 
   return (
     <main
@@ -66,7 +62,7 @@ function SubPage() {
       style={{ paddingBottom: '30px' }}
     >
       <div className='w-full flex justify-center'>
-        <div className='w-[1000px] h-[400px] flex items-center justify-center mt-8 mb-2'>
+        <div className='w-[1000px] h-[400px] bg-gray-300 flex items-center justify-center mt-8 mb-2'>
           {isImage ? (
             <img src={insertImage} alt='location' className='max-w-full max-h-full' />
           ) : (
@@ -75,28 +71,27 @@ function SubPage() {
         </div>
       </div>
       <div className="font-['Cafe24Moyamoya-Face-v1.0'] text-center text-5xl mt-7 mb-10">
-        <span className='text-4xl'>비슷한 장소로</span>{' '}
-        <span className='text-blue-500'>{result}</span> <span className='text-4xl'>어때요?</span>
+        <span className="text-4xl">비슷한 장소로</span> <span className="text-blue-500">{result}</span> <span className="text-4xl">어때요?</span>
       </div>
 
+
       <div className='w-[1000px] flex justify-center items-center py-4 relative mb-10'>
-        <div style={{ position: 'absolute', left: 'calc(50% - 500px)' }}>
-          <Button variant='link' onClick={handleToggleImage}>
-            {isImage ? '서버에서 받은 사진 보기' : '내가 넣은 사진 보기'}
-          </Button>
-        </div>
         <div className='absolute left-1/2 transform -translate-x-1/2'>유사율 {similarity}%</div>
       </div>
       <div className='flex flex-col items-center justify-center w-[1000px] mb-8'>
         <p className='text-left w-full mb-10'>{explanation}</p>
         <p className='text-left w-full mb-8'>{similarityReason}</p>
+        <KakaoMapByCoordinates latitude={location.latitude} longitude={location.longitude} name={location.name} />
         <div className='w-full flex justify-end' style={{ maxWidth: 'calc(50% + 500px)' }}>
           <Link href='/travelplan'>
-            <Button variant='link' className='mt-4 mb-8'>
-              여행 계획 만들러가기
-              <ChevronRightIcon className='h-4 w-4' />
-            </Button>
-          </Link>
+          <Button 
+      variant='blue'
+      className='mt-4 mb-8 text-white flex items-center bg-blue-600 py-2 px-4 rounded' 
+    >
+      <span className='mr-2'>🗺️</span> {/* Map emoji */}
+      여행 계획 만들러가기
+    </Button>
+        </Link>
         </div>
         <KakaoMapByCoordinates
           latitude={location.latitude}
@@ -112,3 +107,4 @@ function SubPage() {
 }
 
 export default SubPage;
+

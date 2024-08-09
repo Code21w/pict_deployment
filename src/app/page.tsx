@@ -5,8 +5,6 @@ import { useCallback, useEffect, useState } from 'react';
 import { ErrorCode, FileRejection, useDropzone } from 'react-dropzone';
 
 import UploadFile from '@/api/SendingImage';
-import fetchLocationInfo from '@/api/fetchLocationInfo';
-import generateAndStoreImage from '@/api/generateAndStoreImage';
 import imageIcon from '@/assets/images/image_icon.png';
 import CloudAnimation from '@/components/main/Cloud';
 import { DialogDemo } from '@/components/resultmodal/ResultModal';
@@ -19,20 +17,29 @@ import useWindowHeightSize from '@/hooks/useWindowHeightSize';
 import { useLoginModalStore } from '@/store/store.ts';
 
 import { instance } from '@/api/instance';
+import { Button } from '@/components/ui/button';
+import { ClipLoader } from 'react-spinners';
 
 function Main() {
+  interface ResultItem {
+    gal_title: string;
+    image_url: string | null;
+    location: string;
+    similarity: number;
+    mapx: number;
+    mapy: number;
+  }
+
   const { setIsOpenLoginModal } = useLoginModalStore();
   const [image, setImage] = useState<string | null>(null);
   const [file, setFile] = useState<File | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [responseImage, setResponseImage] = useState<string | null>(null);
-  const [location, setLocation] = useState<string | null>(null);
+  const [result, setResult] = useState<ResultItem[]>([]);
   const [loading, setLoading] = useState(false);
-  const [similarity, setSimilarity] = useState(0);
   const [errorMessage, setErrorMessage] = useState('');
   const [isUploadedImageVisible, setIsUploadedImageVisible] = useState(false);
-  const [locationInfo, setLocationInfo] = useState('');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [activeResultIndex, setActiveResultIndex] = useState(0); // Track the active result index
 
   const windowHeight = useWindowHeightSize();
 
@@ -56,12 +63,8 @@ function Main() {
 
     checkLoginStatus();
   }, []);
+
   const onDrop = useCallback((acceptedFiles: File[], fileRejections: FileRejection[]) => {
-    // useCallback을 써야하는가 생각해보기
-    // const foundTooManyFiles = fileRejections.find(
-    //   (rejection) => rejection.error.find[ErrorCode['TooManyFiles']]
-    // );
-    // 파일 형식 오류가 있는 경우
     if (fileRejections.length > 0) {
       const tooManyFilesError = fileRejections.find((rejection) =>
         rejection.errors.find((error) => error.code === ErrorCode.TooManyFiles)
@@ -80,7 +83,6 @@ function Main() {
       return;
     }
 
-    // 하나의 파일만 드롭된 경우
     if (acceptedFiles.length === 1) {
       const file = acceptedFiles[0];
       if (file) {
@@ -97,7 +99,7 @@ function Main() {
     accept: {
       'image/*': ['.jpeg', '.jpg', '.png'],
     },
-    multiple: false, // 여러 파일 선택 옵션
+    multiple: false,
   });
 
   const onUploadImage = async () => {
@@ -112,57 +114,31 @@ function Main() {
     setLoading(true);
 
     try {
-      const { imageInfo, externalImageUrl } = await UploadFile(formData);
-      const { image_url, location, similarity } = imageInfo;
-
-      const roundedSimilarity = Math.round(similarity);
-
-      setResponseImage(image_url);
-      setLocation(location);
-      setSimilarity(roundedSimilarity);
-      // 위의 set값은 제대로 받아오로 아래 fetch 를 받는데 문제가 생겼다면 어떻게 처리할 것인가
-      const fetchedLocationInfo = await fetchLocationInfo(location);
-      setLocationInfo(fetchedLocationInfo);
+      const { result, externalImageUrl } = await UploadFile(formData);
+      setResult(result); // Update results state with fetched results
       setLoading(false);
-      await generateAndStoreImage(externalImageUrl, location);
+
     } catch (error) {
       console.error('Error uploading file:', error);
-      setLoading(false); // 에러가 발생해도 로딩 상태 해제 추후 출력 페이지 작성
+      setLoading(false);
     }
   };
 
   const handleButtonClick = async () => {
     if (!isLoggedIn) {
       setIsOpenLoginModal(true);
-
       return;
     }
 
     await onUploadImage();
   };
 
-  useEffect(() => {
-    if (dialogOpen && image) {
-      // 이미지 데이터를 Base64로 변환하여 세션 스토리지에 저장
-      fetch(image)
-        .then((response) => response.blob())
-        .then((blob) => {
-          const reader = new FileReader();
-          reader.onloadend = () => {
-            if (typeof reader.result === 'string') {
-              sessionStorage.setItem('uploadedImage', reader.result);
-            } else {
-              console.error('FileReader result is not a string');
-            }
-          };
-          reader.readAsDataURL(blob);
-        })
-        .catch((error) => console.error('Error converting image to Base64:', error));
+  const handleNavigate = (index: number) => {
+    if (index >= 0 && index < result.length) {
+      setActiveResultIndex(index);
     }
-  }, [dialogOpen, image]);
+  };
 
-  // if (typeof window !== 'undefined') {
-  //   const windowHeight = window.innerHeight;
   return (
     <MainLayout>
       <main className='flex min-h-screen items-center justify-between'>
@@ -239,17 +215,27 @@ function Main() {
               </button>
               {errorMessage && <div className='text-red-500 mt-2'>{errorMessage}</div>}
 
-              <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+              {loading && (
+            <div className='flex justify-center mt-4'>
+              <ClipLoader size={50} color={'#36D7B7'} loading={loading} />
+            </div>
+          )}
+
+              <Dialog open={dialogOpen && result.length > 0}  onOpenChange={setDialogOpen}>
+              {result.length > 0 && (
                 <DialogDemo
-                  responseImage={responseImage}
-                  location={location}
-                  locationInfo={locationInfo}
-                  similarity={similarity}
+                  responseImage={result[activeResultIndex].image_url} // Pass the active image URL
+                  location={result[activeResultIndex].location} 
+                  locationInfo={result[activeResultIndex].gal_title} 
+                  similarity={result[activeResultIndex].similarity}
                   isUploadedImageVisible={isUploadedImageVisible}
                   setIsUploadedImageVisible={setIsUploadedImageVisible}
                   image={image}
                   loading={loading}
-                />
+                  totalResults={result.length} // Pass total results
+                  activeResultIndex={activeResultIndex} // Pass current index
+                  onNavigate={handleNavigate} 
+                /> )}
               </Dialog>
             </div>
           </div>
@@ -260,3 +246,4 @@ function Main() {
 }
 
 export default Main;
+
