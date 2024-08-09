@@ -6,6 +6,7 @@ import Link from 'next/link';
 import MainLayout from '@/components/main/MainLayout';
 
 axios.defaults.withCredentials = true;
+axios.defaults.baseURL = process.env.NEXT_PUBLIC_BASE_URL;
 
 interface TravelPlan {
   planner_id: number;
@@ -27,7 +28,7 @@ function MyPage() {
     name: string | null;
   }>({ visible: false, x: 0, y: 0, name: null });
 
-  const [dropdownOpen, setDropdownOpen] = useState<number | null>(null); // 드롭다운 상태 관리
+  const [dropdownOpen, setDropdownOpen] = useState<number | null>(null);
 
   const toggleRegionColor = useCallback((regionName: string, element: SVGElement) => {
     element.style.fill = element.style.fill === '#5E92CD' ? 'gray' : '#5E92CD';
@@ -47,7 +48,7 @@ function MyPage() {
       toggleRegionColor(regionName, target);
 
       try {
-        await axios.post('http://localhost:3000/api/scratch_map', { sigungu_name: regionName });
+        await axios.post('/api/scratch_map', { sigungu_name: regionName });
       } catch (error) {
         console.error('Error sending data:', error);
         toggleRegionColor(regionName, target);
@@ -91,7 +92,7 @@ function MyPage() {
 
   const fetchTravelPlans = async () => {
     try {
-      const response = await axios.get('http://localhost:3000/api/mypage/titles');
+      const response = await axios.get('/api/mypage/titles');
       setTravelPlans(response.data);
     } catch (error) {
       console.error('Failed to fetch travel plans:', error);
@@ -110,7 +111,7 @@ function MyPage() {
   const handleEditClick = (id: number, currentTitle: string) => {
     setEditId(id);
     setNewTitle(currentTitle || '');
-    setDropdownOpen(null); // 드롭다운 닫기
+    setDropdownOpen(null);
   };
 
   const handleSaveClick = async (id: number) => {
@@ -118,7 +119,7 @@ function MyPage() {
     if (!plan) return;
 
     try {
-      await axios.put('http://localhost:3000/api/mypage/titles', {
+      await axios.put('/api/mypage/titles', {
         oldTitle: plan.title,
         newTitle,
         plannerId: id,
@@ -141,7 +142,7 @@ function MyPage() {
     if (!plan) return;
 
     try {
-      await axios.delete('http://localhost:3000/api/mypage/titles', {
+      await axios.delete('/api/mypage/titles', {
         data: {
           title: plan.title,
           plannerId: id,
@@ -154,12 +155,12 @@ function MyPage() {
   };
 
   const toggleDropdown = (id: number) => {
-    setDropdownOpen(dropdownOpen === id ? null : id); // 드롭다운 토글
+    setDropdownOpen(dropdownOpen === id ? null : id);
   };
 
   const fetchScratchMap = async () => {
     try {
-      const response = await axios.get('http://localhost:3000/api/scratch_map');
+      const response = await axios.get('/api/scratch_map');
       const regions = response.data;
       regions.forEach((region: { sigungu: string }) => {
         let regionName = region.sigungu;
