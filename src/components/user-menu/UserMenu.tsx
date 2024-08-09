@@ -26,7 +26,7 @@ function UserMenu() {
   const [error, setError] = useState('');
   const [local, setLocal] = useState('local');
   const [verified, setVerified] = useState(false);
-  const [userNameLimit, setUserNameLimit] = useState(20);
+  const userNameLimit= 20;
   const [emailSent, setEmailSent] = useState(false);
 
   function deleteCookie(name: string) {
