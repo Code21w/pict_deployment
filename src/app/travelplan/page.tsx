@@ -57,7 +57,6 @@ function TravelPlan() {
   // fetch하는 함수를 useEffect 내부에 선언하도록 함
   useEffect(() => {
     const index = Number(searchParams.get('index'));
-    setCurrentIndex(String(index));
 
     getSession(index);
     // getSession에서 setId(location_id)를 해줌
@@ -115,20 +114,18 @@ function TravelPlan() {
   // 세션 스토리지에서 location id와 location 이름을 가져오는함수
   const getSession = (index: number) => {
     const uploadFileResponseString = sessionStorage.getItem('uploadFileResponse');
+
     if (uploadFileResponseString) {
       const uploadFileResponse = JSON.parse(uploadFileResponseString);
 
-      if (
-        uploadFileResponse.result &&
-        uploadFileResponse.result[index] &&
-        uploadFileResponse.result[index].location
-      ) {
+      if (uploadFileResponse.result[index].location) {
         const fullLocation = uploadFileResponse.result[index].location;
         const location_id = uploadFileResponse.result[index].location_id;
+
         // 전체 위치 문자열을 공백으로 나누고 마지막 요소(도시명)를 가져옴
         const locationParts = fullLocation.split(' ');
         const cityName = locationParts[locationParts.length - 1];
-
+        setCurrentIndex(String(index));
         setAreaName(cityName);
         setId(location_id);
       } else {

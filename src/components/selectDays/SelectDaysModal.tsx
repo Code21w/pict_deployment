@@ -15,18 +15,17 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { useCartStore } from '@/store/store';
 import { useEffect, useState } from 'react';
-
 interface SelectDaysModalProps {
   initialDays: string;
   onClose: () => void;
   onSave: (days: string) => void;
 }
-
 export const SelectDaysModal: React.FC<SelectDaysModalProps> = ({ initialDays, onSave }) => {
   const [travelDays, setTravelDays] = useState(initialDays);
   const [location, setLocation] = useState('');
-
+  const { currentIndex } = useCartStore();
   useEffect(() => {
     const uploadFileResponseString = sessionStorage.getItem('uploadFileResponse');
     if (uploadFileResponseString) {
@@ -34,10 +33,10 @@ export const SelectDaysModal: React.FC<SelectDaysModalProps> = ({ initialDays, o
 
       if (
         uploadFileResponse.result &&
-        uploadFileResponse.result[0] &&
-        uploadFileResponse.result[0].location
+        uploadFileResponse.result[currentIndex] &&
+        uploadFileResponse.result[currentIndex].location
       ) {
-        const fullLocation = uploadFileResponse.result[0].location;
+        const fullLocation = uploadFileResponse.result[currentIndex].location;
 
         // 전체 위치 문자열을 공백으로 나누고 마지막 요소(도시명)를 가져옴
         const locationParts = fullLocation.split(' ');

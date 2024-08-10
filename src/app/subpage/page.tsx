@@ -40,12 +40,12 @@ function SubPage() {
   const [similarityReason, setSimilarityReason] = useState('');
   const [loading, setLoading] = useState(true);
   const { setCurrentCart, setCurrentIndex } = useCartStore();
+
   useEffect(() => {
-    setCurrentCart([]);
-    setCurrentIndex('');
     const uploadFileResponse = sessionStorage.getItem('uploadFileResponse');
     const uploadedImage = sessionStorage.getItem('uploadedImage');
-
+    setCurrentCart([]);
+    setCurrentIndex(index as string);
     const parsedUploadFileResponse = uploadFileResponse ? JSON.parse(uploadFileResponse) : null;
 
     if (parsedUploadFileResponse && index !== null) {
