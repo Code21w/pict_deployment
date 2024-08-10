@@ -344,4 +344,4 @@ const TravelPlanWrapper = () => (
   </Suspense>
 );
 
-export default TravelPlan;
+export default TravelPlanWrapper;

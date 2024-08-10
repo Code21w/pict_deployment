@@ -3,9 +3,9 @@ import fetchLocationInfo from '@/api/fetchLocationInfo';
 import KakaoMapByCoordinates from '@/components/subpage/kakaoMapInSubpage';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
-import React, { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import generateAndStoreImage from '../../api/generateAndStoreImage';
+import { useSearchParams } from 'next/navigation';
 
 const ImageSkeleton = () => (
   <div className='w-[1000px] h-[400px] bg-gray-200 animate-pulse flex items-center justify-center mt-8 mb-2'>
@@ -144,4 +144,11 @@ function SubPage() {
   );
 }
 
-export default SubPage;
+// Wrap SubPage with Suspense in the parent component
+export default function WrappedSubPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <SubPage />
+    </Suspense>
+  );
+}

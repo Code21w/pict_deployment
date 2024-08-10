@@ -64,7 +64,7 @@ const Map: React.FC<MapProps> = ({ recommendedPlaces }) => {
 
         const options = {
           center: new window.kakao.maps.LatLng(latitude, longitude),
-          level: 8, // Adjust zoom level
+          level: 12, // Adjust zoom level
         };
         const map = new window.kakao.maps.Map(container, options);
 
