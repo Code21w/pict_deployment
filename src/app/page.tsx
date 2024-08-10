@@ -14,7 +14,7 @@ import AirplaneAnimation from '@/components/main/Airplane';
 import Globe from '@/components/main/Globe';
 import MainLayout from '@/components/main/MainLayout';
 import useWindowHeightSize from '@/hooks/useWindowHeightSize';
-import { useCartStore, useLoginModalStore } from '@/store/store.ts';
+import { useLoginModalStore } from '@/store/store.ts';
 
 import { instance } from '@/api/instance';
 import { ClipLoader } from 'react-spinners';
@@ -39,12 +39,10 @@ function Main() {
   const [isUploadedImageVisible, setIsUploadedImageVisible] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [activeResultIndex, setActiveResultIndex] = useState(0); // Track the active result index
-  const { setCurrentCart, setCurrentIndex } = useCartStore();
+
   const windowHeight = useWindowHeightSize();
 
   useEffect(() => {
-    setCurrentCart([]);
-    setCurrentIndex('');
     const checkLoginStatus = async () => {
       try {
         const response = await instance.get('/api/user', {

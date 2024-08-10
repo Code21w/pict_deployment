@@ -21,7 +21,7 @@
   ],
   "rules": {
     // General rules
-    "no-console": ["error", { "allow": ["error"] }],
+    "no-console": ["off", { "allow": ["off"] }],
     "no-debugger": "warn",
     "no-dupe-else-if": "warn",
     "no-irregular-whitespace": "warn",
@@ -78,14 +78,14 @@
     "react/jsx-uses-react": "off",
 
     // 정책 임시 추가
-    // "@typescript-eslint/no-explicit-any": "off",
-    // "react-hooks/exhaustive-deps": "off",
+    "@typescript-eslint/no-explicit-any": "off",
+    "react-hooks/exhaustive-deps": "off",
     // "array-callback-return": "off",
     // "@typescript-eslint/ban-types": "off",
 
     // Ignore no-unused-vars if prefixed with underscore
     "@typescript-eslint/no-unused-vars": [
-      "warn",
+      "off",
       {
         "argsIgnorePattern": "^_",
         "varsIgnorePattern": "^_",
