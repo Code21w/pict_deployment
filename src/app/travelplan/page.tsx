@@ -329,7 +329,7 @@ function TravelPlan() {
           </div>
 
           <div className='w-screen h-screen rounded-md'>
-            <Map />
+            <Map recommendedPlaces={currentCart} />
           </div>
         </div>
         <TravelDaysSelector selectDay={selectDay} />

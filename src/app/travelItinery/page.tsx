@@ -2,7 +2,7 @@
 'use client';
 
 import TravelHeader from '@/components/shared/TravelHeader';
-import Map from '@/components/shared/kakaoMap';
+import Map from '@/components/shared/kakaoMapItinerary';
 import Dashboard from '@/components/travelItinerary/dnd/Dashboard';
 import React from 'react';
 import SplitPane from 'react-split-pane-next';

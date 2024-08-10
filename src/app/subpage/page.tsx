@@ -2,10 +2,9 @@
 import fetchLocationInfo from '@/api/fetchLocationInfo';
 import KakaoMapByCoordinates from '@/components/subpage/kakaoMapInSubpage';
 import { Button } from '@/components/ui/button';
-import { useCartStore } from '@/store/store';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
-import React, { Suspense, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import generateAndStoreImage from '../../api/generateAndStoreImage';
 
 const ImageSkeleton = () => (
@@ -39,13 +38,10 @@ function SubPage() {
   const [similarity, setSimilarity] = useState('');
   const [similarityReason, setSimilarityReason] = useState('');
   const [loading, setLoading] = useState(true);
-  const { setCurrentCart, setCurrentIndex } = useCartStore();
 
   useEffect(() => {
     const uploadFileResponse = sessionStorage.getItem('uploadFileResponse');
     const uploadedImage = sessionStorage.getItem('uploadedImage');
-    setCurrentCart([]);
-    setCurrentIndex(index as string);
     const parsedUploadFileResponse = uploadFileResponse ? JSON.parse(uploadFileResponse) : null;
 
     if (parsedUploadFileResponse && index !== null) {
@@ -147,11 +143,5 @@ function SubPage() {
     </main>
   );
 }
-
-const SubPageWrapper = () => (
-  <Suspense fallback={<div>Loading...</div>}>
-    <SubPage />
-  </Suspense>
-);
 
 export default SubPage;
